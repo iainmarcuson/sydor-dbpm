@@ -1,0 +1,77 @@
+If you're starting from zero - you have a MicroZed 7020 and a MicroSD card,
+and that's all you have, you're going to need one or more of the following
+recipes, depending on what you want to do with softGlueZynq.
+
+
+1. Run softGlueZynq as-is:
+
+	All you need is "Cross compiling from linux to linux-arm."
+
+2. Modify some softGlueZynq FPGA content, but don't make modifications that
+   require a new PetaLinux build:
+
+	You need "Cross compiling from linux to linux-arm" and "Installing
+	softGlueZynq in your own Vivado project."
+
+3. Modify the PetaLinux build, or make a modification to softGlueZynq FPGA
+   content for which a new PetaLinux build is required:
+
+	You need "Cross compiling from linux to linux-arm," and "Installing
+	softGlueZynq in your own Vivado project," and "Building a softGlueZynq
+	compatible Petalinux project ."
+
+==============================================================================
+Cross compiling from linux to linux-arm:
+==============================================================================
+
+You have to cross compile EPICS base, synApps, softGlueZynq, and iocZed. (If you
+have synApps 5.9 or later, softGlueZynq is included, and you don't need iocZed,
+because the xxx module is ready for softGlueZynq.)
+
+You're going to need the Xilinx software-development kit (SDK).  You'll have
+to register, but it's free.  https://www.xilinx.com/support/download.html
+You should (must?) use the same version of the SDK as the Vivado version that
+was used to produce the FPGA content.  For softGlueZynq R2-0, that version
+is 2015.4.
+
+In the distribution is the directory EPICS needs to cross compile for the Zynq.
+To build base and synApps for the MicroZed, I modified two config files in base:
+
+Here's the base/configure/os/CONFIG_SITE.linux-x86.linux-arm file I used:
+
+	# CONFIG_SITE.linux-x86.linux-arm
+	#
+	# Site specific definitions for linux-x86 host - linux-arm target builds
+	#-------------------------------------------------------
+	
+	# Tools install path
+	GNU_DIR = /local/mooney/zynq/Xilinx/SDK/2015.4/gnu/arm/lin
+	
+	# GNU crosscompiler target name
+	GNU_TARGET = arm-xilinx-linux-gnueabi
+
+I added this line to base/configure/CONFIG_SITE:
+
+	CROSS_COMPILER_TARGET_ARCHS=linux-arm
+
+Then I set EPICS_HOST_ARCH to linux-x86_64, and built base and synApps.
+
+
+==============================================================================
+Installing softGlueZynq in your own Vivado project
+==============================================================================
+
+See softGlueZynq/documentation/Vivado/README, which also describes how to
+install Vivado.
+
+You can modify softGlueZynq without having to build a new PetaLinux OS if
+you don't change anything that will modify device-tree files.  Modifying or
+adding or deleting AXI components or the Xilinx DMA component will require
+a new OS.  All other modifications will not.
+
+==============================================================================
+Building a softGlueZynq compatible Petalinux project
+==============================================================================
+
+See softGlueZynq/documentation/PetaLinux/README, which also describes how to
+install the Petalinux build system.

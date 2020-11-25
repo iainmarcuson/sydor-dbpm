@@ -1,0 +1,10 @@
+$(P)$(R)DetectionThreshold
+$(P)$(R)MinPulsePairSeparation
+$(P)$(R)DetectionFilter
+$(P)$(R)ScaleFactor
+$(P)$(R)RisetimeOptimization
+$(P)$(R)DetectorPolarity
+$(P)$(R)DecayTime
+$(P)$(R)PresetMode
+$(P)$(R)PresetEvents
+$(P)$(R)PresetTriggers

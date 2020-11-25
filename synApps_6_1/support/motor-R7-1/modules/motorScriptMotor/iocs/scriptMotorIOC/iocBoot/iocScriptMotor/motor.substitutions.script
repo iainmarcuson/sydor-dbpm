@@ -1,0 +1,15 @@
+file "$(MOTOR)/db/asyn_motor.db"
+{
+  pattern
+  {P,                M,  DTYP,        PORT,     ADDR,  DESC,    EGU,      DIR,  VMAX,  VELO,  VBAS,  ACCL,  BDST,     BVEL,  BACC,     MRES,      PREC,  DHLM,       DLLM,   INIT}
+  {scriptMotor:,     m1, "asynMotor", VMC_MOTOR,   0,    "VMCMotor",    mm,       Pos,  15.,   3.,    .05,    .5,    0,       1.0,    2,	.025,    5,   0,       0,  ""}
+  {scriptMotor:,     m2, "asynMotor", SOFT_MOTOR,  0,    "SoftMotor",     mm,       Pos,  15.,   3.,    .05,    .5,    0,       1.0,    2,	.025,    5,   0,       0,  ""}
+}
+
+file "$(TOP)/db/ScriptMotorReload.db"
+{
+  pattern
+  {P,               PORT}
+  {scriptMotor:,    SOFT_MOTOR}
+  {scriptMotor:,    VMC_MOTOR}
+}

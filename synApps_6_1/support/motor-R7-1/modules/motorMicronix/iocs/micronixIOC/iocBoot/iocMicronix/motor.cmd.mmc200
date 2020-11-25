@@ -1,0 +1,28 @@
+dbLoadTemplate("motor.substitutions.mmc200")
+
+### RS-232 with RS-485 adpater (serial1)
+drvAsynSerialPortConfigure("serial1", "/dev/ttyS0", 0, 0, 0)
+
+#!asynOctetSetInputEos("serial1",0,"\n\r")
+#!asynOctetSetOutputEos("serial1",0,"\r")
+
+# Turn on asyn traces
+#!asynSetTraceIOMask("serial1",0,0x1)
+#!asynSetTraceMask("serial1",0,0x3)
+
+###
+# MMC200CreateController(
+#    motor port (will be created),
+#    asyn port (must already exist),
+#    num axes,
+#    moving poll period (ms),
+#    idle poll period (ms),
+#    ignore limit flag)
+###
+#!MMC200CreateController("mmc200_1", "serial1", 2, 500, 2000, 1)
+MMC200CreateController("mmc200_1", "serial1", 2, 500, 0, 1)
+
+# Turn off asyn traces
+#!asynSetTraceIOMask("serial1",0,0x0)
+#!asynSetTraceMask("serial1",0,0x1)
+

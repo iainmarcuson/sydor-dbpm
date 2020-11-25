@@ -1,0 +1,1070 @@
+
+file {
+	name="/home/oxygen25/DOHNARMS/epicsdev/software/alive/aliveRec/aliveApp/op/adl/aliveRecord.adl"
+	version=030107
+}
+display {
+	object {
+		x=61
+		y=101
+		width=340
+		height=580
+	}
+	clr=14
+	bclr=3
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=1
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+text {
+	object {
+		x=10
+		y=5
+		width=220
+		height=20
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="$(P)alive"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=5
+		y=380
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="1"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=30
+		y=380
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV1"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=30
+		y=405
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV2"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=30
+		y=430
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV3"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=30
+		y=455
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV4"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=30
+		y=480
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV5"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=30
+		y=505
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV6"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=30
+		y=530
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV7"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=30
+		y=555
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV8"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=200
+		y=380
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV9"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=200
+		y=405
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV10"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=70
+		y=355
+		width=200
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Environment Variables"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=5
+		y=405
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="2"
+	align="horiz. right"
+}
+text {
+	object {
+		x=5
+		y=430
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="3"
+	align="horiz. right"
+}
+text {
+	object {
+		x=5
+		y=455
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="4"
+	align="horiz. right"
+}
+text {
+	object {
+		x=5
+		y=480
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="5"
+	align="horiz. right"
+}
+text {
+	object {
+		x=5
+		y=505
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="6"
+	align="horiz. right"
+}
+text {
+	object {
+		x=5
+		y=530
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="7"
+	align="horiz. right"
+}
+text {
+	object {
+		x=5
+		y=555
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="8"
+	align="horiz. right"
+}
+text {
+	object {
+		x=175
+		y=380
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="9"
+	align="horiz. right"
+}
+text {
+	object {
+		x=175
+		y=405
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="10"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=230
+		y=225
+		width=100
+		height=20
+	}
+	control {
+		chan="$(P)alive.HMAG"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=175
+		y=225
+		width=50
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Magic"
+	align="horiz. right"
+}
+text {
+	object {
+		x=10
+		y=198
+		width=50
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Value"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=65
+		y=195
+		width=90
+		height=20
+	}
+	monitor {
+		chan="$(P)alive.VAL"
+		clr=14
+		bclr=55
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=250
+		y=5
+		width=80
+		height=20
+	}
+	monitor {
+		chan="$(P)alive.VER"
+		clr=14
+		bclr=55
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=75
+		y=225
+		width=100
+		height=20
+	}
+	control {
+		chan="$(P)alive.MSG"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=10
+		y=225
+		width=60
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Message"
+	align="horiz. right"
+}
+text {
+	object {
+		x=90
+		y=165
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Heartbeats"
+	align="horiz. centered"
+}
+polyline {
+	object {
+		x=10
+		y=30
+		width=326
+		height=2
+	}
+	"basic attribute" {
+		clr=14
+		width=2
+	}
+	points {
+		(11,31)
+		(335,31)
+	}
+}
+text {
+	object {
+		x=235
+		y=5
+		width=10
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="v"
+	align="horiz. centered"
+}
+"text entry" {
+	object {
+		x=95
+		y=125
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.RHOST"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=10
+		y=125
+		width=80
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="IP Address"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=270
+		y=125
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)alive.RPORT"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=225
+		y=125
+		width=40
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Port"
+	align="horiz. right"
+}
+text {
+	object {
+		x=95
+		y=95
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Remote Server"
+	align="horiz. centered"
+}
+menu {
+	object {
+		x=285
+		y=325
+		width=50
+		height=22
+	}
+	control {
+		chan="$(P)alive.ISUP"
+		clr=14
+		bclr=3
+	}
+}
+text {
+	object {
+		x=200
+		y=328
+		width=80
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Suppress"
+	align="horiz. right"
+}
+text {
+	object {
+		x=30
+		y=265
+		width=280
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Remote Information Reading"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=10
+		y=328
+		width=100
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Request Read"
+	align="horiz. right"
+}
+menu {
+	object {
+		x=115
+		y=325
+		width=80
+		height=22
+	}
+	control {
+		chan="$(P)alive.ITRIG"
+		clr=14
+		bclr=3
+	}
+}
+text {
+	object {
+		x=205
+		y=298
+		width=40
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Port"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=250
+		y=295
+		width=80
+		height=20
+	}
+	monitor {
+		chan="$(P)alive.IPORT"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=70
+		y=295
+		width=120
+		height=20
+	}
+	monitor {
+		chan="$(P)alive.IPSTS"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=15
+		y=298
+		width=50
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Status"
+	align="horiz. right"
+}
+polyline {
+	object {
+		x=10
+		y=255
+		width=326
+		height=2
+	}
+	"basic attribute" {
+		clr=14
+		width=2
+	}
+	points {
+		(11,256)
+		(335,256)
+	}
+}
+text {
+	object {
+		x=185
+		y=198
+		width=50
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Period"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=240
+		y=195
+		width=60
+		height=20
+	}
+	monitor {
+		chan="$(P)alive.HPRD"
+		clr=14
+		bclr=55
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=305
+		y=198
+		width=25
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="sec"
+	align="horiz. right"
+}
+menu {
+	object {
+		x=240
+		y=165
+		width=50
+		height=22
+	}
+	control {
+		chan="$(P)alive.HRTBT"
+		clr=14
+		bclr=3
+	}
+}
+polyline {
+	object {
+		x=5
+		y=155
+		width=326
+		height=2
+	}
+	"basic attribute" {
+		clr=14
+		width=2
+	}
+	points {
+		(6,156)
+		(330,156)
+	}
+}
+"text entry" {
+	object {
+		x=200
+		y=430
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV11"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=200
+		y=455
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV12"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=200
+		y=480
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV13"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=200
+		y=505
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV14"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=200
+		y=530
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV15"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=200
+		y=555
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)alive.ENV16"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=175
+		y=430
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="11"
+	align="horiz. right"
+}
+text {
+	object {
+		x=175
+		y=455
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="12"
+	align="horiz. right"
+}
+text {
+	object {
+		x=175
+		y=480
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="13"
+	align="horiz. right"
+}
+text {
+	object {
+		x=175
+		y=505
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="14"
+	align="horiz. right"
+}
+text {
+	object {
+		x=175
+		y=530
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="15"
+	align="horiz. right"
+}
+text {
+	object {
+		x=175
+		y=555
+		width=20
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="16"
+	align="horiz. right"
+}
+polyline {
+	object {
+		x=5
+		y=85
+		width=326
+		height=2
+	}
+	"basic attribute" {
+		clr=14
+		width=2
+	}
+	points {
+		(6,86)
+		(330,86)
+	}
+}
+text {
+	object {
+		x=20
+		y=50
+		width=80
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="IOC Name"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=130
+		y=40
+		width=70
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Variable"
+	align="horiz. right"
+}
+text {
+	object {
+		x=130
+		y=65
+		width=70
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Name"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=210
+		y=60
+		width=120
+		height=20
+	}
+	monitor {
+		chan="$(P)alive.IOCNM"
+		clr=14
+		bclr=55
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=210
+		y=35
+		width=120
+		height=20
+	}
+	monitor {
+		chan="$(P)alive.NMVAR"
+		clr=14
+		bclr=55
+	}
+	align="horiz. centered"
+	limits {
+	}
+}

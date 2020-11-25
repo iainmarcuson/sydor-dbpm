@@ -1,0 +1,10 @@
+$(P)CollectMode
+$(P)NDArrayMode
+$(P)ListMode
+$(P)PixelAdvanceMode
+$(P)PixelsPerRun
+$(P)AutoPixelsPerBuffer
+$(P)PixelsPerBuffer
+$(P)IgnoreGate
+$(P)SyncCount
+$(P)InputLogicPolarity

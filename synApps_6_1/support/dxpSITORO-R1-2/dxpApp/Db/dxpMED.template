@@ -1,0 +1,275 @@
+# Author:  Mark Rivers
+# Database for SITORO
+
+record(bi,"$(P)SNL_Connected") {
+    field(ZNAM,"Not connected")
+    field(ZSV, "MAJOR")
+    field(ONAM,"Connected")
+    field(OSV, "NO_ALARM")
+    field(VAL, "0")
+}
+
+record(bo,"$(P)EraseAll") {
+    field(VAL,"1")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(DETALL)MCA_ERASE")
+    field(ZNAM,"Done")
+    field(ONAM,"Erase")
+    field(FLNK,"$(P)ReadAllOnce")
+}
+
+record(bo,"$(P)EraseStart") {
+    field(VAL,"1")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(DETALL)MCA_ERASE")
+    field(ZNAM,"Done")
+    field(ONAM,"Erase")
+    field(FLNK,"$(P)StartAll")
+}
+
+record(bo,"$(P)StartAll") {
+    field(VAL,"1")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(DETALL)MCA_START_ACQUIRE")
+    field(ZNAM,"Done")
+    field(ONAM,"Start")
+    field(FLNK,"$(P)SetAcquireBusy")
+}
+
+record(bo,"$(P)SetAcquireBusy") {
+    field(VAL,"1")
+    field(OUT,"$(P)AcquireBusy PP MS")
+    field(ZNAM,"Done")
+    field(ONAM,"Set")
+    field(FLNK,"$(P)SetClientWait")
+}
+
+record(busy,"$(P)AcquireBusy") {
+    field(ZNAM,"Done")
+    field(ONAM,"Busy")
+}
+
+record(bo,"$(P)StopAll") {
+    field(VAL,"1")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(DETALL)MCA_STOP_ACQUIRE")
+    field(ZNAM,"Done")
+    field(ONAM,"Stop")
+}
+
+record(mbbo, "$(P)PresetMode") {
+    field(DESC, "set preset type")
+    field(ZRVL, "0")
+    field(ZRST, "No preset")
+    field(ONVL, "1")
+    field(ONST, "Real time")
+    field(TWVL, "2")
+    field(TWST, "Events")
+    field(THVL, "3")
+    field(THST, "Triggers")
+}
+
+record(ao,"$(P)PresetReal") {
+    field(PREC, "2")
+}
+
+record(longout, "$(P)PresetTriggers") {
+    field(DESC, "Preset triggers")
+}
+
+record(longout, "$(P)PresetEvents") {
+    field(DESC, "Preset events")
+}
+
+record(bi,"$(P)Acquiring") {
+    field(SCAN,"I/O Intr")
+    field(DTYP, "asynInt32")
+    field(INP, "$(DETALL)MCA_ACQUIRING")
+    field(ZNAM,"Done")
+    field(ONAM,"Acquiring")
+}
+
+record(ai,"$(P)MaxElapsedReal") {
+    field(SCAN,"I/O Intr")
+    field(DTYP, "asynFloat64")
+    field(INP, "$(DETALL)MCA_ELAPSED_REAL")
+    field(PREC, "2")
+}
+
+record(ai,"$(P)MaxElapsedLive") {
+    field(SCAN,"I/O Intr")
+    field(DTYP, "asynFloat64")
+    field(INP, "$(DETALL)MCA_ELAPSED_LIVE")
+    field(PREC, "2")
+}
+
+record(ai,"$(P)MaxElapsedTriggerLive") {
+    field(SCAN,"I/O Intr")
+    field(DTYP, "asynFloat64")
+    field(INP, "$(DETALL)DxpTriggerLiveTime")
+    field(PREC, "2")
+}
+
+record(ai,"$(P)MaxTriggers") {
+    field(SCAN,"I/O Intr")
+    field(DTYP, "asynInt32")
+    field(INP, "$(DETALL)DxpTriggers")
+    field(PREC, "0")
+}
+
+record(ai,"$(P)MaxEvents") {
+    field(SCAN,"I/O Intr")
+    field(DTYP, "asynInt32")
+    field(INP, "$(DETALL)DxpEvents")
+    field(PREC, "0")
+}
+
+record(ai,"$(P)MaxInputCountRate") {
+    field(SCAN,"I/O Intr")
+    field(DTYP, "asynFloat64")
+    field(INP, "$(DETALL)DxpInputCountRate")
+    field(PREC, "1")
+}
+
+record(ai,"$(P)MaxOutputCountRate") {
+    field(SCAN,"I/O Intr")
+    field(DTYP, "asynFloat64")
+    field(INP, "$(DETALL)DxpOutputCountRate")
+    field(PREC, "1")
+}
+
+record(ai,"$(P)DeadTime") {
+    field(PREC, "2")
+}
+
+record(ai,"$(P)IDeadTime") {
+    field(PREC, "2")
+}
+
+record(bo,"$(P)StatusAll") {
+    field(SCAN,".5 second")
+    field(DISV,"0")
+    field(SDIS,"$(P)Acquiring NPP NMS")
+    field(ZNAM,"Done")
+    field(ONAM,"Status")
+    field(FLNK, "$(P)StatusAllOnce PP MS")
+}
+
+record(bo,"$(P)StatusAllOnce") {
+    field(VAL, "1")
+    field(OUT, "$(P)DoStatusAll PP MS")
+    field(ZNAM,"Done")
+    field(ONAM,"Status")
+    field(FLNK, "$(P)DoStatusAll1")
+}
+
+record(bo,"$(P)DoStatusAll1") {
+    field(VAL, "1")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(DETALL)MCA_READ_STATUS")
+    field(ZNAM,"Done")
+    field(ONAM,"Status")
+}
+
+record(bo,"$(P)DoStatusAll") {
+    field(ZNAM,"Done")
+    field(ONAM,"Status")
+}
+
+record(bo,"$(P)ReadAll") {
+    field(SCAN,"1 second")
+    field(DISV,"0")
+    field(SDIS,"$(P)Acquiring NPP NMS")
+    field(ZNAM,"Done")
+    field(ONAM,"Read")
+    field(FLNK, "$(P)ReadAllOnce PP MS")
+}
+
+record(bo,"$(P)ReadAllOnce") {
+    field(VAL, "1")
+    field(OUT, "$(P)DoReadAll PP MS")
+    field(ZNAM,"Done")
+    field(ONAM,"Read")
+    field(FLNK, "$(P)DoReadAll1")
+}
+
+record(bo,"$(P)DoReadAll1") {
+    field(VAL, "1")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(DETALL)MCA_READ_STATUS")
+    field(ZNAM,"Done")
+    field(ONAM,"Read")
+}
+
+record(bo,"$(P)DoReadAll") {
+    field(ZNAM, "Done")
+    field(ONAM, "Read")
+}
+
+record(bo,"$(P)ReadTraces") {
+    field(SCAN,"Passive")
+    field(VAL, "1")
+    field(OUT, "$(P)DoReadTraces PP MS")
+    field(ZNAM,"Done")
+    field(ONAM,"Read")
+}
+
+record(bo,"$(P)DoReadTraces") {
+    field(ZNAM, "Done")
+    field(ONAM, "Read")
+}
+
+record(bo,"$(P)CopyDetectionThreshold") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyMinPulsePairSeparation") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyDetectionFilter") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyScaleFactor") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyRisetimeOptimization") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyDetectorPolarity") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyResetDelay") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyDecayTime") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyROIChannel") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyROIEnergy") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}
+
+record(bo,"$(P)CopyROI_SCA") {
+    field(ZNAM, "Done")
+    field(ONAM, "Copy")
+}

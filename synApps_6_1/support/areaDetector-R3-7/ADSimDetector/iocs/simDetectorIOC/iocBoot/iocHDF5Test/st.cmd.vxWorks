@@ -1,0 +1,8 @@
+# vxWorks startup file
+< cdCommands
+
+cd topbin
+ld < simDetectorApp.munch
+cd startup
+
+< st_base.cmd

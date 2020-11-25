@@ -1,0 +1,52 @@
+registrar(ZynqRegister)
+variable(drvZynqDebug, int)
+variable(drvZynqISRState, int)
+
+variable(devAsynSoftGlueDebug, int)
+variable(MCSDebug, int)
+device(stringout, INST_IO, asynSoftGlue, "softGlue")
+device(bo, INST_IO, softGlueShow, "softGlueShow")
+device(longout, INST_IO, softGlueSigNum, "softGlueSigNum")
+# example of custom interrupt service routine
+registrar(sampleCustomInterruptRegistrar)
+registrar(MCSISRRegistrar)
+
+# devA32Zed
+variable(devA32ZedDebug, int)
+device(bo,VME_IO,devBoA32Zed,"Zed")
+device(bi,VME_IO,devBiA32Zed,"Zed")
+device(ai,VME_IO,devAiA32Zed,"Zed")
+device(ao,VME_IO,devAoA32Zed,"Zed")
+device(longin,VME_IO,devLiA32Zed,"Zed")
+device(longout,VME_IO,devLoA32Zed,"Zed")
+device(mbbi,VME_IO,devMbbiA32Zed,"Zed")
+device(mbbo,VME_IO,devMbboA32Zed,"Zed")
+device(waveform,VME_IO,devWaveformA32Zed,"Zed")
+registrar(ZedRegister)
+
+# asub pixelTrigger
+variable(pixelTriggerDebug, int)
+registrar(pixelTriggerRegister)
+registrar(pixelTriggerISRRegistrar)
+
+# asub scaler
+variable(scalerDebug, int)
+registrar(scalerRegister)
+
+# asub pixelTriggerDma
+registrar(pixelTriggerDmaRegister)
+registrar(pixelTriggerDmaISRRegistrar)
+
+# asub histScalerDma
+registrar(histScalerDmaRegister)
+
+# asub clockConfig
+registrar(clockConfigRegister)
+
+# asub readSoftGlueCounter_ISR
+registrar(RSCsoftGlueISRRegistrar)
+registrar(readSoftGlueCounter_ISRRegister)
+variable(readSoftGlueCounter_ISRDebug, int)
+
+device(scaler,VME_IO,devSGscaler16,"SGscaler16")
+variable(devSGscaler16Debug, int)

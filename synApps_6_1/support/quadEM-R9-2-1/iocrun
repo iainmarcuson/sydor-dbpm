@@ -1,0 +1,59 @@
+#!/bin/bash
+
+EPICS_HOST_ARCH=linux-x86_64
+
+CSSPATH=`cat CONFIG.txt|grep 'epicsEnvSet("CSSPATH"' |awk -F'[""]' '{print $4}'`
+PREFIX=`cat CONFIG.txt|grep 'epicsEnvSet("PREFIX"' |awk -F'[""]' '{print $4}'`
+RECORD=`cat CONFIG.txt|grep 'epicsEnvSet("RECORD"' |awk -F'[""]' '{print $4}'`
+CSSEXEC=`cat CONFIG.txt|grep 'epicsEnvSet("CSSEXEC"' |awk -F'[""]' '{print $4}'`
+
+SPLIT_ID=""
+
+export EPICS_CA_MAX_ARRAY_BYTES=1000000
+PATH=/usr/lib/epics2/base/bin/linux-x86_64:$PATH
+DIR=`pwd`
+CSSGUI=$DIR/quadEMApp/op/opi/autoconvert/CSS/xbpm_SIEPB4.opi
+help(){
+        printf "Syntax:\n       ./iocrun {Option}\nOptions:\n    {gui}: Start CSS GUI\n  {start}: Boot IOC\n   {help}: This menu\n"
+}
+
+function finish {
+    kill $SPLIT_ID
+}
+
+trap finish EXIT
+
+if [ ! -z $1 ];then
+        if [ $1 = 'gui' ];then
+                cd $CSSPATH
+		echo "GUI is $CSSGUI"
+		echo "PREFIX is $PREFIX"
+                echo `./$CSSEXEC --launcher.openfile "$CSSGUI P=$PREFIX,R=$RECORD"`
+
+
+        elif [ $1 = 'start' ];then
+            printf "\n**Initialize IOC\n"
+	    python3 ../../../socket_split_queue.py &
+	    SPLIT_ID=$!
+	    echo "Starting networking; please wait."
+	    sleep 4
+	    echo "Starting EPICS."
+                cd iocBoot/iocBS_EM
+                ./st.cmd
+		kill $SPLIT_ID
+
+
+        elif [ $1 = 'help' ];then
+                help
+
+        else
+                printf "**Unknown function\n"
+                help
+        fi
+
+else
+        printf "**Please select a function\n"
+        help
+        exit 1
+fi
+                               

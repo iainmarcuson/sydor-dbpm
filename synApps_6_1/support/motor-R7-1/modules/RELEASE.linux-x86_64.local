@@ -1,0 +1,6 @@
+MOTOR = /home/iainm/work/b4/bs_dev/synApps_6_1/support/motor-R7-1
+ASYN = /home/iainm/work/b4/bs_dev/synApps_6_1/support/asyn-R4-36
+SNCSEQ = /home/iainm/work/b4/bs_dev/synApps_6_1/support/seq-2-2-6
+BUSY = /home/iainm/work/b4/bs_dev/synApps_6_1/support/busy-R1-7-2
+IPAC = /home/iainm/work/b4/bs_dev/synApps_6_1/support/ipac-2-15
+EPICS_BASE = /usr/lib/epics2/base

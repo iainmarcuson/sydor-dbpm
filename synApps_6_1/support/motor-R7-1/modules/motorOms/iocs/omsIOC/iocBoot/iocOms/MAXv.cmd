@@ -1,0 +1,35 @@
+
+dbLoadTemplate("MAXv.substitutions")
+
+# OMS MAXv driver setup parameters: 
+#     (1)number of cards in array.
+#     (2)VME Address Space - A(16,24,32).
+#     (3)Base Address (see motorOms/omsApp/src/README).
+#     (4)interrupt vector (0=disable or  64 - 255).
+#     (5)interrupt level (2 - 6).
+#     (6)motor task polling rate (min=1Hz,max=60Hz).
+MAXvSetup(1, 16,     0xF000, 200, 5, 10)
+#!MAXvSetup(1, 24,   0xFF0000, 200, 5, 10)
+#!MAXvSetup(1, 32, 0xFF000000, 200, 5, 10)
+#!drvMAXvdebug=4
+
+# OMS MAXv configuration string:
+#     (1) number of card being configured (0-14).
+#     (2) configuration string; axis type (PSO/PSE/PSM) MUST be set here.
+#         For example, set which TTL signal level defines an active limit
+#         switch.  The "config" example below sets X,Y,Z,T to active low (LTL),
+#         sets U,V,R,S to active high (LTH) and sets all axes to open-loop
+#         stepper (PSO). See MAXv User's Manual for LTL/LTH and PSO/PSE/PSM
+#         commands.
+#         config="AX LTL PSO; AY LTL PSO; AZ LTL PSO; AT LTL PSO; AU LTH PSO; AV LTH PSO; AR LTH PSO; AS LTH PSO;"
+#     (3) SSI based absolute encoder bit flag. Bit #0 for Axis X, bit #1 for
+#         Axis Y, etc.. Set a bit flag to '1' for absolute encoder values; '0'
+#         for the standard incremental encoder values.
+#     (4) SSI based absolute encoder grey code flags (0/1 - yes/no, 0x12 -> UY)
+
+# The max command-line length of the VxWorks shell is 128 chars
+str = malloc(200);
+strcpy str, "AA; LMH,H,H,H,H,H,H,H;"
+strcat str, "AX LTH PSO; AY LTH PSO; AZ LTL PSO; AT LTL PSO; AU LTL PSO; AV LTL PSO; AR LTL PSO; AS LTL PSO;"
+MAXvConfig(0, str, 0, 0)
+free(str)

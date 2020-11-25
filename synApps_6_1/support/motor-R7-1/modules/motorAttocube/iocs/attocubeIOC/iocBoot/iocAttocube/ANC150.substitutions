@@ -1,0 +1,8 @@
+file "$(MOTOR)/db/asyn_motor.db"
+{
+pattern
+{P,         N,        M,         DTYP,   PORT,  ADDR,         DESC,  EGU,  DIR,  VELO,  VBAS,  ACCL,  BDST,  BVEL,  BACC,  MRES,   PREC,  DHLM,  DLLM,  INIT}
+{attocube:, 1,  "m$(N)",  "asynMotor", serial1,    0,  "motor $(N)",  deg,  Pos,    10,     0,    .2,     0,     1,     2,  0.01,      5,     0,     0,    ""}
+{attocube:, 2,  "m$(N)",  "asynMotor", serial1,    1,  "motor $(N)",   mm,  Pos,     1,     0,    .2,     0,     1,     2,  0.00006,   5,     0,     0,    ""}
+{attocube:, 3,  "m$(N)",  "asynMotor", serial1,    2,  "motor $(N)",   mm,  Pos,     1,     0,    .2,     0,     1,     2,  0.00007,   5,     0,     0,    ""}
+}

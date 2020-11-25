@@ -1,0 +1,276 @@
+# Database for XIA FalconX detectors 
+# This database contains records for each channel, i.e. this file gets loaded once for each channel.
+
+record(mbbo, "$(P)$(R)PresetMode") {
+    field(PINI, "YES")
+    field(DESC, "set preset type")
+    field(DTYP, "asynInt32")
+    field(OUT,  "$(IO)DxpPresetMode")
+    field(ZRVL, "0")
+    field(ZRST, "No preset")
+    field(ONVL, "1")
+    field(ONST, "Real time")
+    field(TWVL, "2")
+    field(TWST, "Events")
+    field(THVL, "3")
+    field(THST, "Triggers")
+}
+
+record(mbbi, "$(P)$(R)PresetMode_RBV") {
+    field(DESC, "set preset type for preset counts")
+    field(DTYP, "asynInt32")
+    field(INP,  "$(IO)DxpPresetMode")
+    field(ZRVL, "0")
+    field(ZRST, "No preset")
+    field(ONVL, "1")
+    field(ONST, "Real time")
+    field(TWVL, "2")
+    field(TWST, "Events")
+    field(THVL, "3")
+    field(THST, "Triggers")
+    field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)PresetReal") {
+    field(PINI, "YES")
+    field(DTYP, "asynFloat64")
+    field(OUT, "$(IO)DxpPresetReal")
+    field(DESC, "Preset real time")
+}
+
+record(ai, "$(P)$(R)PresetReal_RBV") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpPresetReal")
+    field(DESC, "Preset real time")
+    field(SCAN, "I/O Intr")
+}
+
+record(longout, "$(P)$(R)PresetTriggers") {
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(IO)DxpPresetTriggers")
+    field(DESC, "Preset triggers")
+}
+
+record(longin, "$(P)$(R)PresetTriggers_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpPresetTriggers")
+    field(DESC, "Preset triggers")
+    field(SCAN, "I/O Intr")
+}
+
+record(longout, "$(P)$(R)PresetEvents") {
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(IO)DxpPresetEvents")
+    field(DESC, "Preset events")
+}
+
+record(longin, "$(P)$(R)PresetEvents_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpPresetEvents")
+    field(DESC, "Preset events")
+    field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)DetectionThreshold") {
+    field(PINI, "YES")
+    field(VAL,  "1.0")
+    field(DTYP, "asynFloat64")
+    field(OUT, "$(IO)DxpDetectionThreshold")
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)DetectionThreshold_RBV") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpDetectionThreshold")
+    field(PREC, "3")
+    field(SCAN, "I/O Intr")
+}
+
+record(longout, "$(P)$(R)MinPulsePairSeparation") {
+    field(PINI, "YES")
+    field(VAL,  "50")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(IO)DxpMinPulsePairSeparation")
+    field(EGU, "Samples")
+}
+
+record(longin, "$(P)$(R)MinPulsePairSeparation_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpMinPulsePairSeparation")
+    field(EGU, "Samples")
+    field(SCAN, "I/O Intr")
+}
+
+record(mbbo, "$(P)$(R)DetectionFilter") {
+    field(PINI, "YES")
+    field(DESC, "Detection filter")
+    field(DTYP, "asynInt32")
+    field(OUT,  "$(IO)DxpDetectionFilter")
+    field(ZRVL, "0")
+    field(ZRST, "LowEnergy")
+    field(ONVL, "1")
+    field(ONST, "LowRate")
+    field(TWVL, "2")
+    field(TWST, "MidRate")
+    field(THVL, "3")
+    field(THST, "HighRate")
+    field(FRVL, "4")
+    field(FRST, "MaxThroughput")
+}
+
+record(mbbi, "$(P)$(R)DetectionFilter_RBV") {
+    field(DESC, "Detection filter")
+    field(DTYP, "asynInt32")
+    field(INP,  "$(IO)DxpDetectionFilter")
+    field(ZRVL, "0")
+    field(ZRST, "LowEnergy")
+    field(ONVL, "1")
+    field(ONST, "LowRate")
+    field(TWVL, "2")
+    field(TWST, "MidRate")
+    field(THVL, "3")
+    field(THST, "HighRate")
+    field(FRVL, "4")
+    field(FRST, "MaxThroughput")
+    field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)ScaleFactor") {
+    field(PINI, "YES")
+    field(VAL,  "2.0")
+    field(DTYP, "asynFloat64")
+    field(OUT, "$(IO)DxpScaleFactor")
+    field(PREC, "3")
+    field(DRVL, "0.5")
+    field(DRVH, "200.0")
+}
+
+record(ai, "$(P)$(R)ScaleFactor_RBV") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpScaleFactor")
+    field(PREC, "3")
+    field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)RisetimeOptimization") {
+    field(PINI, "YES")
+    field(VAL,  "2.0")
+    field(DTYP, "asynFloat64")
+    field(OUT, "$(IO)DxpRisetimeOptimization")
+    field(PREC, "3")
+    field(DRVL, "0.0")
+    field(DRVH, "4000.0")
+}
+
+record(ai, "$(P)$(R)RisetimeOptimization_RBV") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpRisetimeOptimization")
+    field(PREC, "3")
+    field(SCAN, "I/O Intr")
+}
+
+record(bo, "$(P)$(R)DetectorPolarity") {
+    field(PINI, "YES")
+    field(VAL,  "1")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(IO)DxpDetectorPolarity")
+    field(ZNAM, "Neg")
+    field(ONAM, "Pos")
+}
+
+record(bi, "$(P)$(R)DetectorPolarity_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpDetectorPolarity")
+    field(ZNAM, "Neg")
+    field(ONAM, "Pos")
+    field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)$(R)DecayTime") {
+    field(PINI, "YES")
+    field(VAL,  "10.0")
+    field(DTYP, "asynFloat64")
+    field(OUT, "$(IO)DxpDecayTime")
+    field(PREC, "2")
+    field(EGU, "us")
+}
+
+record(ai, "$(P)$(R)DecayTime_RBV") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpDecayTime")
+    field(PREC, "2")
+    field(EGU, "us")
+    field(SCAN, "I/O Intr")
+}
+
+record(waveform, "$(P)$(R)TraceData") {
+    field(DESC, "Trace data")
+    field(DTYP, "asynInt32ArrayIn")
+    field(PREC, "0")
+    field(INP, "$(IO)DxpTraceData")
+    field(NELM, "8192")
+    field(FTVL, "LONG")
+}
+
+# This is really redundant with the MCA_ELAPSED_REAL parameter
+record(ai, "$(P)$(R)ElapsedRealTime") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)MCA_ELAPSED_REAL")
+    field(DESC, "number of triggers")
+    field(SCAN, "I/O Intr")
+}
+
+# This is really redundant with the MCA_ELAPSED_LIVE parameter
+record(ai, "$(P)$(R)ElapsedLiveTime") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)MCA_ELAPSED_LIVE")
+    field(DESC, "Energy live time")
+    field(SCAN, "I/O Intr")
+}
+
+record(ai, "$(P)$(R)ElapsedTriggerLiveTime") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpTriggerLiveTime")
+    field(DESC, "Trigger live time")
+    field(PREC, "2")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(P)$(R)Triggers") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpTriggers")
+    field(DESC, "number of triggers")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(P)$(R)Events") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpEvents")
+    field(DESC, "number of events")
+    field(SCAN, "I/O Intr")
+}
+
+record(ai, "$(P)$(R)InputCountRate") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpInputCountRate")
+    field(DESC, "incident count rate")
+    field(PREC, "1")
+    field(SCAN, "I/O Intr")
+}
+
+record(ai, "$(P)$(R)OutputCountRate") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpOutputCountRate")
+    field(DESC, "output count rate")
+    field(PREC, "1")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(P)$(R)CurrentPixel") {
+    field(DTYP, "asynInt32")
+    field(INP,  "$(IO)DxpCurrentPixel")
+    field(DESC, "Current pixel #")
+    field(SCAN, "I/O Intr")
+}

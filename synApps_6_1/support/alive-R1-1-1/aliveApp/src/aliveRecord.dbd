@@ -1,0 +1,200 @@
+menu(aliveHRTBT) {
+        choice(aliveHRTBT_OFF,"Off")
+        choice(aliveHRTBT_ON,"On")
+        }
+menu(aliveITRIG) {
+        choice(aliveITRIG_IDLE,"Idle")
+        choice(aliveITRIG_TRIGGER,"Trigger")
+        }
+menu(aliveISUP) {
+        choice(aliveISUP_OFF,"Off")
+        choice(aliveISUP_ON,"On")
+        }
+menu(aliveIPSTS) {
+        choice(aliveIPSTS_UNDETERMINED,"Undetermined")
+        choice(aliveIPSTS_OPERABLE,"Operable")
+        choice(aliveIPSTS_INOPERABLE,"Inoperable")
+        }
+recordtype(alive) {
+        include "dbCommon.dbd" 
+        field(VAL,DBF_ULONG) {
+                prompt("Return value")
+                special(SPC_NOMOD)
+        }
+        field(RHOST,DBF_STRING) {
+                prompt("Remote host")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(RPORT,DBF_USHORT) {
+                prompt("Remote port")
+                special(SPC_MOD)
+                initial("0")
+        }
+        field(HRTBT,DBF_MENU) {
+                prompt("Heartbeat state")
+                menu(aliveHRTBT)
+                initial("On")
+        }
+        field(HPRD,DBF_USHORT) {
+                prompt("Heartbeat period")
+                special(SPC_NOMOD)
+                initial("15")
+        }
+        field(HMAG,DBF_ULONG) {
+                prompt("Heartbeat magic number")
+                initial("305419896")
+        }
+        field(MSG,DBF_ULONG) {
+                prompt("Message Value")
+                initial("0")
+        }
+        field(RPVT,DBF_NOACCESS) {
+                prompt("Record Private")
+                special(SPC_NOMOD)
+                interest(4)
+                extra("void *rpvt")
+        }
+
+        field(ENV1,DBF_STRING) {
+                prompt("Environment variable 1")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV2,DBF_STRING) {
+                prompt("Environment variable 2")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV3,DBF_STRING) {
+                prompt("Environment variable 3")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV4,DBF_STRING) {
+                prompt("Environment variable 4")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV5,DBF_STRING) {
+                prompt("Environment variable 5")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV6,DBF_STRING) {
+                prompt("Environment variable 6")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV7,DBF_STRING) {
+                prompt("Environment variable 7")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV8,DBF_STRING) {
+                prompt("Environment variable 8")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV9,DBF_STRING) {
+                prompt("Environment variable 9")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV10,DBF_STRING) {
+                prompt("Environment variable 10")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV11,DBF_STRING) {
+                prompt("Environment variable 11")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV12,DBF_STRING) {
+                prompt("Environment variable 12")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV13,DBF_STRING) {
+                prompt("Environment variable 13")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV14,DBF_STRING) {
+                prompt("Environment variable 14")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV15,DBF_STRING) {
+                prompt("Environment variable 15")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+        field(ENV16,DBF_STRING) {
+                prompt("Environment variable 16")
+                special(SPC_MOD)
+                size(40)
+                initial("")
+        }
+
+        field(IPORT,DBF_USHORT) {
+                prompt("Information port")
+                special(SPC_NOMOD)
+                initial("0")
+        }
+        field(IPSTS,DBF_MENU) {
+                prompt("Information port status")
+                special(SPC_NOMOD)
+                menu(aliveIPSTS)
+                initial("Undetermined")
+        }
+        field(ITRIG,DBF_MENU) {
+                prompt("Trigger information read")
+                special(SPC_MOD)
+                menu(aliveITRIG)
+                initial("Idle")
+        }
+        field(ISUP,DBF_MENU) {
+                prompt("Suppress information read")
+                special(SPC_MOD)
+                menu(aliveISUP)
+                initial("Off")
+        }
+
+        field(NMVAR,DBF_STRING) {
+                prompt("IOC name variable")
+                special(SPC_NOMOD)
+                size(40)
+                initial("IOC")
+        }
+        field(IOCNM,DBF_STRING) {
+                prompt("IOC name")
+                special(SPC_NOMOD)
+                size(40)
+                initial("")
+        }
+
+        field(VER,DBF_STRING) {
+                prompt("Record version")
+                special(SPC_NOMOD)
+                size(40)
+                initial("")
+        }
+}

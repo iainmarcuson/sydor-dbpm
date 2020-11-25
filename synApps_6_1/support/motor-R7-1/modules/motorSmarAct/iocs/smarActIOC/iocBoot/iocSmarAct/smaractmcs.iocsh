@@ -1,0 +1,14 @@
+### Motors
+# Motors substitutions, customize this for your motor
+dbLoadTemplate "motor.substitutions.smaractmcs"
+
+# Configure each controller
+drvAsynIPPortConfigure("MCS_ETH","192.168.1.17:2102",0,0,0)
+
+# Controller port, asyn port, number of axis, moving poll period, idle poll period
+# smarActMCSCreateController(const char *motorPortName, const char *ioPortName, int numAxes, double movingPollPeriod, double idlePollPeriod);
+smarActMCSCreateController("MCS", "MCS_ETH", 1, 0.020, 1.0)
+
+# Controller port, axis number, controller channel
+# smarActMCSCreateAxis(const char *motorPortName, int axisNumber, int channel)
+smarActMCSCreateAxis("MCS", 0, 0);

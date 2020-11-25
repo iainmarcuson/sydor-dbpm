@@ -1,0 +1,43 @@
+# Database for CaenEls TetrAMM electrometer
+#   Mark Rivers
+#   July 15, 2015
+
+include "quadEM.template"
+
+# We replace the choices for the Range
+record(mbbo,"$(P)$(R)Range") {
+    field(ZRVL,"0")
+    field(ZRST,"+- 120 uA")
+    field(ONVL,"1")
+    field(ONST,"+- 120 nA")
+}
+
+record(mbbi,"$(P)$(R)Range_RBV") {
+    field(ZRVL,"0")
+    field(ZRST,"+- 120 uA")
+    field(ONVL,"1")
+    field(ONST,"+- 120 nA")
+}
+
+# We replace the choices for the TriggerMode
+record(mbbo,"$(P)$(R)TriggerMode") {
+    field(ZRVL, "0")
+    field(ZRST, "Free run")
+    field(ONVL, "2")
+    field(ONST, "Ext. trig.")
+    field(TWVL, "3")
+    field(TWST, "Ext. bulb")
+    field(THVL, "4")
+    field(THST, "Ext. gate")
+}
+
+record(mbbi,"$(P)$(R)TriggerMode_RBV") {
+    field(ZRVL, "0")
+    field(ZRST, "Free run")
+    field(ONVL, "2")
+    field(ONST, "Ext. trig.")
+    field(TWVL, "3")
+    field(TWST, "Ext. bulb")
+    field(THVL, "4")
+    field(THST, "Ext. gate")
+}

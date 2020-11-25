@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>ipUnidig</title>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type" />
+</head>
+<body>
+  <h1 style="text-align: center">
+    ipUnidig Driver</h1>
+  <h1 style="text-align: center">
+    Author: Mark Rivers</h1>
+  <p>
+    This package provides EPICS device support for the Greenspring IP-UD (formerly called
+    the IP-Unidig) series of digital I/O Industry Pack modules. It also supports the
+    Systran DIO316I and the SBS IP-OPTOIO-8. The IP-UD family includes more than 20
+    separate models, though some are no longer available. This software provides support
+    for most of these models. Most models provide 24 bits, with each bit individually
+    programmable as an input or an output. The last section of this document describes
+    any special features or restrictions on particular models.</p>
+  <p>
+    The driver is written in C++, and consists of a class that inherits from asynPortDriver,
+    which is part of the EPICS asyn module. The driver supports 3 parameters, identified
+    by the drvInfo strings used in the INP and OUT fields of records: DIGITAL_INPUT,
+    DIGITAL_OUTPUT, and DAC_OUTPUT. DAC_OUTPUT is only supported on the IP-Unidig-HV
+    series of modules.
+  </p>
+  <p>
+    The driver supports interrupts on input transitions for modules that provide this
+    capability, such as the IP-Unidig-I. Interrupts can be individually enabled and
+    disabled for low-to-high and high-to-low transitions on each input bit. The interrupts
+    can be used for I/O Intr scanning of bi and longin records. They can also be used
+    to call other drivers when an interrupt occurs. This capability is used by the synApps
+    quadEM module. The quadEM VME card cannot generate interrupts, but it can output
+    a TTL pulse each time new data is available, at up to 815 Hz. If this pulse is input
+    to the Ip-Unidig, the ipUnidig interrupt routine will call the quadEM driver each
+    time new data is available.</p>
+  <p>
+    Most IP-Unidig modules are bi-directional, meaning each bit can be either an input
+    or an output. This is done using open-collector output circuits, with pull-up resistors
+    to +5V. If the output bit is set to 1 (High), then the open-collector transistor
+    is turned off and the signal is pulled up to +5V. In that state an external device
+    can drive the line to 0V or 5V. There is an independent input sensor that measures
+    whether the line is above the TTL threshold (=High=1) or below the TTL threshold
+    (=Low=0). Thus, setting the output 1 (High) effectively enables that line as an
+    input. If the output is set to 0 (Low), its open collector will sink the current
+    through the pull-up resistor and the line will go to 0V, and an external device
+    cannot change the state.</p>
+  <h2>
+    Startup script</h2>
+  <p>
+    The following lines are needed in the EPICS startup script for the IP-Unidig.</p>
+  <pre># Initialize Greenspring IP-Unidig
+# initIpUnidig(char *portName, 
+#              int carrier, 
+#              int slot,
+#              int msecPoll,
+#              int intVec, 
+#              int risingMask, 
+#              int fallingMask)
+# portName    = name to give this asyn port
+# carrier     = IPAC carrier number (0, 1, etc.)
+# slot        = IPAC slot (0,1,2,3, etc.)
+# msecPoll    = polling time for input bits in msec.  Default=100.
+# intVec      = interrupt vector
+# risingMask  = mask of bits to generate interrupts on low to high (24 bits)
+# fallingMask = mask of bits to generate interrupts on high to low (24 bits)
+initIpUnidig("Unidig1", 0, 1, 2000, 116, 0xfffffb, 0xfffffb)
+dbLoadTemplate "ipUnidig.substitutions"
+</pre>
+  <p>
+    Interrupts on the IP-Unidig-I models are fully supported. For each input bit the
+    hardware can be programmed to generate interrupts on rising or falling transitions,
+    or neither. The interrupt service routine software is written to allow alternating
+    which transition generates interrupts, so that it is possible to generate interrupts
+    on both rising and falling transitions.</p>
+  <p>
+    The risingMask and fallingMask parameters to initIpUnidig are used to specify which
+    bits should generate interrupts on each edge. It is possible to have some bits set
+    in neither mask, some in one mask and not the other, and some specified in both
+    masks. For example if risingMask=0x5 (binary 101) and fallingMask=0x6 (binary 110),
+    then the first input will generate interrupts on the rising edge, the second input
+    will generate interrupts on the falling edge, the third input will generate interrupts
+    on both rising and falling edges, and all other inputs will not generate interrupts
+    at all.</p>
+  <p>
+    Generally risingMask and fallingMask will both be 0xFFFFFF, so that all bits generate
+    interrupts on both transitions. However, if an input is changing very rapidly and
+    one does not want interrupts on both or either transition, then that input in the
+    mask should be 0. The msecPoll argument sets the time in milliseconds for polling
+    the inputs. Polling is needed to periodically read inputs that do not generate interrupts
+    on their transitions. An example <a href="ipUnidig.substitutions.html">ipUndig.subsitutions</a>
+    file shows how to load the databases described below.</p>
+  <h2>
+    Databases</h2>
+  <p>
+    ipUnidig uses the standard asyn device support. 4 generic databases are provided:
+    IpUnidigBi.db (binary output record), IpUnidigBo.db (binary output record), IpUnidigLi.db
+    (longin record), IpUnidigLo.db (longout record). Database is provided for 3 records,
+    binary output (bo), long input (longin) and binary input (bi). Each of these defines
+    a single record. IpUnidigBi.db, for example contains:</p>
+  <pre>record(bi,"$(P)$(R)") {
+  field(PINI, "YES")
+  field(DTYP,"asynUInt32Digital")
+  field(INP,"@asynMask($(PORT) 0 $(MASK))DIGITAL_INPUT")
+  field(SCAN, "$(SCAN)")
+  field(ZNAM, "Low")
+  field(ONAM, "High")
+}
+</pre>
+  <p>
+    In addition a remoteShutter.db file is provided for using the IP-Unidig with the
+    APS remote shutter control.</p>
+  <h2 id="MEDM_screens" style="text-align: left">
+    MEDM screens</h2>
+  <p>
+    The following show the MEDM screens that are used to control the ipUnidig driver.
+  </p>
+  <p>
+    <code>ipUnidig.adl</code> is the main screen used to control the ipUndig driver.
+  </p>
+  <div style="text-align: center">
+    <h3 style="text-align: center">
+      ipUnidig.adl</h3>
+    <img alt="ipUnidig.png" src="ipUnidig.png" /></div>
+  <p>
+    <code>ipUnidig_more.adl</code> can be used to set the scan rate of each bi record.
+  </p>
+  <div style="text-align: center">
+    <h3 style="text-align: center">
+      ipUnidig_more.adl</h3>
+    <img alt="ipUnidig_more.png" src="ipUnidig_more.png" /></div>
+  <hr />
+  <h2 style="text-align: center">
+    IP-Unidig Models</h2>
+  <p>
+    The IP-Unidig family consists of more than 20 different models. These models differ
+    in the following ways:</p>
+  <ul>
+    <li>The input and output drivers can be TTL (IP-Unidig), differential (IP-Unidig-D),
+      optically isolated (IP-Unidig-O), high-voltage (IP-Unidig-HV), or LineSafe (IP-Unidig-E).</li>
+    <li>On some models the inputs are capable of generating interrupts. Models which can
+      generate interrupts have a &quot;-I&quot; in the model name, e.g. IP-Unidig-I and
+      IP-Unidig-I-HV. The interrupt capability of the modules is now fully supported in
+      this software (it was not supported in releases prior to R1-2.). For each input
+      bit the modules can be programmed to generate an interrupt on the rising edge, on
+      the falling edge, on both edges, or never. If interrupts are not supported or desired,
+      then the inputs on all models are polled (default rate = 10 Hz, any rate up to the
+      60Hz system clock can be used), and &quot;pseudo-interrupts&quot; are generated
+      by the input server if any input changes state.</li>
+  </ul>
+  <p>
+    The following provides information on specific models. Note that only the IP-Unidig-I
+    and Systran DIO316I have actually been tested. The support for other models is based
+    on reading the manuals. Users who have problems are encouraged to contact the author
+    so that fixes can be incorporated.
+  </p>
+  <dl>
+    <dt>IP-Unidig, IP-Unidig-I</dt>
+    <dd>
+      The basic model (IP-Unidig) provides 24 bits of parallel I/O. Each bit can either
+      be an input or an output. The outputs are open-collector. Writing a 1 to a bit turns
+      off the open collector driver. In this state the on-board 1k pullup resistors will
+      pull the line up to +5V, and an external device can pull the line low. Thus, writing
+      a 1 to a bit allows that bit to be an input. At power-up all bits are set to 1,
+      allowing them to be inputs.
+    </dd>
+    <dt></dt>
+    <dt>IP-Unidig-E, IP-Unidig-I-E</dt>
+    <dd>
+      This is identical to the IP-Unidig except that the inputs have LineSafe protection.
+    </dd>
+    <dt></dt>
+    <dt>IP-Unidig-E48</dt>
+    <dd>
+      This is identical to the IP-Unidig except that the inputs have LineSafe protection
+      and there are 48 lines, rather than 24. This software currently only supports the
+      first 24 bits when used with the IP-Unidig-E48.
+    </dd>
+    <dt></dt>
+    <dt>IP-Unidig-D, IP-Unidig-I-D</dt>
+    <dd>
+      This is identical to the IP-Unidig except that the inputs and outputs use differential
+      line drivers. The outputs are not open collector, and hence if a line is used as
+      an output it cannot be used as an input. This software enables the output drivers
+      dynamically. If a bit is set or cleared then that line is assumed to be an output,
+      and its output driver is turned on. Once it is turned on it is never turned off.
+      At powerup all output drivers are turned off, so all lines can be inputs.
+    </dd>
+    <dt></dt>
+    <dt>IP-Unidig-HV, IP-Unidig-I-HV </dt>
+    <dd>
+      This is similar to the IP-Unidig except that the inputs and outputs are high-voltage
+      capable. There are 2 options, -16I8O (16 inputs and 8 outputs) and -8I160 (8 inputs,
+      16 outputs). Each high-voltage input is converted to a digital signal by the use
+      of a voltage comparator. The reference for this comparator is an on-board 12 bit
+      D/A converter, with a resolution of 15 mV/bit. At initialization the D/A is programmed
+      for 2.5 volts. Device support can send messages with cmd = cmdSetDAC, and value=DAC
+      value in the range 0 to 4095, corresponding to 0V to 61V threshold. On the 16I8O
+      model the inputs are bits 0-15, and the outputs are bits 16-23. On the 8I16O model
+      the inputs are bits 0-7, and the outputs are bits 8-23.
+    </dd>
+    <dt></dt>
+    <dt>IP-Unidig-O, IP-Unidig-I-O </dt>
+    <dd>
+      This is similar to the IP-Unidig except that the inputs and outputs are optically
+      isolated. There are 3 options, -24IO (24 inputs/outputs), 12I12O (12 inputs, 12
+      outputs), -24I (24 inputs). On models with outputs the outputs are all enabled in
+      the initialization code. On the 24IO model each line can be individually set to
+      be an input by setting the output value to 1, just as with the basic IP-Unidig model.
+      On the 12I12O model the inputs are bits 0-11 and the outputs are bits 12-23.
+    </dd>
+    <dt></dt>
+    <dt>Other IP-Unidig models</dt>
+    <dd>
+      The IP-Unidig-T, IP-Unidig-T-D, IP-Unidig-P and IP-Unidig-P-D are not currently
+      supported because they are quite different from the other IP-Unidig models
+    </dd>
+    <dt></dt>
+    <dt>Systran DIO316I </dt>
+    <dd>
+      This is a digital I/O module which is similar to the IP-Unidig. This software support
+      sets the module up as follows: - Ports 0-3 are output ports. This provides 32 bits
+      of output. However, device support currently only supports the first 24 bits (ports
+      0-2). - All output ports are enabled. - Ports 4 and 5 are input ports. This provides
+      16 bits of input, bits 0-15.
+    </dd>
+    <dt></dt>
+  </dl>
+  <hr />
+  <address>
+    Suggestions and Comments to:
+    <br />
+    <a href="mailto:rivers@cars.uchicago.edu">Mark Rivers </a>: (rivers@cars.uchicago.edu)
+    <br />
+  </address>
+</body>
+</html>

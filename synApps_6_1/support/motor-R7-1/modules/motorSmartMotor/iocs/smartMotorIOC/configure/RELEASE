@@ -1,0 +1,8 @@
+# RELEASE - Location of external support modules
+
+# Use motor/module's generated release file when buidling inside motor
+-include $(TOP)/../../../RELEASE.$(EPICS_HOST_ARCH).local
+# Use motorSmartMotor's release file when building inside motorSmartMotor, but outside motor
+-include $(TOP)/../../configure/RELEASE.local
+# Use smartMotorIOC's RELEASE.local when building outside motorSmartMotor
+-include $(TOP)/configure/RELEASE.local

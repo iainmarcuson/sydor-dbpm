@@ -1,0 +1,33 @@
+### motor.cmd.SMChydra
+
+# Ethernet
+#!drvAsynIPPortConfigure("hydraPort","192.168.1.17:400", 0, 0, 0)
+# Serial
+drvAsynSerialPortConfigure("hydraPort", "/dev/ttyS1", 0, 0, 0)
+
+# Only show errors
+asynSetTraceMask("hydraPort", 0, 1)
+# Leave ascii selected so traces can be turned on with a single click
+asynSetTraceIOMask("hydraPort", 0, 1)
+
+# Set end-of-string terminators
+asynOctetSetInputEos("hydraPort",0,"\r\n")
+asynOctetSetOutputEos("hydraPort",0,"\r\n")
+
+dbLoadTemplate("motor.substitutions.SMChydra")
+
+# SMChydraCreateController(
+#    port name,
+#    asyn port name,
+#    num axes,
+#    moving poll period (ms),
+#    idle poll period (ms) )
+SMChydraCreateController("Hydra1", "hydraPort", 2, 100, 500)
+
+# This sleep is useful when asyn traces are enabled
+#!epicsThreadSleep(3.0)
+
+# Include an asyn record for each motor to make it easy to enable diagnostic messages
+dbLoadRecords("$(ASYN)/db/asynRecord.db","P=micos:,R=hydraComm,PORT=hydraPort,ADDR=0,OMAX=256,IMAX=256")
+dbLoadRecords("$(ASYN)/db/asynRecord.db","P=micos:,R=hydraAsyn1,PORT=Hydra1,ADDR=0,OMAX=256,IMAX=256")
+dbLoadRecords("$(ASYN)/db/asynRecord.db","P=micos:,R=hydraAsyn2,PORT=Hydra1,ADDR=1,OMAX=256,IMAX=256")

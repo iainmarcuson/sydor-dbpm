@@ -1,0 +1,165 @@
+# Status polling rate (and data readout speed in normal/mca mode)
+record(ao, "$(P)PollTime") {
+    field(PINI, "YES")
+    field(DTYP, "asynFloat64")
+    field(OUT, "$(IO)DxpPollTime")
+    field(VAL, "0.01")
+    field(PREC, "3")
+    field(EGU, "s")
+}
+
+record(ai, "$(P)PollTime_RBV") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpPollTime")
+    field(PREC, "3")
+    field(EGU, "s")
+    field(SCAN, "I/O Intr")
+}
+
+record(ao, "$(P)MCARefreshPeriod") {
+    field(PINI, "YES")
+    field(DTYP, "asynFloat64")
+    field(OUT, "$(IO)DxpMCARefreshPeriod")
+    field(VAL, "0.1")
+    field(PREC, "3")
+    field(EGU, "s")
+}
+
+record(ai, "$(P)MCARefreshPeriod_RBV") {
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpMCARefreshPeriod")
+    field(PREC, "3")
+    field(EGU, "s")
+    field(SCAN, "I/O Intr")
+}
+
+record(ai,"$(P)TraceTime") {
+    field(DESC, "Trace time per point")
+    field(EGU, "micro seconds")
+    field(DTYP, "asynFloat64")
+    field(INP, "$(IO)DxpTraceTime")
+    field(PREC, "4")
+    field(SCAN, "I/O Intr")
+}
+
+
+record(waveform, "$(P)TraceTimeArray") {
+    field(DESC, "Trace time array")
+    field(DTYP, "asynFloat64ArrayIn")
+    field(PREC, "0")
+    field(INP, "$(IO)DxpTraceTimeArray")
+    field(NELM, "8192")
+    field(FTVL, "DOUBLE")
+    field(SCAN, "I/O Intr")
+}
+
+record(bo, "$(P)SaveSystem") {
+    field(DESC, "save system information")
+    field(SCAN, "Passive")
+    field(DTYP, "asynInt32")
+    field(OUT,  "$(IO)DxpSaveSystem")
+    field(ZNAM, "Done")
+    field(ONAM, "Save")
+}
+
+record(bi, "$(P)SaveSystem_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpSaveSystem")
+    field(ZNAM, "Done")
+    field(ONAM, "Save")
+    field(SCAN, "I/O Intr")
+}
+
+record(waveform, "$(P)SaveSystemFile")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynOctetWrite")
+    field(INP,  "$(IO)DxpSaveSystemFile")
+    field(FTVL, "UCHAR")
+    field(NELM, "256")
+}
+
+record(mbbo, "$(P)SCATriggerMode") {
+    field(PINI, "YES")
+    field(DESC, "SCA trigger mode")
+    field(DTYP, "asynInt32")
+    field(OUT,  "$(IO)DxpSCATriggerMode")
+    field(ZRVL, "0")
+    field(ZRST, "Off")
+    field(ONVL, "1")
+    field(ONST, "Gate high")
+    field(TWVL, "2")
+    field(TWST, "Gate low")
+    field(THVL, "3")
+    field(THST, "Always")
+}
+
+record(mbbi, "$(P)SCATriggerMode_RBV") {
+    field(DESC, "SCA trigger mode")
+    field(DTYP, "asynInt32")
+    field(INP,  "$(IO)DxpSCATriggerMode")
+    field(ZRVL, "0")
+    field(ZRST, "Off")
+    field(ONVL, "1")
+    field(ONST, "Gate high")
+    field(TWVL, "2")
+    field(TWST, "Gate low")
+    field(THVL, "3")
+    field(THST, "Always")
+    field(SCAN, "I/O Intr")
+}
+
+record(longout, "$(P)SCAPulseDuration") {
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(IO)DxpSCAPulseDuration")
+    field(VAL, "100")
+}
+
+record(longin, "$(P)SCAPulseDuration_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpSCAPulseDuration")
+    field(SCAN, "I/O Intr")
+}
+
+
+record(longout, "$(P)NumSCAs") {
+    field(PINI, "YES")
+    field(DTYP, "asynInt32")
+    field(OUT, "$(IO)DxpNumSCAs")
+    field(VAL, "16")
+}
+
+record(longin, "$(P)NumSCAs_RBV") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpNumSCAs")
+    field(SCAN, "I/O Intr")
+}
+
+record(longin, "$(P)MaxSCAs") {
+    field(DTYP, "asynInt32")
+    field(INP, "$(IO)DxpMaxSCAs")
+    field(SCAN, "I/O Intr")
+}
+
+# These records are for waiting for IDL or other clients
+record(bo,"$(P)EnableClientWait") {
+    field(ZNAM,"Disable")
+    field(ONAM,"Enable")
+}
+
+record(bo,"$(P)SetClientWait") {
+    field(DISV,"0")
+    field(SDIS,"$(P)EnableClientWait NPP NMS")
+    field(OMSL,"closed_loop")
+    field(DOL,"1")
+    field(OUT,"$(P)ClientWait PP MS")
+}
+
+record(busy,"$(P)ClientWait") {
+}
+
+# These records are not used, but they must exist for the IDL EPICS_MED class
+record(ao,"$(P)Dwell") {}
+record(bo,"$(P)ChannelAdvance") {}
+record(ao,"$(P)Prescale") {}

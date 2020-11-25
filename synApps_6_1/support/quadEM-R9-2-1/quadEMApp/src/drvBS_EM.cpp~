@@ -1,0 +1,796 @@
+/*
+ * drvNSLS_EM.cpp
+ * 
+ * Asyn driver that inherits from the drvQuadEM class to control 
+ * the NSLS Precision Integrator
+ *
+ * Author: Mark Rivers
+ *
+ * Created December 4, 2015
+ */
+
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <errno.h>
+#include <math.h>
+
+#include <epicsTypes.h>
+#include <epicsTime.h>
+#include <epicsThread.h>
+#include <epicsString.h>
+#include <epicsEvent.h>
+#include <asynOctetSyncIO.h>
+#include <asynCommonSyncIO.h>
+#include <drvAsynIPPort.h>
+#include <iocsh.h>
+
+#include <epicsExport.h>
+
+#include <arpa/inet.h>
+#include <time.h>
+#include "drvBS_EM.h"
+
+#define BROADCAST_TIMEOUT 0.2
+#define NSLS_EM_TIMEOUT   0.1
+
+#define COMMAND_PORT    4747
+#define DATA_PORT       5757
+#define BROADCAST_PORT 37747
+#define MIN_INTEGRATION_TIME 400e-6
+#define MAX_INTEGRATION_TIME 1.0
+#define FREQUENCY 1e6
+// 2^20 is maximum counts for 20-bit ADC
+#define MAX_COUNTS ((0xFFFFF-0x01000)*1.0)
+#define ADC_OFFSET 0x01000
+typedef enum {
+  Phase0, 
+  Phase1, 
+  PhaseBoth
+} PingPongValue_t;
+
+static const char *driverName="drvBS_EM";
+static void readThread(void *drvPvt);
+
+
+/** Constructor for the drvNSLS_EM class.
+  * Calls the constructor for the drvQuadEM base class.
+  * \param[in] portName The name of the asyn port driver to be created.
+  * \param[in] broadcastAddress The broadcast address of the network with this module
+  * \param[in] moduleID The module ID of this module, set with rotary switch on module
+  * \param[in] ringBufferSize The number of samples to hold in the input ring buffer.
+  *            This should be large enough to hold all the samples between reads of the
+  *            device, e.g. 1 ms SampleTime and 1 second read rate = 1000 samples.
+  *            If 0 then default of 2048 is used.
+  */
+drvBS_EM::drvBS_EM(const char *portName, const char *broadcastAddress, int moduleID, int ringBufferSize) 
+   : drvQuadEM(portName, ringBufferSize)
+  
+{
+    asynStatus status;
+    const char *functionName = "drvBS_EM";
+    char tempString[256];
+    
+    numModules_ = 0;
+    moduleID_ = moduleID;
+    ipAddress_[0] = 0;
+    firmwareVersion_[0] = 0;
+    // Integration capacitors in pF
+    ranges_[0]=12;
+    ranges_[1]=50;
+    ranges_[2]=100;
+    ranges_[3]=150;
+    ranges_[4]=200;
+    ranges_[5]=250;
+    ranges_[6]=300;
+    ranges_[7]=350;
+    broadcastAddress_ = epicsStrDup(broadcastAddress);
+    
+    acquireStartEvent_ = epicsEventCreate(epicsEventEmpty);
+    
+    strcpy(udpPortName_, "UDP_");
+    strcat(udpPortName_, portName);
+    strcpy(tcpCommandPortName_, "TCP_Command_");
+    strcat(tcpCommandPortName_, portName);
+    strcpy(tcpDataPortName_, "TCP_Data_");
+    strcat(tcpDataPortName_, portName);
+    
+    strcpy(tempString, broadcastAddress_);
+    strcat(tempString, ":37747 UDP*");
+
+    strcpy(tempString, broadcastAddress_);
+    strcat(tempString, ":13001");
+    //XXX Add error checking
+    //Connect command port
+    status = (asynStatus)drvAsynIPPortConfigure(tcpCommandPortName_, tempString, 0, 0, 0);
+    if (status)
+      {
+	asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+		  "Error calling drvAsynIPPortConfigure for command port=%s, IP=%s, status=%d\n",
+		  tcpCommandPortName_, tempString, status);
+      }
+    else
+      {
+	printf("Configured command port successfully.\n");
+	fflush(stdout);
+      }
+    status = pasynOctetSyncIO->connect(tcpCommandPortName_, 0, &pasynUserTCPCommand_, NULL);
+    if (status)
+      {
+	asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+		  "%s:%s: error calling drvAsynIPPortConfigure for Port: %s Command Address%s Status=%d\n",
+		  driverName, functionName, tcpCommandPortName_, tempString, status);
+      }
+    else
+      {
+	printf("Connected command port Addr: %s.\n",tempString);
+	fflush(stdout);
+      }
+    //status = pasynCommonSyncIO->connect(tcpCommandPortName_, 0, &pasynUserTCPCommandConnect_, NULL);
+    epicsThreadSleep(1.0);
+    printf("Completed sleep.\n");
+    fflush(stdout);
+
+    //Connect data port
+    strcpy(tempString, broadcastAddress_);
+    strcat(tempString, ":13002");
+    printf("Data address is: %s\n", tempString);
+    status = (asynStatus) drvAsynIPPortConfigure(tcpDataPortName_, tempString, 0, 0, 0);
+    status = pasynOctetSyncIO->connect(tcpDataPortName_, 0, &pasynUserTCPData_, NULL);
+    if (status)
+      {
+	printf("Error connecting data port.\n");
+	fflush(stdout);
+      }
+    else
+      {
+	printf("Connected data port.\n");
+	fflush(stdout);
+      }
+
+       
+    acquiring_ = 0;
+    readingActive_ = 0;
+    setIntegerParam(P_Model, QE_ModelNSLS_EM);
+    
+    // Do everything that needs to be done when connecting to the meter initially.
+    // Note that the meter could be offline when the IOC starts, so we put this in
+    // the reset() function which can be done later when the meter is online.
+//    lock();
+//    drvQuadEM::reset();
+//    unlock();
+
+    /* Create the thread that reads the meter */
+    status = (asynStatus)(epicsThreadCreate("drvBS_EMTask",
+                          epicsThreadPriorityMedium,
+                          epicsThreadGetStackSize(epicsThreadStackMedium),
+                          (EPICSTHREADFUNC)::readThread,
+                          this) == NULL);
+    if (status) {
+        printf("%s:%s: epicsThreadCreate failure, status=%d\n", driverName, functionName, status);
+        return;
+    }
+
+    ///Parameters to set
+    setIntegerParam(P_Range, 0);
+    setIntegerParam(P_ValuesPerRead, 5);
+    setDoubleParam(P_IntegrationTime, 10e-6);
+    setDoubleParam(P_SampleTime, 20e-6);
+    setIntegerParam(P_NumAverage, 25);
+
+
+    callParamCallbacks();
+}
+
+
+
+static void readThread(void *drvPvt)
+{
+    drvBS_EM *pPvt = (drvBS_EM *)drvPvt;
+    
+    pPvt->readThread();
+}
+
+asynStatus drvBS_EM::findModule()
+{
+    size_t nwrite;
+    size_t nread;
+    epicsTimeStamp start;
+    epicsTimeStamp now;
+    epicsFloat64 deltaTime;
+    int status;
+    int eomReason;
+    char buffer[1024];
+    char *ptr;
+    int count;
+    char tempString[256];
+    int i;
+    static const char *functionName="findModules";
+
+    status = pasynOctetSyncIO->write(pasynUserUDP_, "i\n", 2, 1.0, &nwrite);
+    epicsTimeGetCurrent(&start);
+
+    while (1) {
+        epicsTimeGetCurrent(&now);
+        deltaTime = epicsTimeDiffInSeconds(&now, &start);
+        if (deltaTime > BROADCAST_TIMEOUT) break;
+        status = pasynOctetSyncIO->read(pasynUserUDP_, buffer, sizeof(buffer), 0.01, &nread, &eomReason);
+        if ((status == asynTimeout) && (nread > 0)) {
+            ptr = buffer;
+            while (1) {
+                ptr = strstr(ptr, "id:");
+                if (!ptr) break;
+                sscanf(ptr, "id: %d%n", &moduleInfo_[numModules_].moduleID, &count);
+                ptr += count;
+                sscanf(ptr, " ip: %s%n", moduleInfo_[numModules_].moduleIP, &count);
+                ptr += count;
+                numModules_++;
+            }
+        } else if (status != asynTimeout) {
+            return asynError;
+        }
+    }
+
+    // See if the specified module was found
+    for (i=0; i<numModules_; i++) {
+        if (moduleInfo_[i].moduleID == moduleID_) break;
+    }
+    
+    if (i == numModules_) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+            "%s:%s: cannot find requested module %d on network\n", 
+            driverName, functionName, moduleID_);
+        return asynError;
+    }
+    
+    // Create TCP command port
+    epicsSnprintf(tempString, sizeof(tempString), "%s:%d", moduleInfo_[i].moduleIP, COMMAND_PORT);
+    // Set noAutoConnect, we will handle connection management
+    status = drvAsynIPPortConfigure(tcpCommandPortName_, tempString, 0, 1, 0);
+    if (status) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+            "%s:%s: error calling drvAsyIPPortConfigure for TCP port %s, IP=%s, status=%d\n", 
+            driverName, functionName, tcpCommandPortName_, moduleInfo_[i].moduleIP, status);
+        return asynError;
+    }
+
+    // Connect to TCP command port
+    status = pasynOctetSyncIO->connect(tcpCommandPortName_, 0, &pasynUserTCPCommand_, NULL);
+    if (status) {
+        printf("%s:%s: error calling pasynOctetSyncIO->connect for TCP port, status=%d, error=%s\n", 
+               driverName, functionName, status, pasynUserTCPCommand_->errorMessage);
+        return asynError;
+    }
+    //pasynOctetSyncIO->setInputEos(pasynUserTCPCommand_, "\r\n", 2);
+    //pasynOctetSyncIO->setOutputEos(pasynUserTCPCommand_, "\r", 1);
+    status = pasynCommonSyncIO->connect(tcpCommandPortName_, 0, &pasynUserTCPCommandConnect_, NULL);
+    if (status) {
+        printf("%s:%s: error calling pasynCommonSyncIO->connect forTCP port, status=%d, error=%s\n", 
+               driverName, functionName, status, pasynUserTCPCommand_->errorMessage);
+        return asynError;
+    }
+
+    // Create TCP data port
+    epicsSnprintf(tempString, sizeof(tempString), "%s:%d", moduleInfo_[i].moduleIP, DATA_PORT);
+    status = drvAsynIPPortConfigure(tcpDataPortName_, tempString, 0, 0, 0);
+    if (status) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+            "%s:%s: error calling drvAsyIPPortConfigure for TCP port %s, IP=%s, status=%d\n", 
+            driverName, functionName, tcpDataPortName_, moduleInfo_[i].moduleIP, status);
+        return asynError;
+    }
+
+    // Connect to TCP data port
+    status = pasynOctetSyncIO->connect(tcpDataPortName_, 0, &pasynUserTCPData_, NULL);
+    if (status) {
+        printf("%s:%s: error connecting to TCP port, status=%d, error=%s\n", 
+               driverName, functionName, status, pasynUserTCPData_->errorMessage);
+        return asynError;
+    }
+    pasynOctetSyncIO->setInputEos(pasynUserTCPData_, "\n", 1);
+
+    return asynSuccess;
+}
+
+/** Writes a string to the BS_EM and reads the response. */
+asynStatus drvBS_EM::writeReadMeter()
+{
+  size_t nread;
+  size_t nwrite;
+  asynStatus status=asynSuccess;
+//  char tempString[16];
+  int eomReason;
+  static const char *functionName="writeReadMeter";
+
+  ///XXX Debugging
+  printf("Starting writeReadMeter.\n");
+  fflush(stdout);
+
+  // The meter has a strange behavior.  Commands that take no arguments succeed on the first write/read
+  // but commands that take arguments fail on the first write read, must do it again.
+  ///XXX
+  ///pasynCommonSyncIO->connectDevice(pasynUserTCPCommandConnect_);
+  
+  status = pasynOctetSyncIO->writeRead(pasynUserTCPCommand_, outString_, strlen(outString_), 
+                                          inString_, sizeof(inString_), NSLS_EM_TIMEOUT, 
+                                          &nwrite, &nread, &eomReason);
+  if (status) {
+      asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+          "%s:%s: error calling writeRead, outString=%s status=%d, nread=%d, eomReason=%d, inString=%s\n",
+          driverName, functionName, outString_, status, (int)nread, eomReason, inString_);
+  }
+  else if (strstr(inString_, ">:OK") == 0) {
+      asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+          "%s:%s: error, outString=%s expected >:OK, received %s\n",
+          driverName, functionName, outString_, inString_);
+      status = asynError;
+  }
+  ///XXX
+  ///pasynCommonSyncIO->disconnectDevice(pasynUserTCPCommandConnect_);
+  
+  printf("Finishhhhed             writeReadMer.\n");;;;;;;
+  fflush(stdout);
+
+  return status;
+}
+
+/** Read thread to read the data from the electrometer when it is in continuous acquire mode.
+  * Reads the data, computes the sums and positions, and does callbacks.
+  */
+
+void drvBS_EM::readThread(void)
+{
+    asynStatus status;
+    size_t nRead;
+    size_t total_read;
+    int eomReason;
+    int pingPong;
+    int i,j,k;
+    asynUser *pasynUser;
+    asynInterface *pasynInterface;
+    asynOctet *pasynOctet;
+    void *octetPvt;
+    int phase;
+    epicsInt32 raw[4];
+    epicsFloat64 data[4];
+    static char ASCIIData[4096];
+    size_t nRequested;
+    int num_data;		// Number of current words
+    int num_words;		// Number of received words 
+    unsigned int *data_int = (unsigned int *)ASCIIData;
+    static const char *functionName = "readThread";
+    int total_num = 0;
+    ///Benchmarking
+#define RATE_BENCHMARK
+    ///#undef RATE_BENCHMARK
+#ifdef RATE_BENCHMARK
+    const char *rate_log_filename = "ratelog.txt";
+    FILE *rate_log_file;
+    time_t old_minutes, curr_minutes, curr_time;
+    int total_bytes, packet_err_count;
+    int recv_count;
+#endif
+
+#ifdef RATE_BENCHMARK
+    total_bytes = 0;
+    packet_err_count = 0;
+    curr_time = time(NULL);
+    // old_minutes = curr_time/60;
+    curr_minutes = curr_time/60;
+    rate_log_file = fopen(rate_log_filename, "a");
+    recv_count = 0;
+    printf("Invoked readThread()\n");
+#endif
+
+    /* Create an asynUser */
+    pasynUser = pasynManager->createAsynUser(0, 0);
+    pasynUser->timeout = NSLS_EM_TIMEOUT;
+    status = pasynManager->connectDevice(pasynUser, tcpDataPortName_, 0);
+    if(status!=asynSuccess) {
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+            "%s:%s: connectDevice failed, status=%d\n",
+            driverName, functionName, status);
+    }
+    pasynInterface = pasynManager->findInterface(pasynUser, asynOctetType, 1);
+    if(!pasynInterface) {;
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+            "%s:%s: findInterface failed for asynOctet, status=%d\n",
+            driverName, functionName, status);
+    }
+    pasynOctet = (asynOctet *)pasynInterface->pinterface;
+    octetPvt = pasynInterface->drvPvt;
+    
+    /* Loop forever */
+    lock();
+    while (1) {
+        if (acquiring_ == 0) {
+            readingActive_ = 0;
+            unlock();
+            (void)epicsEventWait(acquireStartEvent_);
+            lock();
+            readingActive_ = 1;
+            status = pasynOctet->flush(octetPvt, pasynUser);
+            getIntegerParam(P_PingPong,       &pingPong);
+            nRequested = sizeof(ASCIIData);
+        }
+        unlock();
+        pasynManager->lockPort(pasynUser);
+//Read header
+	status = pasynOctet->read(octetPvt, pasynUser, ASCIIData, 4, &nRead, &eomReason);
+	nRequested = ntohs(*(unsigned short *)(&ASCIIData[2]));
+	num_words = (nRequested-1)/4; // Subtract 1-byte checksum
+	num_data = (nRequested-13)/4; //12-byte header plus 1-byte checksum
+#ifdef RATE_BENCHMARK
+	total_bytes += 4;
+#endif
+
+	total_read = 0;
+	///printf("readThread: NumRead=%d, first byte=%hhx, NumBytes=%d.\n",
+	///       nRead, ASCIIData[0], nRequested);
+	fflush(stdout);
+	//Check for valid data
+	if ((ASCIIData[0] != 'B') || (ASCIIData[1] != 1))
+	  {
+#ifdef RATE_BENCHMARK
+            packet_err_count++;
+	    if ((packet_err_count % 30) == 0)
+	      {
+		///printf("%hhu, %hhu, %hhu, %hhu\n", ASCIIData[0], ASCIIData[1], ASCIIData[2], ASCIIData[3]);
+	      }
+#endif RATE_BENCHMARK
+	    pasynOctet->flush(octetPvt, pasynUser);
+	    pasynManager->unlockPort(pasynUser);
+	    lock();
+	    continue;		// Try again next packet
+	  }
+	///XXX TODO Note that the checksum is not currently transmitted, so the +1 that should be there has been turne into a +0 for now
+	while(total_read < (nRequested+0))
+	  {
+	    status = pasynOctet->read(octetPvt, pasynUser, &(ASCIIData[total_read]), nRequested+0-total_read, &nRead, &eomReason);
+	    total_read += nRead;
+	  }
+
+#ifdef RATE_BENCHMARK
+	recv_count++;
+	total_bytes += nRead;
+	curr_time = time(NULL);
+	curr_minutes = curr_time/60;
+	if ((recv_count % 100) == 0)
+	  {
+	    //printf("Requested %lu bytes, received %lu bytes.\n", nRequested+0, total_read);
+	    //printf("Final byte is %hhx\n", ASCIIData[total_read-1]);
+	  }
+  //printf("Recevied 100 packets, time %i, current %i, old %i\n", curr_time, curr_minutes, old_minutes);
+  //fflush(stdout);
+
+  
+
+
+	if (curr_minutes != old_minutes)
+	  {
+	    //printf("Found a difference.\n");
+	    //fflush(stdout);
+	    old_minutes = curr_minutes;
+	    fprintf(rate_log_file, "%i\t%i\t%i %e\n", packet_err_count, recv_count, packet_err_count+recv_count, ((double)total_bytes)/60.0);
+	    if ((curr_minutes % 3) == 0)
+	      {
+		fflush(rate_log_file);
+	      }
+	    total_bytes = 0;
+	    packet_err_count = 0;
+	    recv_count = 0;
+	  }
+#endif
+
+	
+        ///printf("readThread: Read %i data bytes.\n", nRead);
+	fflush(stdout);
+	///pasynOctet->flush(octetPvt, pasynUser);
+        pasynManager->unlockPort(pasynUser);
+        lock();
+
+	if (0){
+        if ((status != asynSuccess) || 
+            (eomReason != ASYN_EOM_EOS)) {
+            if (status != asynTimeout) {
+                asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, 
+                    "%s:%s: unexpected error reading meter status=%d, nRead=%lu, eomReason=%d\n", 
+                    driverName, functionName, status, (unsigned long)nRead, eomReason);
+                // We got an error reading the meter, it is probably offline.  
+                // Wait 1 second before trying again.
+                unlock();
+                epicsThreadSleep(1.0);
+                lock();
+            }
+            continue;
+        }
+	}
+	/// Make the data little endian
+	///printf("Making data little endian.\n");
+	///fflush(stdout);
+	for (i=0; i<num_words; i++)
+	  {
+	    data_int[i] = ntohl(data_int[i]);
+	    ///data_int[i] = total_num++;
+	  }
+
+	for (j=0; j<num_data/4; j++)
+	  {
+	    if (((phase == 0) && (pingPong == Phase0)) ||
+		((phase == 1) && (pingPong == Phase1)) ||
+		(pingPong == PhaseBoth)) {
+	      for (i=0; i<4; i++) {
+		//12 bytes offset of payload, so 3 ints
+		data[i] = ((data_int[j*4+i+3])-ADC_OFFSET)*scaleFactor_;
+  //data[i] = (((signed int) data_int[j*4+i])-((signed int) ADC_OFFSET)) * scaleFactor_;
+		///
+		//data[i] = (total_num++)*1.0;
+	      }      
+	      ///
+	      ///printf("Computing positions.\n");
+	      fflush(stdout);
+	      computePositions(data);
+	    }
+	  }
+    }
+}
+
+
+/** Starts and stops the electrometer.
+  * \param[in] value 1 to start the electrometer, 0 to stop it.
+  */
+asynStatus drvBS_EM::setAcquire(epicsInt32 value) 
+{
+    //static const char *functionName = "setAcquire";
+
+    // Return without doing anything if value=1 and already acquiring
+    if ((value == 1) && (acquiring_)) return asynSuccess;
+    
+    if (value == 0) {
+        // Setting this flag tells the read thread to stop
+        acquiring_ = 0;
+        // Wait for the read thread to stop
+        while (readingActive_) {
+            unlock();
+            epicsThreadSleep(0.01);
+            lock();
+        }
+    } else {
+        // Notify the read thread if acquisition status has started
+        epicsEventSignal(acquireStartEvent_);
+        acquiring_ = 1;
+    }
+    // Call the base class function in case anything needs to be done there.
+    drvQuadEM::setAcquire(value);
+    return setMode();
+}
+
+/** Set the acquisition mode
+  */
+asynStatus drvBS_EM::setMode()
+{
+    int pingPong;
+    int valuesPerRead;
+    int acquire;
+    int mode;
+
+    getIntegerParam(P_PingPong, &pingPong);
+    getIntegerParam(P_ValuesPerRead, &valuesPerRead);
+    getIntegerParam(P_Acquire, &acquire);
+    mode = P_Acquire ? 0 : 1;
+    // The phase information is only valid when ValuesPerRead=1.  Set to PhaseBoth if !=1.
+    if ((valuesPerRead != 1) && (pingPong != PhaseBoth)) {
+        pingPong = PhaseBoth;
+        setIntegerParam(P_PingPong, PhaseBoth);
+    }
+    if (pingPong != PhaseBoth) mode |= 0x80;
+    // Send the mode command
+    sprintf(outString_, "m %d", mode);
+    ///writeReadMeter();
+    return asynSuccess;
+}
+
+/** Sets the integration time. 
+  * \param[in] value The integration time in seconds [0.001 - 1.000]
+  */
+asynStatus drvBS_EM::setIntegrationTime(epicsFloat64 value) 
+{
+    asynStatus status;
+    
+    /* Make sure the integration time is valid. If not change it and put back in parameter library */
+    if (value < MIN_INTEGRATION_TIME) {
+        value = MIN_INTEGRATION_TIME;
+        setDoubleParam(P_IntegrationTime, value);
+    }
+    ///XXX TODO Check return code
+    epicsSnprintf(outString_, sizeof(outString_), "wr 1 %d\r\n", (int)(value*1e6));
+    status = writeReadMeter();
+    epicsSnprintf(outString_, sizeof(outString_), "wr 2 %d\r\n", (int)(value*1e6));
+    status = writeReadMeter();
+    computeScaleFactor();
+    return status;
+}
+
+/** Sets the range 
+  * \param[in] value The desired range.
+  */
+asynStatus drvBS_EM::setRange(epicsInt32 value) 
+{
+    asynStatus status;
+    
+    epicsSnprintf(outString_, sizeof(outString_), "wr 3 %d\r\n", value);
+    status = writeReadMeter();
+    computeScaleFactor();
+    return status;
+}
+
+
+/** Sets the values per read.
+  * \param[in] value Values per read. Minimum depends on number of channels.
+  */
+asynStatus drvBS_EM::setValuesPerRead(epicsInt32 value) 
+{
+    asynStatus status;
+    
+    epicsSnprintf(outString_, sizeof(outString_), "n %d", value);
+    //status = writeReadMeter();
+    computeScaleFactor();
+    return setMode();
+}
+
+ /** Sets the ping-pong setting. 
+  * \param[in] value 0: use both ping and pong (HLF OFF), value=1: use just ping (HLF ON) 
+  */
+asynStatus drvBS_EM::setPingPong(epicsInt32 value) 
+{
+    return setMode();
+}
+
+asynStatus drvBS_EM::computeScaleFactor()
+{
+    int range;
+    int valuesPerRead;
+    double integrationTime;
+    static const char *functionName = "computeScaleFactor";
+
+    getIntegerParam(P_ValuesPerRead,  &valuesPerRead);
+    getIntegerParam(P_Range,          &range);
+    getDoubleParam(P_IntegrationTime, &integrationTime);
+    scaleFactor_ = ranges_[range]*1e-12 * FREQUENCY / (integrationTime * 1e6)
+                  / MAX_COUNTS / (double)valuesPerRead;
+    ///XXX FIXME TODO Set here to allow setIntegrationTime to shift current
+    //scaleFactor_ = ranges_[range]*1e-12 * FREQUENCY / (1.0 * 1e6)
+    //              / MAX_COUNTS / (double)valuesPerRead;
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
+        "%s::%s scaleFactor=%e\n", driverName, functionName, scaleFactor_);
+    return asynSuccess;
+}
+
+
+/** Reads all the settings back from the electrometer.
+  */
+asynStatus drvBS_EM::readStatus() 
+{
+    // Reads the values of all the meter parameters, sets them in the parameter library
+    int mode, valuesPerRead, range;
+    double period;
+    int numAverage;
+    int pingPong;
+    int numItems;
+    double sampleTime, averagingTime;
+    static const char *functionName = "getStatus";
+    
+    ///Fill in with either resonable values or the parameter values
+    
+    getIntegerParam(P_Range, &range);
+    setIntegerParam(P_Range, range);
+    valuesPerRead = 1;
+    setIntegerParam(P_ValuesPerRead, valuesPerRead);
+    getDoubleParam(P_IntegrationTime, &period);
+    ///
+    printf("Integration time %f.\n", period);
+    fflush(stdout);
+    setDoubleParam(P_IntegrationTime, period);
+    sampleTime = period*valuesPerRead;
+    getIntegerParam(P_PingPong, &pingPong);
+    if (pingPong != PhaseBoth) sampleTime *= 2.0;
+    setDoubleParam(P_SampleTime, sampleTime);
+    
+    // Compute the number of values that will be accumulated in the ring buffer before averaging
+    getDoubleParam(P_AveragingTime, &averagingTime);
+    numAverage = (int)((averagingTime / sampleTime) + 0.5);
+    setIntegerParam(P_NumAverage, numAverage);
+    ///
+    printf("Number averaging: %i.\n", numAverage);
+    return asynSuccess;
+}
+
+asynStatus drvBS_EM::reset()
+{
+    asynStatus status;
+    //static const char *functionName = "reset";
+
+    // Call the base class method
+    status = drvQuadEM::reset();
+    return status;
+}
+
+
+/** Exit handler.  Turns off acquire so we don't waste network bandwidth when the IOC stops */
+void drvBS_EM::exitHandler()
+{
+    lock();
+    setAcquire(0);
+    unlock();
+}
+
+/** Report  parameters 
+  * \param[in] fp The file pointer to write to
+  * \param[in] details The level of detail requested
+  */
+void drvBS_EM::report(FILE *fp, int details)
+{
+    int i;
+    
+    fprintf(fp, "%s: port=%s\n", driverName, portName);
+    if (details > 0) {
+        fprintf(fp, "  IP address:       %s\n", ipAddress_);
+        fprintf(fp, "  Module ID:        %d\n", moduleID_);
+        fprintf(fp, "  Firmware version: %s\n", firmwareVersion_);
+        fprintf(fp, "  Scale factor:     %e\n", scaleFactor_);
+    }
+    fprintf(fp, "  Number of modules found on network=%d\n", numModules_);
+    for (i=0; i<numModules_; i++) {
+        fprintf(fp, "    Module %d\n", i);
+        fprintf(fp, "      Module ID:  %d\n", moduleInfo_[i].moduleID);
+        fprintf(fp, "      IP address: %s\n", moduleInfo_[i].moduleIP);
+    }
+    drvQuadEM::report(fp, details);
+}
+
+
+/* Configuration routine.  Called directly, or from the iocsh function below */
+
+extern "C" {
+
+/** EPICS iocsh callable function to call constructor for the drvNSLS_EM class.
+  * \param[in] portName The name of the asyn port driver to be created.
+  * \param[in] broadcastAddress The broadcast address of the network with this module
+  * \param[in] moduleID The module ID of this module, set with rotary switch on module
+  * \param[in] ringBufferSize The number of samples to hold in the input ring buffer.
+  *            This should be large enough to hold all the samples between reads of the
+  *            device, e.g. 1 ms SampleTime and 1 second read rate = 1000 samples.
+  *            If 0 then default of 2048 is used.
+  */
+int drvBS_EMConfigure(const char *portName, const char *broadcastAddress, int moduleID, int ringBufferSize)
+{
+    new drvBS_EM(portName, broadcastAddress, moduleID, ringBufferSize);
+    return(asynSuccess);
+}
+
+
+/* EPICS iocsh shell commands */
+
+static const iocshArg initArg0 = { "portName", iocshArgString};
+static const iocshArg initArg1 = { "broadcast address", iocshArgString};
+static const iocshArg initArg2 = { "module ID", iocshArgInt};
+static const iocshArg initArg3 = { "ring buffer size",iocshArgInt};
+static const iocshArg * const initArgs[] = {&initArg0,
+                                            &initArg1,
+                                            &initArg2,
+                                            &initArg3};
+static const iocshFuncDef initFuncDef = {"drvBS_EMConfigure",4,initArgs};
+static void initCallFunc(const iocshArgBuf *args)
+{
+    drvBS_EMConfigure(args[0].sval, args[1].sval, args[2].ival, args[3].ival);
+}
+
+void drvBS_EMRegister(void)
+{
+    iocshRegister(&initFuncDef,initCallFunc);
+}
+
+epicsExportRegistrar(drvBS_EMRegister);
+
+}
+

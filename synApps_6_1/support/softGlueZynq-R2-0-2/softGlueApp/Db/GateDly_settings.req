@@ -1,0 +1,6 @@
+$(P)$(H)GateDly-$(N)_desc
+$(P)$(H)GateDly-$(N)_CLK_Signal
+$(P)$(H)GateDly-$(N)_IN_Signal
+$(P)$(H)GateDly-$(N)_OUT_Signal
+$(P)$(H)GateDly-$(N)_DLY
+$(P)$(H)GateDly-$(N)_WIDTH

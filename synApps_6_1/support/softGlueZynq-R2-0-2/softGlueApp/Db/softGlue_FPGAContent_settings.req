@@ -1,0 +1,145 @@
+# components
+file gate_settings.req P=$(P),H=$(H),GATE=AND-1
+file gate_settings.req P=$(P),H=$(H),GATE=AND-2
+file gate_settings.req P=$(P),H=$(H),GATE=AND-3
+file gate_settings.req P=$(P),H=$(H),GATE=AND-4
+file gate_settings.req P=$(P),H=$(H),GATE=OR-1
+file gate_settings.req P=$(P),H=$(H),GATE=OR-2
+file gate_settings.req P=$(P),H=$(H),GATE=OR-3
+file gate_settings.req P=$(P),H=$(H),GATE=OR-4
+file gate_settings.req P=$(P),H=$(H),GATE=XOR-1
+file gate_settings.req P=$(P),H=$(H),GATE=XOR-2
+file BUFFER_settings.req P=$(P),H=$(H),N=1
+file BUFFER_settings.req P=$(P),H=$(H),N=2
+file BUFFER_settings.req P=$(P),H=$(H),N=3
+file BUFFER_settings.req P=$(P),H=$(H),N=4
+file DFF_settings.req P=$(P),H=$(H),N=1
+file DFF_settings.req P=$(P),H=$(H),N=2
+file DFF_settings.req P=$(P),H=$(H),N=3
+file DFF_settings.req P=$(P),H=$(H),N=4
+file DnCntr_settings.req P=$(P),H=$(H),N=1
+file DnCntr_settings.req P=$(P),H=$(H),N=2
+file DnCntr_settings.req P=$(P),H=$(H),N=3
+file DnCntr_settings.req P=$(P),H=$(H),N=4
+file UpCntr_settings.req P=$(P),H=$(H),N=1
+file UpCntr_settings.req P=$(P),H=$(H),N=2
+file UpCntr_settings.req P=$(P),H=$(H),N=3
+file UpCntr_settings.req P=$(P),H=$(H),N=4
+file DEMUX2_settings.req P=$(P),H=$(H),N=1
+file DEMUX2_settings.req P=$(P),H=$(H),N=2
+file MUX2_settings.req P=$(P),H=$(H),N=1
+file MUX2_settings.req P=$(P),H=$(H),N=2
+file DivByN_settings.req P=$(P),H=$(H),N=1
+file DivByN_settings.req P=$(P),H=$(H),N=2
+file DivByN_settings.req P=$(P),H=$(H),N=3
+file DivByN_settings.req P=$(P),H=$(H),N=4
+
+file UpDnCntr_settings.req P=$(P),H=$(H),N=1
+file UpDnCntr_settings.req P=$(P),H=$(H),N=2
+file UpDnCntr_settings.req P=$(P),H=$(H),N=3
+file UpDnCntr_settings.req P=$(P),H=$(H),N=4
+#file UpDnCntr8_settings.req P=$(P),H=$(H),N=5
+file QuadDec_settings.req P=$(P),H=$(H),N=1
+file QuadDec_settings.req P=$(P),H=$(H),N=2
+#file MagCmp_settings.req P=$(P),H=$(H),N=1
+file GateDly_settings.req P=$(P),H=$(H),N=1
+file GateDly_settings.req P=$(P),H=$(H),N=2
+file GateDly_settings.req P=$(P),H=$(H),N=3
+file GateDly_settings.req P=$(P),H=$(H),N=4
+file HistScal_settings.req P=$(P),H=$(H),N=1
+file PixelTrigger_settings.req P=$(P),H=$(H),N=1
+file PixelTrigger_settings.req P=$(P),H=$(H),N=2
+$(P)$(H)PixelTrig_TRIG_Signal
+$(P)$(H)PixelTrig_ENTRIG_Signal
+#file PixelFIFO_settings.req P=$(P),H=$(H),N=1
+file ScalToStream_settings.req P=$(P),H=$(H),N=1
+file ScalersToFIFO_settings.req P=$(P),H=$(H),N=1
+file FreqCntr_settings.req P=$(P),H=$(H),N=1
+file scaler16_settings.req P=$(P),H=$(H),N=1
+
+# hard-wired OR gates
+$(P)$(H)HW_OR-1_OUT_Signal
+$(P)$(H)HW_OR-2_OUT_Signal
+
+# clock
+$(P)$(H)10MHZ_CLOCK_Signal
+$(P)$(H)20MHZ_CLOCK_Signal
+$(P)$(H)50MHZ_CLOCK_Signal
+$(P)$(H)VAR_CLOCK_Signal
+
+# field I/O
+$(P)$(H)FI1_Signal
+$(P)$(H)FI2_Signal
+$(P)$(H)FI3_Signal
+$(P)$(H)FI4_Signal
+$(P)$(H)FI5_Signal
+$(P)$(H)FI6_Signal
+$(P)$(H)FI7_Signal
+$(P)$(H)FI8_Signal
+$(P)$(H)FI9_Signal
+$(P)$(H)FI10_Signal
+$(P)$(H)FI11_Signal
+$(P)$(H)FI12_Signal
+$(P)$(H)FI13_Signal
+$(P)$(H)FI14_Signal
+$(P)$(H)FI15_Signal
+$(P)$(H)FI16_Signal
+$(P)$(H)FI17_Signal
+$(P)$(H)FI18_Signal
+$(P)$(H)FI19_Signal
+$(P)$(H)FI20_Signal
+$(P)$(H)FI21_Signal
+$(P)$(H)FI22_Signal
+$(P)$(H)FI23_Signal
+$(P)$(H)FI24_Signal
+
+$(P)$(H)FI25_Signal
+$(P)$(H)FI26_Signal
+$(P)$(H)FI27_Signal
+$(P)$(H)FI28_Signal
+$(P)$(H)FI29_Signal
+$(P)$(H)FI30_Signal
+$(P)$(H)FI31_Signal
+$(P)$(H)FI32_Signal
+$(P)$(H)FI33_Signal
+$(P)$(H)FI34_Signal
+$(P)$(H)FI35_Signal
+$(P)$(H)FI36_Signal
+
+$(P)$(H)FO1_Signal
+$(P)$(H)FO2_Signal
+$(P)$(H)FO3_Signal
+$(P)$(H)FO4_Signal
+$(P)$(H)FO5_Signal
+$(P)$(H)FO6_Signal
+$(P)$(H)FO7_Signal
+$(P)$(H)FO8_Signal
+$(P)$(H)FO9_Signal
+$(P)$(H)FO10_Signal
+$(P)$(H)FO11_Signal
+$(P)$(H)FO12_Signal
+$(P)$(H)FO13_Signal
+$(P)$(H)FO14_Signal
+$(P)$(H)FO15_Signal
+$(P)$(H)FO16_Signal
+$(P)$(H)FO17_Signal
+$(P)$(H)FO18_Signal
+$(P)$(H)FO19_Signal
+$(P)$(H)FO20_Signal
+$(P)$(H)FO21_Signal
+$(P)$(H)FO22_Signal
+$(P)$(H)FO23_Signal
+$(P)$(H)FO24_Signal
+
+# circuit description
+$(P)$(H)circuit_desc
+$(P)$(H)50MHZ_CLOCK_desc
+$(P)$(H)20MHZ_CLOCK_desc
+$(P)$(H)10MHZ_CLOCK_desc
+$(P)$(H)VAR_CLOCK_desc
+
+$(P)$(H)HW_OR-1_desc
+$(P)$(H)HW_OR-2_desc
+
+file softGlue_config_settings.req P=$(P),H=$(H)
+file clockConfig_settings.req P=$(P),H=$(H),Q=1

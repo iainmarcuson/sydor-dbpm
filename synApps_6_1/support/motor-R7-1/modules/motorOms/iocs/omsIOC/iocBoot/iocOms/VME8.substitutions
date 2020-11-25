@@ -1,0 +1,13 @@
+file "$(MOTOR)/db/motor.db"
+{
+pattern
+{P,     N,  M,        DTYP,           C,  S,  DESC,           EGU,  DIR,  VELO,  VBAS,  ACCL,  BDST,  BVEL,  BACC,  MRES,    PREC,  DHLM,  DLLM,  INIT}
+{oms:,  1,  "m$(N)",  "OMS VME8/44",  0,  0,  "VME8 M$(N)",   mm,   Pos,  1,     .1,    .2,    0,     1,     .2,    2.5e-4,  5,     100,   -100,  ""}
+{oms:,  2,  "m$(N)",  "OMS VME8/44",  0,  1,  "VME8 M$(N)",   mm,   Pos,  1,     .1,    .2,    0,     1,     .2,    2.5e-4,  5,     100,   -100,  ""}
+{oms:,  3,  "m$(N)",  "OMS VME8/44",  0,  2,  "VME8 M$(N)",   mm,   Pos,  1,     .1,    .2,    0,     1,     .2,    2.5e-4,  5,     100,   -100,  ""}
+{oms:,  4,  "m$(N)",  "OMS VME8/44",  0,  3,  "VME8 M$(N)",   mm,   Pos,  1,     .1,    .2,    0,     1,     .2,    2.5e-4,  5,     100,   -100,  ""}
+{oms:,  5,  "m$(N)",  "OMS VME8/44",  0,  4,  "VME8 M$(N)",   mm,   Pos,  1,     .1,    .2,    0,     1,     .2,    2.5e-4,  5,     100,   -100,  ""}
+{oms:,  6,  "m$(N)",  "OMS VME8/44",  0,  5,  "VME8 M$(N)",   mm,   Pos,  1,     .1,    .2,    0,     1,     .2,    2.5e-4,  5,     100,   -100,  ""}
+{oms:,  7,  "m$(N)",  "OMS VME8/44",  0,  6,  "VME8 M$(N)",   mm,   Pos,  1,     .1,    .2,    0,     1,     .2,    2.5e-4,  5,     100,   -100,  ""}
+{oms:,  8,  "m$(N)",  "OMS VME8/44",  0,  7,  "VME8 M$(N)",   mm,   Pos,  1,     .1,    .2,    0,     1,     .2,    2.5e-4,  5,     100,   -100,  ""}
+}

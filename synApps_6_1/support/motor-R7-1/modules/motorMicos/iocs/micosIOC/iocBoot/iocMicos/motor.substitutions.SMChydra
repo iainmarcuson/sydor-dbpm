@@ -1,0 +1,8 @@
+file "$(MOTOR)/db/asyn_motor.db"
+{
+  pattern
+  {P,       M,      DTYP,    PORT,   ADDR,  DESC,	EGU,  DIR,  VMAX,  VELO,  VBAS,  ACCL,  BDST,     BVEL,  BACC,  MRES,   PREC,  DHLM,       DLLM,   INIT}
+  {micos:,  m3, "asynMotor", Hydra1,  0,    "m3",   degrees,  Pos,  15.,   3.,    .05,    .5,    0,       1.0,    2,	0.01,     2,   175,       -175,     ""}
+  {micos:,  m4, "asynMotor", Hydra1,  1,    "m4",   degrees,  Pos,  15.,   3.,    .05,    .5,    0,       1.0,    2,	0.01,     2,   175,       -175,     ""}
+}
+

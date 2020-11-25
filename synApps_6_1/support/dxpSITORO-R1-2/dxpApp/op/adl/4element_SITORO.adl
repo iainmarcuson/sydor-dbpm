@@ -1,0 +1,1521 @@
+
+file {
+	name="/home/epics/devel/dxpSITORO/dxpApp/op/adl/4element_SITORO.adl"
+	version=030109
+}
+display {
+	object {
+		x=794
+		y=172
+		width=635
+		height=615
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=151
+		y=2
+		width=333
+		height=25
+	}
+	"basic attribute" {
+		clr=54
+	}
+}
+text {
+	object {
+		x=161
+		y=3
+		width=312
+		height=25
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="4 Element Detector Control"
+}
+rectangle {
+	object {
+		x=4
+		y=35
+		width=310
+		height=525
+	}
+	"basic attribute" {
+		clr=54
+		fill="outline"
+		width=2
+	}
+}
+rectangle {
+	object {
+		x=319
+		y=35
+		width=310
+		height=310
+	}
+	"basic attribute" {
+		clr=54
+		fill="outline"
+		width=2
+	}
+}
+text {
+	object {
+		x=221
+		y=62
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Acquire"
+}
+rectangle {
+	object {
+		x=13
+		y=40
+		width=200
+		height=60
+	}
+	"basic attribute" {
+		clr=54
+		fill="outline"
+		width=2
+	}
+}
+"message button" {
+	object {
+		x=115
+		y=72
+		width=90
+		height=20
+	}
+	control {
+		chan="$(P)EraseAll"
+		clr=14
+		bclr=51
+	}
+	label="Erase"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=19
+		y=72
+		width=90
+		height=20
+	}
+	control {
+		chan="$(P)EraseStart"
+		clr=14
+		bclr=51
+	}
+	label="Erase/Start"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=19
+		y=47
+		width=90
+		height=20
+	}
+	control {
+		chan="$(P)StartAll"
+		clr=14
+		bclr=51
+	}
+	label="Start"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=115
+		y=47
+		width=90
+		height=20
+	}
+	control {
+		chan="$(P)StopAll"
+		clr=14
+		bclr=51
+	}
+	label="Stop"
+	press_msg="1"
+}
+"related display" {
+	object {
+		x=328
+		y=42
+		width=70
+		height=20
+	}
+	display[0] {
+		label="Detector setup"
+		name="4element_DetectorSetup_SITORO.adl"
+		args="P=$(P), D=$(D)"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=403
+		y=42
+		width=140
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Detector setup"
+}
+text {
+	object {
+		x=112
+		y=155
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Presets"
+}
+menu {
+	object {
+		x=95
+		y=179
+		width=95
+		height=20
+	}
+	control {
+		chan="$(P)PresetMode"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=195
+		y=179
+		width=40
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Mode"
+}
+menu {
+	object {
+		x=15
+		y=130
+		width=100
+		height=20
+	}
+	control {
+		chan="$(P)CollectMode"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=120
+		y=130
+		width=150
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Collection mode"
+}
+text {
+	object {
+		x=403
+		y=242
+		width=40
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Scan"
+}
+"related display" {
+	object {
+		x=328
+		y=242
+		width=70
+		height=20
+	}
+	display[0] {
+		label="Scan 1"
+		name="scan_more.adl"
+		args="P=$(P), S=scan1, N=1, DW=Dwait1, PW=Pwait1"
+	}
+	display[1] {
+		label="Scan 2"
+		name="scan_more.adl"
+		args="P=$(P), S=scan2, N=2, DW=Dwait2, PW=Pwait2"
+	}
+	display[2] {
+		label="Scan 3"
+		name="scan_more.adl"
+		args="P=$(P), S=scan3, N=3, DW=Dwait3, PW=Pwait3"
+	}
+	display[3] {
+		label="Scan 4"
+		name="scan_more.adl"
+		args="P=$(P), S=scan4, N=4, DW=Dwait4, PW=Pwait4"
+	}
+	display[4] {
+		label="Scan H"
+		name="scan_more.adl"
+		args="P=$(P), S=scanH, N=1, DW=DwaitH, PW=PwaitH"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=328
+		y=267
+		width=70
+		height=20
+	}
+	display[0] {
+		label="Save/restore"
+		name="save_restoreStatus_more.adl"
+		args="P=$(P)"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=403
+		y=267
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Save/restore"
+}
+text {
+	object {
+		x=403
+		y=117
+		width=150
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Mapping control"
+}
+"related display" {
+	object {
+		x=328
+		y=117
+		width=70
+		height=20
+	}
+	display[0] {
+		label="Mapping control"
+		name="mappingControl_SITORO.adl"
+		args="P=$(P)"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=328
+		y=142
+		width=70
+		height=20
+	}
+	display[0] {
+		label="ROI/SCA 0"
+		name="4element_ROI_SCA_SITORO.adl"
+		args="P=$(P),M=$(M),D=$(D),R=0"
+	}
+	display[1] {
+		label="ROI/SCA 1"
+		name="4element_ROI_SCA_SITORO.adl"
+		args="P=$(P),M=$(M),D=$(D),R=1"
+	}
+	display[2] {
+		label="ROI/SCA 2"
+		name="4element_ROI_SCA_SITORO.adl"
+		args="P=$(P),M=$(M),D=$(D),R=2"
+	}
+	display[3] {
+		label="ROI/SCA 3"
+		name="4element_ROI_SCA_SITORO.adl"
+		args="P=$(P),M=$(M),D=$(D),R=3"
+	}
+	display[4] {
+		label="ROI/SCA 4"
+		name="4element_ROI_SCA_SITORO.adl"
+		args="P=$(P),M=$(M),D=$(D),R=4"
+	}
+	display[5] {
+		label="ROI/SCA 5"
+		name="4element_ROI_SCA_SITORO.adl"
+		args="P=$(P),M=$(M),D=$(D),R=5"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=403
+		y=142
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="ROI/SCA"
+}
+"related display" {
+	object {
+		x=328
+		y=167
+		width=70
+		height=20
+	}
+	display[0] {
+		label="Calibration"
+		name="4element_cal.adl"
+		args="P=$(P)"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=403
+		y=167
+		width=110
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Calibration"
+}
+"related display" {
+	object {
+		x=328
+		y=192
+		width=70
+		height=20
+	}
+	display[0] {
+		label="Statistics"
+		name="4element_SITORO_presets.adl"
+		args="P=$(P),M=$(M),D=$(D)"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=403
+		y=192
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Presets"
+}
+"related display" {
+	object {
+		x=328
+		y=217
+		width=70
+		height=20
+	}
+	display[0] {
+		label="Statistics"
+		name="4element_SITORO_statistics.adl"
+		args="P=$(P),M=$(M),D=$(D)"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=403
+		y=217
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Statistics"
+}
+"related display" {
+	object {
+		x=328
+		y=292
+		width=70
+		height=20
+	}
+	display[0] {
+		label="Common Plugins"
+		name="commonPlugins.adl"
+		args="P=$(P)"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=403
+		y=292
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Plugins"
+}
+text {
+	object {
+		x=403
+		y=67
+		width=90
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="MCA plots"
+}
+"related display" {
+	object {
+		x=328
+		y=67
+		width=70
+		height=20
+	}
+	display[0] {
+		label="MCA #1"
+		name="simple_mca.adl"
+		args="P=$(P), M=$(M)1"
+	}
+	display[1] {
+		label="MCA #2"
+		name="simple_mca.adl"
+		args="P=$(P), M=$(M)2"
+	}
+	display[2] {
+		label="MCA #3"
+		name="simple_mca.adl"
+		args="P=$(P), M=$(M)3"
+	}
+	display[3] {
+		label="MCA #4"
+		name="simple_mca.adl"
+		args="P=$(P), M=$(M)4"
+	}
+	display[4] {
+		label="MCA 1-4"
+		name="4element_plots.adl"
+		args="P=$(P)$(M)"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=403
+		y=92
+		width=150
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="ADC trace plots"
+}
+"related display" {
+	object {
+		x=328
+		y=92
+		width=70
+		height=20
+	}
+	display[0] {
+		label="ADC trace #1"
+		name="SITORO_trace.adl"
+		args="P=$(P), R=$(D)1:"
+	}
+	display[1] {
+		label="ADC trace #2"
+		name="SITORO_trace.adl"
+		args="P=$(P), R=$(D)2:"
+	}
+	display[2] {
+		label="ADC trace #3"
+		name="SITORO_trace.adl"
+		args="P=$(P), R=$(D)3:"
+	}
+	display[3] {
+		label="ADC trace #4"
+		name="SITORO_trace.adl"
+		args="P=$(P), R=$(D)4:"
+	}
+	display[4] {
+		label="ADC trace 1-4"
+		name="4element_trace_SITORO.adl"
+		args="P=$(P), D=$(D)"
+	}
+	clr=14
+	bclr=51
+}
+"text entry" {
+	object {
+		x=95
+		y=231
+		width=95
+		height=22
+	}
+	control {
+		chan="$(P)PresetEvents"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=195
+		y=232
+		width=60
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Events"
+}
+"text entry" {
+	object {
+		x=95
+		y=258
+		width=95
+		height=22
+	}
+	control {
+		chan="$(P)PresetTriggers"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=195
+		y=259
+		width=80
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Triggers"
+}
+"text update" {
+	object {
+		x=15
+		y=230
+		width=70
+		height=20
+	}
+	monitor {
+		chan="$(P)PresetEvents"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=15
+		y=255
+		width=70
+		height=20
+	}
+	monitor {
+		chan="$(P)PresetTriggers"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+"message button" {
+	object {
+		x=10
+		y=335
+		width=50
+		height=20
+	}
+	control {
+		chan="$(P)StatusAllOnce.PROC"
+		clr=14
+		bclr=51
+	}
+	label="Read"
+	press_msg="1"
+}
+menu {
+	object {
+		x=65
+		y=360
+		width=80
+		height=20
+	}
+	control {
+		chan="$(P)ReadAll.SCAN"
+		clr=14
+		bclr=51
+	}
+}
+"message button" {
+	object {
+		x=10
+		y=360
+		width=50
+		height=20
+	}
+	control {
+		chan="$(P)ReadAllOnce.PROC"
+		clr=14
+		bclr=51
+	}
+	label="Read"
+	press_msg="1"
+}
+text {
+	object {
+		x=150
+		y=360
+		width=130
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="MCA Read rate"
+}
+"text update" {
+	object {
+		x=15
+		y=285
+		width=70
+		height=20
+	}
+	monitor {
+		chan="$(P)PollTime_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=95
+		y=284
+		width=95
+		height=22
+	}
+	control {
+		chan="$(P)PollTime"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=200
+		y=285
+		width=90
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Poll time"
+}
+composite {
+	object {
+		x=319
+		y=350
+		width=310
+		height=260
+	}
+	"composite name"=""
+	children {
+		text {
+			object {
+				x=389
+				y=357
+				width=170
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Elapsed (maximum)"
+		}
+		rectangle {
+			object {
+				x=319
+				y=350
+				width=310
+				height=260
+			}
+			"basic attribute" {
+				clr=54
+				fill="outline"
+				width=2
+			}
+		}
+		"text update" {
+			object {
+				x=331
+				y=557
+				width=70
+				height=20
+			}
+			monitor {
+				chan="$(P)IDeadTime"
+				clr=15
+				bclr=14
+			}
+			clrmod="alarm"
+			align="horiz. right"
+			limits {
+			}
+		}
+		text {
+			object {
+				x=406
+				y=557
+				width=210
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Instant dead time (%)"
+		}
+		"text update" {
+			object {
+				x=331
+				y=582
+				width=70
+				height=20
+			}
+			monitor {
+				chan="$(P)DeadTime"
+				clr=15
+				bclr=14
+			}
+			clrmod="alarm"
+			align="horiz. right"
+			limits {
+			}
+		}
+		text {
+			object {
+				x=406
+				y=582
+				width=210
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Average dead time (%)"
+		}
+		composite {
+			object {
+				x=426
+				y=382
+				width=170
+				height=170
+			}
+			"composite name"=""
+			children {
+				text {
+					object {
+						x=426
+						y=382
+						width=60
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Events"
+				}
+				text {
+					object {
+						x=426
+						y=407
+						width=80
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Triggers"
+				}
+				text {
+					object {
+						x=426
+						y=432
+						width=90
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Real time"
+				}
+				text {
+					object {
+						x=426
+						y=507
+						width=160
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Input count rate"
+				}
+				text {
+					object {
+						x=426
+						y=532
+						width=170
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Output count rate"
+				}
+				text {
+					object {
+						x=426
+						y=482
+						width=160
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Energy live time"
+				}
+				text {
+					object {
+						x=426
+						y=457
+						width=170
+						height=20
+					}
+					"basic attribute" {
+						clr=14
+					}
+					textix="Trigger live time"
+				}
+			}
+		}
+		composite {
+			object {
+				x=331
+				y=382
+				width=90
+				height=170
+			}
+			"composite name"=""
+			children {
+				"text update" {
+					object {
+						x=331
+						y=382
+						width=90
+						height=20
+					}
+					monitor {
+						chan="$(P)MaxEvents"
+						clr=54
+						bclr=4
+					}
+					align="horiz. right"
+					limits {
+					}
+				}
+				"text update" {
+					object {
+						x=331
+						y=407
+						width=90
+						height=20
+					}
+					monitor {
+						chan="$(P)MaxTriggers"
+						clr=54
+						bclr=4
+					}
+					align="horiz. right"
+					limits {
+					}
+				}
+				"text update" {
+					object {
+						x=331
+						y=432
+						width=90
+						height=20
+					}
+					monitor {
+						chan="$(P)MaxElapsedReal"
+						clr=54
+						bclr=4
+					}
+					align="horiz. right"
+					limits {
+					}
+				}
+				"text update" {
+					object {
+						x=331
+						y=507
+						width=90
+						height=20
+					}
+					monitor {
+						chan="$(P)MaxInputCountRate"
+						clr=54
+						bclr=4
+					}
+					align="horiz. right"
+					limits {
+					}
+				}
+				"text update" {
+					object {
+						x=331
+						y=532
+						width=90
+						height=20
+					}
+					monitor {
+						chan="$(P)MaxOutputCountRate"
+						clr=54
+						bclr=4
+					}
+					align="horiz. right"
+					limits {
+					}
+				}
+				"text update" {
+					object {
+						x=331
+						y=482
+						width=90
+						height=20
+					}
+					monitor {
+						chan="$(P)MaxElapsedLive"
+						clr=54
+						bclr=4
+					}
+					align="horiz. right"
+					limits {
+					}
+				}
+				"text update" {
+					object {
+						x=331
+						y=457
+						width=90
+						height=20
+					}
+					monitor {
+						chan="$(P)MaxElapsedTriggerLive"
+						clr=54
+						bclr=4
+					}
+					align="horiz. right"
+					limits {
+					}
+				}
+			}
+		}
+	}
+}
+"related display" {
+	object {
+		x=328
+		y=317
+		width=70
+		height=20
+	}
+	display[0] {
+		label="asyn record"
+		name="asynRecord.adl"
+		args="P=$(P), R=Asyn"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=403
+		y=317
+		width=110
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Asyn record"
+}
+menu {
+	object {
+		x=65
+		y=435
+		width=80
+		height=20
+	}
+	control {
+		chan="$(P)EnableClientWait"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=150
+		y=435
+		width=150
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Wait for client"
+}
+menu {
+	object {
+		x=65
+		y=460
+		width=80
+		height=20
+	}
+	control {
+		chan="$(P)ClientWait"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=150
+		y=460
+		width=110
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Client Wait"
+}
+"text update" {
+	object {
+		x=15
+		y=485
+		width=130
+		height=20
+	}
+	monitor {
+		chan="$(P)SNL_Connected"
+		clr=0
+		bclr=14
+	}
+	clrmod="alarm"
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=150
+		y=485
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="SNL Status"
+}
+text {
+	object {
+		x=200
+		y=310
+		width=110
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="MCA refresh"
+}
+text {
+	object {
+		x=150
+		y=335
+		width=150
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="MCA Status rate"
+}
+"text entry" {
+	object {
+		x=95
+		y=309
+		width=95
+		height=22
+	}
+	control {
+		chan="$(P)MCARefreshPeriod"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+menu {
+	object {
+		x=65
+		y=335
+		width=80
+		height=20
+	}
+	control {
+		chan="$(P)StatusAll.SCAN"
+		clr=14
+		bclr=51
+	}
+}
+"text update" {
+	object {
+		x=15
+		y=310
+		width=70
+		height=20
+	}
+	monitor {
+		chan="$(P)MCARefreshPeriod_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+menu {
+	object {
+		x=65
+		y=385
+		width=80
+		height=20
+	}
+	control {
+		chan="$(P)SCATriggerMode"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=150
+		y=385
+		width=140
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="SCA Trig. mode"
+}
+"text update" {
+	object {
+		x=10
+		y=410
+		width=50
+		height=20
+	}
+	monitor {
+		chan="$(P)SCAPulseDuration_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=65
+		y=409
+		width=80
+		height=22
+	}
+	control {
+		chan="$(P)SCAPulseDuration"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=150
+		y=410
+		width=140
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="SCA width (ns)"
+}
+composite {
+	object {
+		x=20
+		y=105
+		width=156
+		height=20
+	}
+	"composite name"=""
+	children {
+		text {
+			object {
+				x=116
+				y=105
+				width=60
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Status"
+		}
+		text {
+			object {
+				x=70
+				y=105
+				width=40
+				height=20
+			}
+			"basic attribute" {
+				clr=21
+			}
+			"dynamic attribute" {
+				vis="if zero"
+				chan="$(P)Acquiring"
+			}
+			textix="Done"
+			align="horiz. right"
+		}
+		text {
+			object {
+				x=20
+				y=105
+				width=90
+				height=20
+			}
+			"basic attribute" {
+				clr=18
+			}
+			"dynamic attribute" {
+				vis="if not zero"
+				chan="$(P)Acquiring"
+			}
+			textix="Acquiring"
+		}
+	}
+}
+"text update" {
+	object {
+		x=15
+		y=205
+		width=70
+		height=20
+	}
+	monitor {
+		chan="$(P)PresetReal"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=95
+		y=204
+		width=95
+		height=22
+	}
+	control {
+		chan="$(P)PresetReal"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=195
+		y=205
+		width=90
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Real time"
+}
+"text update" {
+	object {
+		x=10
+		y=385
+		width=50
+		height=20
+	}
+	monitor {
+		chan="$(P)SCATriggerMode_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}

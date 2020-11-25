@@ -1,0 +1,7 @@
+file "$(MOTOR)/motorApp/Db/asyn_motor.db"
+{
+pattern
+{P,        M,      DTYP,     PORT, ADDR, DESC,  EGU,  DIR,   VELO,  VBAS, ACCL, BDST, BVEL, BACC,   MRES,         PREC,   DHLM,       DLLM,    INIT}
+# These settings are good for model: 2342S012CR+30/1 989:1+HEM-16+MG10
+{microMo:, m1, "asynMotor",  MVP1,  0,  "m1",   rev,  Pos,   0.025,   0.0,  .1,    0,   0.01,  0.1,  0.000015798786653,     4,   3000000.0,  -300000.0, ""}
+}

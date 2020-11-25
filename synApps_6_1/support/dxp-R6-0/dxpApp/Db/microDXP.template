@@ -1,0 +1,33 @@
+# Gain
+record(ao, "$(P)$(R)Gain") {
+  field(DESC, "Gain")
+  field(DTYP, "asynFloat64")
+  field(OUT,  "$(IO)DxpGain")
+  field(PREC, "2")
+  field(PINI, "YES")
+}
+
+record(ai, "$(P)$(R)Gain_RBV") {
+  field(DESC, "Gain")
+  field(DTYP, "asynFloat64")
+  field(INP,  "$(IO)DxpGain")
+  field(PREC, "2")
+  field(SCAN, "I/O Intr")
+}
+
+# Fine gain
+record(ao, "$(P)$(R)FineGain") {
+  field(DESC, "Fine gain")
+  field(DTYP, "asynFloat64")
+  field(OUT,  "$(IO)DxpFineGain")
+  field(PREC, "2")
+  field(PINI, "YES")
+}
+
+record(ai, "$(P)$(R)FineGain_RBV") {
+  field(DESC, "Fine gain")
+  field(DTYP, "asynFloat64")
+  field(INP,  "$(IO)DxpFineGain")
+  field(PREC, "2")
+  field(SCAN, "I/O Intr")
+}

@@ -1,0 +1,48 @@
+DESTINATION=/home/epics/public_html/pub/dxpStandalone_$1
+
+find . -name 'auto_settings*.sav*_*' -exec rm -fv {} \;
+find . -name 'core.*' -exec rm -fv {} \;
+pushd ..
+
+tar czf $DESTINATION.tgz \
+asyn-*/db \
+asyn-*/opi \
+mca-*/mcaApp/Db/ \
+mca-*/mcaApp/op/ \
+autosave-*/asApp/Db/ \
+autosave-*/asApp/op/ \
+sscan-*/sscanApp/Db/ \
+sscan-*/sscanApp/op/ \
+areaDetector-*/ADCore/db/ \
+areaDetector-*/ADCore/ADApp/op/ \
+dxp-*/documentation \
+dxp-*/dxpApp/Db \
+dxp-*/dxpApp/firmware \
+dxp-*/dxpApp/op \
+dxp-*/bin/win* \
+dxp-*/bin/linux* \
+dxp-*/dbd/ \
+dxp-*/iocBoot
+
+rm -f $DESTINATION.zip
+zip -r -q $DESTINATION.zip   \
+asyn-*/db \
+asyn-*/opi \
+mca-*/mcaApp/Db/ \
+mca-*/mcaApp/op/ \
+autosave-*/asApp/Db/ \
+autosave-*/asApp/op/ \
+sscan-*/sscanApp/Db/ \
+sscan-*/sscanApp/op/ \
+areaDetector-*/ADCore/db/ \
+areaDetector-*/ADCore/ADApp/op/ \
+dxp-*/documentation \
+dxp-*/dxpApp/Db \
+dxp-*/dxpApp/firmware \
+dxp-*/dxpApp/op \
+dxp-*/bin/win* \
+dxp-*/bin/linux* \
+dxp-*/dbd/ \
+dxp-*/iocBoot \
+--exclude '*.svn*' --exclude '*/O.*'
+popd

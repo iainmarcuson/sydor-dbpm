@@ -1,0 +1,152 @@
+# Database for NSLS electrometer
+#   Mark Rivers
+#   Dec. 5, 2015
+
+include "quadEM.template"
+
+# Allow for a unique number to be assigned to the system
+record(stringin, "$(P)$(R)Card") {
+	field(VAL, "$(CARD)")
+	field(PINI, "YES")
+}
+
+# Remove "Multiple" from acquisition modes
+record(mbbo, "$(P)$(R)AcquireModeSimple") {
+	field(ZRVL, "0")
+	field(ZRST, "Continuous")
+	field(ONVL, "2")
+	field(ONST, "Single")
+	field(DTYP, "Raw Soft Channel")
+	field(OUT, "$(P)$(R)AcquireMode.VAL")
+	field(FLNK, "$(P)$(R)AcquireMode.PROC")
+	field(VAL, "0")
+	field(PINI, "YES")
+}
+
+
+# We replace the choices for the Range and the range of the IntegrationTime
+# We also add a simplified range selectrion
+
+record(mbbo,"$(P)$(R)RangeSimple") {
+	field(ZRVL, "7")
+	field(ZRST, "HIGH")
+	field(ONVL, "1")
+	field(ONST, "LOW")
+	field(DTYP, "Raw Soft Channel")
+	field(OUT, "$(P)$(R)Range.VAL")
+	field(FLNK, "$(P)$(R)Range.PROC")
+	field(VAL, "1")
+	field(PINI, "YES")
+}
+
+record(mbbo,"$(P)$(R)Range") {
+    field(ZRVL,"0")
+    field(ZRST,"12 pC")
+    field(ONVL,"1")
+    field(ONST,"50 pC")
+    field(TWVL,"2")
+    field(TWST,"100 pC")
+    field(THVL,"3")
+    field(THST,"150 pC")
+    field(FRVL,"4")
+    field(FRST,"200 pC")
+    field(FVVL,"5")
+    field(FVST,"250 pC")
+    field(SXVL,"6")
+    field(SXST,"300 pC")
+    field(SVVL,"7")
+    field(SVST,"350 pC")
+}
+
+record(mbbi,"$(P)$(R)Range_RBV") {
+    field(ZRVL,"0")
+    field(ZRST,"12 pC")
+    field(ONVL,"1")
+    field(ONST,"50 pC")
+    field(TWVL,"2")
+    field(TWST,"100 pC")
+    field(THVL,"3")
+    field(THST,"150 pC")
+    field(FRVL,"4")
+    field(FRST,"200 pC")
+    field(FVVL,"5")
+    field(FVST,"250 pC")
+    field(SXVL,"6")
+    field(SXST,"300 pC")
+    field(SVVL,"7")
+    field(SVST,"350 pC")
+}
+
+record(ao,"$(P)$(R)IntegrationTime") {
+    field(DRVL,".000400")
+    field(LOPR,".000400")
+    field(DRVH,"1")
+    field(HOPR,"1")
+}
+
+record(ai,"$(P)$(R)IntegrationTime_RBV") {
+    field(LOPR,".000400")
+    field(HOPR,"1")
+}
+
+record(mbbo,"$(P)$(R)PingPong") {
+    field(ZRVL,"0")
+    field(ZRST,"Phase 0")
+    field(ONVL,"1")
+    field(ONST,"Phase 1")
+    field(TWVL,"2")
+    field(TWST,"Both")
+}
+
+record(mbbi,"$(P)$(R)PingPong_RBV") {
+    field(ZRVL,"0")
+    field(ZRST,"Phase 0")
+    field(ONVL,"1")
+    field(ONST,"Phase 1")
+    field(TWVL,"2")
+    field(TWST,"Both")
+}
+
+record(ai, "$(P)$(R)Current1:MeanValue_RBV") {
+	field(EGU, "nA")
+}
+
+
+record(ai, "$(P)$(R)Current2:MeanValue_RBV") {
+        field(EGU, "nA")
+}
+
+record(ai, "$(P)$(R)Current3:MeanValue_RBV") {
+        field(EGU, "nA")
+}
+
+record(ai, "$(P)$(R)Current4:MeanValue_RBV") {
+        field(EGU, "nA")
+}
+
+record(ai, "$(P)$(R)SumAll:MeanValue_RBV") {
+	field(EGU, "nA")
+}
+
+record(stringin, "$(P)$(R)IOCSerNum")
+{
+	field(VAL, "SI-01")
+}
+
+record(stringin, "$(P)$(R)B4SerNum")
+{
+	field(VAL, "Set Serial Number")
+}
+
+
+record(stringin, "$(P)$(R)IOCVer")
+{
+        field(VAL, "1.1")
+	field(PINI, "YES")
+}
+
+record(stringin, "$(P)$(R)ModuleID") {
+	field(VAL, "$(MODULE_ID)")
+	field(PINI, "YES")
+}
+

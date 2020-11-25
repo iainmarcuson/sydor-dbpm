@@ -48,3 +48,9 @@ Thumbs.db
 *.mov
 *.wmv
 
+# EPICS Compiled Files
+synApps_6_1/**/db
+synApps_6_1/**/dbd
+synApps_6_1/**/O.*
+synApps_6_1/**/lib
+synApps_6_1/**/html

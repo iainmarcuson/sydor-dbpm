@@ -1,0 +1,639 @@
+4 0 0
+beginScreenProperties
+major 4
+minor 0
+release 0
+x 102
+y 78
+w 453
+h 263
+font "helvetica-medium-r-18.0"
+ctlFont "helvetica-medium-r-8.0"
+btnFont "helvetica-medium-r-18.0"
+fgColor index 0
+bgColor index 1
+textColor index 14
+ctlFgColor1 index 30
+ctlFgColor2 index 32
+ctlBgColor1 index 34
+ctlBgColor2 index 35
+topShadowColor index 37
+botShadowColor index 44
+snapToGrid
+gridSize 5
+endScreenProperties
+
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 2
+y 2
+w 448
+h 258
+lineColor index 59
+fill
+fillColor index 59
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 111
+y 108
+w 80
+h 10
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 50
+useDisplayBg
+value {
+ "Pump Pressure"
+}
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 111
+y 153
+w 130
+h 10
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 50
+useDisplayBg
+value {
+ "Pump Current (Amps)"
+}
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 110
+y 198
+w 130
+h 10
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 50
+useDisplayBg
+value {
+ "Pump Voltage (Volts)"
+}
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 31
+y 50
+w 390
+h 15
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 50
+useDisplayBg
+value {
+ "Ion Pump $(P)$(PMP) Setpoint $(SPT)"
+}
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 111
+y 76
+w 130
+h 30
+controlPv "$(P)$(PMP):Pressure"
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+smartRefresh
+fastUpdate
+fgColor index 61
+bgColor index 14
+autoHeight
+format "exponential"
+nullColor index 32
+useHexPrefix
+objType "controls"
+newPos
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 111
+y 121
+w 130
+h 30
+controlPv "$(P)$(PMP):Current"
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+smartRefresh
+fastUpdate
+fgColor index 61
+bgColor index 14
+autoHeight
+format "exponential"
+nullColor index 32
+useHexPrefix
+objType "controls"
+newPos
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 110
+y 166
+w 130
+h 30
+controlPv "$(P)$(PMP):Voltage"
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+smartRefresh
+fastUpdate
+fgColor index 61
+bgColor index 14
+autoHeight
+format decimal
+nullColor index 32
+useHexPrefix
+objType "controls"
+newPos
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 49
+y 119
+w 45
+h 10
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 50
+useDisplayBg
+value {
+ "Mode"
+}
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 29
+y 70
+w 390
+h 140
+lineColor index 50
+fillColor index 50
+lineWidth 0
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 73
+y 167
+w 9
+h 9
+lineColor index 57
+fill
+fillColor index 57
+lineWidth 0
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 73
+y 167
+w 9
+h 9
+lineColor index 20
+fill
+fillColor index 20
+lineWidth 0
+visPv "CALC\\\{(A)\}($(P)$(PMP):Spt$(SPT)Status)"
+visInvert
+visMin 0
+visMax 1
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 54
+y 168
+w 18
+h 10
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 0
+useDisplayBg
+value {
+ "SP"
+}
+endObjectProperties
+
+# (Rectangle)
+object activeRectangleClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 50
+y 165
+w 35
+h 14
+lineColor index 0
+fillColor index 0
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 265
+y 78
+w 141
+h 27
+controlPv "$(P)$(PMP):PumpSize"
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+smartRefresh
+fastUpdate
+fgColor index 61
+bgColor index 14
+autoHeight
+format decimal
+nullColor index 32
+useHexPrefix
+objType "controls"
+newPos
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 270
+y 110
+w 130
+h 10
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 50
+useDisplayBg
+value {
+ "Ion Pump Size"
+}
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 259
+y 131
+w 80
+h 27
+controlPv "$(P)$(PMP):Model"
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+smartRefresh
+fastUpdate
+fgColor index 15
+fgAlarm
+bgColor index 14
+autoHeight
+format "exponential"
+nullColor index 32
+useHexPrefix
+objType "controls"
+newPos
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 259
+y 166
+w 80
+h 10
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 50
+useDisplayBg
+value {
+ "Controller"
+}
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 82
+y 11
+w 300
+h 27
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 14
+useDisplayBg
+value {
+ "QPC Ion Pump"
+}
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 355
+y 133
+w 50
+h 20
+controlPv "$(P)$(PMP):FirmwareVers"
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+smartRefresh
+fastUpdate
+fgColor index 15
+bgColor index 14
+autoHeight
+format decimal
+nullColor index 32
+useHexPrefix
+objType "controls"
+newPos
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 350
+y 158
+w 60
+h 10
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 50
+useDisplayBg
+value {
+ "Firmware"
+}
+endObjectProperties
+
+# (Static Text)
+object activeXTextClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 350
+y 170
+w 60
+h 10
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+fgColor index 50
+useDisplayBg
+value {
+ "Version"
+}
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 85
+y 215
+w 300
+h 20
+controlPv "$(P)$(PMP):Status"
+font "helvetica-medium-r-8.0"
+smartRefresh
+fastUpdate
+fgColor index 60
+bgColor index 14
+autoHeight
+format "string"
+nullColor index 32
+useHexPrefix
+objType "controls"
+newPos
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 195
+y 108
+w 43
+h 12
+controlPv "$(P)$(PMP):getPressUnits"
+font "helvetica-medium-r-8.0"
+fontAlign "center"
+smartRefresh
+fastUpdate
+fgColor index 50
+bgColor index 14
+autoHeight
+format "string"
+nullColor index 32
+useHexPrefix
+objType "controls"
+newPos
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 84
+y 238
+w 300
+h 20
+controlPv "$(P)$(PMP):Pump$(SPLY)Name"
+font "helvetica-medium-r-8.0"
+smartRefresh
+fastUpdate
+fgColor index 60
+bgColor index 14
+autoHeight
+format "string"
+nullColor index 32
+useHexPrefix
+objType "controls"
+newPos
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 42
+y 84
+w 61
+h 16
+fgColor index 14
+onColor index 51
+offColor index 51
+topShadowColor index 0
+botShadowColor index 14
+controlPv "$(P)$(PMP):enable.PROC"
+pressValue "0"
+releaseValue 
+onLabel "HV ON"
+offLabel "HV ON"
+3d
+useEnumNumeric
+font "helvetica-medium-r-10.0"
+endObjectProperties
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 42
+y 101
+w 61
+h 16
+fgColor index 14
+onColor index 51
+offColor index 51
+topShadowColor index 0
+botShadowColor index 14
+controlPv "$(P)$(PMP):disable.PROC"
+pressValue "0"
+releaseValue 
+onLabel "HV OFF"
+offLabel "HV OFF"
+3d
+useEnumNumeric
+font "helvetica-medium-r-10.0"
+endObjectProperties
+
+# (Menu Button)
+object activeMenuButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 42
+y 132
+w 61
+h 18
+fgColor index 59
+bgColor index 14
+inconsistentColor index 12
+topShadowColor index 2
+botShadowColor index 12
+controlPv "$(P)$(PMP):setPressUnits"
+indicatorPv "$(P)$(PMP):setPressUnits"
+font "helvetica-medium-r-10.0"
+endObjectProperties
+
+# (Related Display)
+object relatedDisplayClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 38
+y 184
+w 65
+h 15
+fgColor index 14
+bgColor index 50
+topShadowColor index 2
+botShadowColor index 12
+font "helvetica-medium-r-10.0"
+icon
+buttonLabel "SETPOINT"
+numPvs 2
+numDsps 1
+displayFileName {
+  0 QPCsingle_pump_sp_streams.edl
+}
+menuLabel {
+  0 
+}
+symbols {
+  0 "P=$(P),PMP=$(PMP),SPT=$(SPT)"
+}
+endObjectProperties
+

@@ -1,0 +1,7 @@
+file "$(MOTOR)/db/motor.db"
+{
+pattern
+{P,       N,	 M,	    DTYP,         C,      S,	DESC,		EGU,	DIR,    VELO,VBAS,  ACCL,	   BDST,	 BVEL,	BACC,	MRES,	PREC,	DHLM,	DLLM, INIT}
+{piJena:, 1,     "m$(N)",  "PIJEDS",      0,      0,    "motor $(N)",   um,     Pos,    2.,   0,     .2,             0,           0,    .2,      .001,   5,      100,    0,   ""}
+{piJena:, 2,     "m$(N)",  "PIJEDS",      0,      1,    "motor $(N)",   um,     Pos,    2.,   0,     .2,             0,           0,    .2,      .001,   5,      100,    0,   ""}
+}

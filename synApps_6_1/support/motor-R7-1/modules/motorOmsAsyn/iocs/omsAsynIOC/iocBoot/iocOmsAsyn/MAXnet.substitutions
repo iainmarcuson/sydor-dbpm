@@ -1,0 +1,6 @@
+file "$(MOTOR)/db/asyn_motor.db"
+{
+pattern
+{P,         N,        M,        DTYP,   PORT,  ADDR,         DESC,  EGU,  DIR,  VELO,  VBAS,  ACCL,  BDST,  BVEL,  BACC,  MRES,   PREC,  DHLM,  DLLM,  INIT}
+{omsAsyn:,  2,  "m$(N)",  "asynMotor", MAXNET,    0,  "motor $(N)",  deg,  Pos,    10,     0,    .2,     0,     1,     2,  0.01,      5,     0,     0,    ""}
+}

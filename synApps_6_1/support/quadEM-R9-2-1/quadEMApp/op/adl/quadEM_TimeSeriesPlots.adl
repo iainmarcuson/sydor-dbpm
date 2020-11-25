@@ -1,0 +1,450 @@
+
+file {
+	name="/home/epics/devel/quadEM-9-1/quadEMApp/op/adl/quadEM_TimeSeriesPlots.adl"
+	version=030109
+}
+display {
+	object {
+		x=878
+		y=96
+		width=260
+		height=290
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+composite {
+	object {
+		x=5
+		y=5
+		width=250
+		height=25
+	}
+	"composite name"=""
+	children {
+		rectangle {
+			object {
+				x=5
+				y=5
+				width=250
+				height=25
+			}
+			"basic attribute" {
+				clr=54
+			}
+		}
+		text {
+			object {
+				x=10
+				y=7
+				width=240
+				height=20
+			}
+			"basic attribute" {
+				clr=0
+			}
+			textix="quadEM Time Series Plots"
+			align="horiz. centered"
+		}
+	}
+}
+rectangle {
+	object {
+		x=5
+		y=37
+		width=250
+		height=250
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=1
+	}
+}
+text {
+	object {
+		x=72
+		y=40
+		width=110
+		height=20
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="Time domain"
+}
+text {
+	object {
+		x=47
+		y=150
+		width=160
+		height=20
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="Frequency domain"
+}
+text {
+	object {
+		x=97
+		y=65
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Plots X"
+}
+text {
+	object {
+		x=97
+		y=90
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Plots Y"
+}
+text {
+	object {
+		x=97
+		y=115
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Single plots"
+}
+text {
+	object {
+		x=97
+		y=175
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Plots X"
+}
+text {
+	object {
+		x=97
+		y=200
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Plots Y"
+}
+text {
+	object {
+		x=97
+		y=225
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Single plots"
+}
+text {
+	object {
+		x=97
+		y=260
+		width=110
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Time series"
+}
+"related display" {
+	object {
+		x=12
+		y=65
+		width=80
+		height=20
+	}
+	display[0] {
+		label="X (current, sum, pos)"
+		name="quadEM_plotAll.adl"
+		args="P=$(P)$(R)TS:, CURR1=Current1:TimeSeries, CURR2=Current2:TimeSeries, SUM=SumX:TimeSeries, POS=PosX:TimeSeries, XAXIS=TSTimeAxis, TITLE=$(TX), XTITLE=Time (sec), YTITLE=Counts"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=12
+		y=259
+		width=80
+		height=20
+	}
+	display[0] {
+		label="Time series control"
+		name="NDPluginTimeSeries.adl"
+		args="P=$(P)$(R),R=TS:,R1=TS:Current1:,T1=Current1,R2=TS:Current2:,T2=Current2,R3=TS:Current3:,T3=Current3,R4=TS:Current4:,T4=Current4,R5=TS:SumX:,T5=SumX,R6=TS:SumY:,T6=SumY,R7=TS:SumAll:,T7=SumAll,R8=TS:PosX:,T8=PosX,R9=TS:PosY:,T9=PosY"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=12
+		y=115
+		width=80
+		height=20
+	}
+	display[0] {
+		label="Current 1"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:Current1:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:Current1:TimeSeries"
+	}
+	display[1] {
+		label="Current 2"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:Current2:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:Current2:TimeSeries"
+	}
+	display[2] {
+		label="Current 3"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:Current3:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:Current3:TimeSeries"
+	}
+	display[3] {
+		label="Current 4"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:Current4:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:Current4:TimeSeries"
+	}
+	display[4] {
+		label="Sum X"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:SumX:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:SumX:TimeSeries"
+	}
+	display[5] {
+		label="Sum Y"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:SumY:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:SumY:TimeSeries"
+	}
+	display[6] {
+		label="Sum All"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:SumAll:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:SumAll:TimeSeries"
+	}
+	display[7] {
+		label="Difference X"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:DiffX:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:DiffX:TimeSeries"
+	}
+	display[8] {
+		label="Difference Y"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:DiffY:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:DiffY:TimeSeries"
+	}
+	display[9] {
+		label="Position X"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:PosX:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:PosX:TimeSeries"
+	}
+	display[10] {
+		label="Position Y"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=TS:PosY:,XTITLE=Time (sec),XAXIS=$(P)$(R)TS:TSTimeAxis,YAXIS=$(P)$(R)TS:PosY:TimeSeries"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=12
+		y=90
+		width=80
+		height=20
+	}
+	display[0] {
+		label="Y (current, sum, pos)"
+		name="quadEM_plotAll.adl"
+		args="P=$(P)$(R)TS:, CURR1=Current3:TimeSeries, CURR2=Current4:TimeSeries, SUM=SumY:TimeSeries, POS=PosY:TimeSeries, XAXIS=TSTimeAxis, TITLE=$(TY), XTITLE=Time (sec), YTITLE=Counts"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=12
+		y=175
+		width=80
+		height=20
+	}
+	display[0] {
+		label="X (current, sum, pos)"
+		name="quadEM_plotAll.adl"
+		args="P=$(P)$(R)FFT:, CURR1=Current1:FFTAbsValue, CURR2=Current2:FFTAbsValue, SUM=SumX:FFTAbsValue, POS=PosX:FFTAbsValue, XAXIS=PosX:FFTFreqAxis, TITLE=$(TX), XTITLE=Frequency (Hz), YTITLE=Counts"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=12
+		y=200
+		width=80
+		height=20
+	}
+	display[0] {
+		label="X (current, sum, pos)"
+		name="quadEM_plotAll.adl"
+		args="P=$(P)$(R)FFT:, CURR1=Current3:FFTAbsValue, CURR2=Current4:FFTAbsValue, SUM=SumY:FFTAbsValue, POS=PosY:FFTAbsValue, XAXIS=PosY:FFTFreqAxis, TITLE=$(TY), XTITLE=Frequency (Hz), YTITLE=Counts"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=12
+		y=225
+		width=80
+		height=20
+	}
+	display[0] {
+		label="Current 1"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:Current1:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:Current1:FFTFreqAxis,YAXIS=$(P)$(R)FFT:Current1:FFTAbsValue"
+	}
+	display[1] {
+		label="Current 2"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:Current2:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:Current2:FFTFreqAxis,YAXIS=$(P)$(R)FFT:Current2:FFTAbsValue"
+	}
+	display[2] {
+		label="Current 3"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:Current3:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:Current3:FFTFreqAxis,YAXIS=$(P)$(R)FFT:Current3:FFTAbsValue"
+	}
+	display[3] {
+		label="Current 4"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:Current4:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:Current4:FFTFreqAxis,YAXIS=$(P)$(R)FFT:Current4:FFTAbsValue"
+	}
+	display[4] {
+		label="Sum X"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:SumX:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:SumX:FFTFreqAxis,YAXIS=$(P)$(R)FFT:SumX:FFTAbsValue"
+	}
+	display[5] {
+		label="Sum Y"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:SumY:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:SumY:FFTFreqAxis,YAXIS=$(P)$(R)FFT:SumY:FFTAbsValue"
+	}
+	display[6] {
+		label="Sum All"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:SumAll:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:SumAll:FFTFreqAxis,YAXIS=$(P)$(R)FFT:SumAll:FFTAbsValue"
+	}
+	display[7] {
+		label="Difference X"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:DiffX:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:DiffX:FFTFreqAxis,YAXIS=$(P)$(R)FFT:DiffX:FFTAbsValue"
+	}
+	display[8] {
+		label="Difference Y"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:DiffY:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:DiffY:FFTFreqAxis,YAXIS=$(P)$(R)FFT:DiffY:FFTAbsValue"
+	}
+	display[9] {
+		label="Position X"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:PosX:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:PosX:FFTFreqAxis,YAXIS=$(P)$(R)FFT:PosX:FFTAbsValue"
+	}
+	display[10] {
+		label="Position Y"
+		name="NDTimeSeriesPlot.adl"
+		args="P=$(P)$(R),R=TS:,RN=FFT:PosY:,XTITLE=Frequency (Hz),XAXIS=$(P)$(R)FFT:PosY:FFTFreqAxis,YAXIS=$(P)$(R)FFT:PosY:FFTAbsValue"
+	}
+	clr=14
+	bclr=51
+}

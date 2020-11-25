@@ -1,0 +1,8 @@
+# To build a standalone binary uncomment this line
+#  STATIC_BUILD=YES
+#
+
+# Use site-specific definitions from areaDetector to find HDF5, etc.
+-include $(AREA_DETECTOR)/configure/CONFIG_SITE
+-include $(SUPPORT)/configure/CONFIG_SITE
+

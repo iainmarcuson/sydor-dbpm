@@ -1,0 +1,141 @@
+
+file {
+	name="/home/epics/devel/quadEM-7-0/quadEMApp/op/adl/quadEMTestApp.adl"
+	version=030109
+}
+display {
+	object {
+		x=308
+		y=45
+		width=159
+		height=41
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+text {
+	object {
+		x=9
+		y=10
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Start"
+}
+"related display" {
+	object {
+		x=66
+		y=11
+		width=66
+		height=20
+	}
+	display[0] {
+		label="AH401B"
+		name="quadEM.adl"
+		args="P=quadEMTest:, R=AH401B:,P_TS=quadEMTest:AH401B_TS:,P_FFT=quadEMTest:AH401B_FFT:,TX=Horizontal_BPM, TY=Vertical_BPM"
+	}
+	display[1] {
+		label="AH501"
+		name="quadEM.adl"
+		args="P=quadEMTest:, R=AH501:,P_TS=quadEMTest:AH501_TS:,P_FFT=quadEMTest:AH501_FFT:,TX=Horizontal_BPM, TY=Vertical_BPM"
+	}
+	display[2] {
+		label="APS_EM"
+		name="quadEM.adl"
+		args="P=quadEMTest:, R=APS_EM:,P_TS=quadEMTest:APS_EM_TS:,P_FFT=quadEMTest:APS_EM_FFT:,TX=Horizontal_BPM, TY=Vertical_BPM"
+	}
+	display[3] {
+		label="TetrAMM"
+		name="quadEM.adl"
+		args="P=quadEMTest:, R=TetrAMM:,TX=Horizontal_BPM,TY=Vertical_BPM"
+	}
+	display[4] {
+		label="NSLS_EM"
+		name="quadEM.adl"
+		args="P=quadEMTest:, R=NSLS_EM:,P_TS=quadEMTest:NSLS_EM_TS:,P_FFT=quadEMTest:NSLS_EM_FFT:,TX=Horizontal_BPM, TY=Vertical_BPM"
+	}
+	display[5] {
+		label="NSLS2_EM"
+		name="quadEM.adl"
+		args="P=quadEMTest:, R=NSLS2_EM:,P_TS=quadEMTest:NSLS2_EM_TS:,P_FFT=quadEMTest:NSLS2_EM_FFT:,TX=Horizontal_BPM, TY=Vertical_BPM"
+	}
+	clr=14
+	bclr=4
+}

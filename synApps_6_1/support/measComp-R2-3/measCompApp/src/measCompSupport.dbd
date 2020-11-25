@@ -1,0 +1,4 @@
+registrar(drvC9513Register)
+registrar(drvMultiFunctionRegister)
+registrar(drvUSBCTRRegister)
+registrar(USBCTR_SNLRegistrar)

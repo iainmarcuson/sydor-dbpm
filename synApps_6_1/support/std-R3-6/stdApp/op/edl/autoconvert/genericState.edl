@@ -1,0 +1,233 @@
+4 0 1
+beginScreenProperties
+major 4
+minor 0
+release 1
+x 2688
+y 378
+w 750
+h 59
+font "helvetica-medium-r-18.0"
+ctlFont "helvetica-bold-r-10.0"
+btnFont "helvetica-medium-r-18.0"
+fgColor rgb 0 0 0
+bgColor rgb 47872 47872 47872
+textColor rgb 0 0 0
+ctlFgColor1 rgb 64256 62208 18944
+ctlFgColor2 rgb 60928 46592 11008
+ctlBgColor1 rgb 52480 24832 0
+ctlBgColor2 rgb 65280 45056 65280
+topShadowColor rgb 44544 19968 48128
+botShadowColor rgb 13312 13056 34304
+showGrid
+snapToGrid
+gridSize 4
+endScreenProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 7
+release 0
+x 289
+y 16
+w 114
+h 24
+controlPv "$(P)$(S)val$(N)"
+format "decimal"
+font "helvetica-medium-r-14.0"
+fontAlign "left"
+fgColor rgb 0 0 0
+bgColor rgb 47872 47872 47872
+editable
+motifWidget
+limitsFromDb
+nullColor rgb 60928 46592 11008
+smartRefresh
+fastUpdate
+newPos
+objType "controls"
+endObjectProperties
+
+# (Text Control)
+object activeXTextDspClass
+beginObjectProperties
+major 4
+minor 7
+release 0
+x 408
+y 16
+w 239
+h 24
+controlPv "$(P)$(S)pv$(N).VAL"
+format "string"
+font "helvetica-medium-r-14.0"
+fontAlign "left"
+fgColor rgb 0 0 0
+bgColor rgb 47872 47872 47872
+editable
+motifWidget
+limitsFromDb
+nullColor rgb 60928 46592 11008
+smartRefresh
+fastUpdate
+newPos
+objType "controls"
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 9
+y 16
+w 86
+h 24
+
+beginGroup
+
+endGroup
+
+visPv "CALC\\\{(a)\}($(P)$(S)mode$(N))"
+visMin 0
+visMax 1
+endObjectProperties
+
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 652
+y 16
+w 86
+h 24
+
+beginGroup
+
+endGroup
+
+visPv "CALC\\\{(a)\}($(P)$(S)mode$(N))"
+visInvert
+visMin 0
+visMax 1
+endObjectProperties
+
+
+# (Choice Button)
+object activeChoiceButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 100
+y 16
+w 184
+h 26
+fgColor rgb 0 0 0
+bgColor rgb 47872 47872 47872
+selectColor rgb 47872 47872 47872
+inconsistentColor rgb 0 0 0
+topShadowColor rgb 65280 65280 65280
+botShadowColor rgb 0 0 0
+controlPv "$(P)$(S)mode$(N)"
+font "helvetica-medium-r-10.0"
+orientation "horizontal"
+endObjectProperties
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 9
+y 16
+w 86
+h 24
+
+beginGroup
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 9
+y 16
+w 86
+h 24
+fgColor rgb 0 0 0
+onColor rgb 64768 0 0
+offColor rgb 64768 0 0
+topShadowColor rgb 65280 65280 65280
+botShadowColor rgb 0 0 0
+controlPv "$(P)$(S)inCalc$(N).PROC"
+pressValue "1"
+releaseValue 
+onLabel "Save"
+offLabel "Save"
+3d
+useEnumNumeric
+font "helvetica-medium-r-14.0"
+endObjectProperties
+
+endGroup
+
+visPv "CALC\\\{(a)\}($(P)$(S)mode$(N))"
+visMin 0
+visMax 1
+endObjectProperties
+
+# (Group)
+object activeGroupClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 652
+y 16
+w 86
+h 24
+
+beginGroup
+
+# (Message Button)
+object activeMessageButtonClass
+beginObjectProperties
+major 4
+minor 0
+release 0
+x 652
+y 16
+w 86
+h 24
+fgColor rgb 0 0 0
+onColor rgb 0 55296 0
+offColor rgb 0 55296 0
+topShadowColor rgb 65280 65280 65280
+botShadowColor rgb 0 0 0
+controlPv "$(P)$(S)outCalc$(N).PROC"
+pressValue "1"
+releaseValue 
+onLabel "Apply"
+offLabel "Apply"
+3d
+useEnumNumeric
+font "helvetica-medium-r-14.0"
+endObjectProperties
+
+endGroup
+
+visPv "CALC\\\{(a)\}($(P)$(S)mode$(N))"
+visInvert
+visMin 0
+visMax 1
+endObjectProperties
+
+
