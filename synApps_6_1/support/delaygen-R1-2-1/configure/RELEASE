@@ -1,0 +1,44 @@
+#RELEASE Location of external products
+# Run "make clean uninstall install" in the application
+# top directory each time this file is changed.
+#
+# NOTE: The build does not check dependancies on files
+# external to this application. Thus you should run
+# "make clean uninstall install" in the top directory
+# each time EPICS_BASE, SNCSEQ, or any other external
+# module defined in the RELEASE file is rebuilt.
+
+TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
+
+# If you don't want to install into $(TOP) then
+# define INSTALL_LOCATION_APP here
+#INSTALL_LOCATION_APP=$(TOP)/target
+
+# synApps support modules
+SUPPORT=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support
+-include $(TOP)/../configure/SUPPORT.$(EPICS_HOST_ARCH)
+
+# Modules required for building module
+ASYN=$(SUPPORT)/asyn-R4-36
+IP=$(SUPPORT)/ip-R2-20-1
+IPAC=$(SUPPORT)/ipac-2-15
+
+# Modules needed by some devices for records
+##### Colby needs sseq
+CALC=$(SUPPORT)/calc-R3-7-3
+##### BNC 505
+STREAM=$(SUPPORT)/StreamDevice-2-8-9
+
+# EPICS_BASE usually appears last so other apps can override stuff:
+EPICS_BASE=/usr/lib/epics2/base
+-include $(TOP)/../configure/EPICS_BASE.$(EPICS_HOST_ARCH)
+
+#Capfast users may need the following definitions
+#CAPFAST_TEMPLATES=
+#SCH2EDIF_PATH=
+
+# These lines allow developers to override these RELEASE settings
+# without having to modify this file directly.
+-include $(TOP)/../RELEASE.local
+-include $(TOP)/../RELEASE.$(EPICS_HOST_ARCH).local
+-include $(TOP)/configure/RELEASE.local

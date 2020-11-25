@@ -1,0 +1,46 @@
+#RELEASE Location of external products
+# Run "gnumake clean uninstall install" in the application
+# top directory each time this file is changed.
+
+TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
+
+# If you don't want to install into $(TOP) then
+# define INSTALL_LOCATION_APP here
+#INSTALL_LOCATION_APP=<fullpathname>
+
+SUPPORT=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support
+-include $(TOP)/../configure/SUPPORT.$(EPICS_HOST_ARCH)
+
+#If using the sequencer, point SNCSEQ at its top directory:
+SNCSEQ=$(SUPPORT)/seq-2-2-6
+
+# dxp requires areaDetector, and areaDetector/configure already defines
+# ASYN, EV4_BASE, libraries needed for plugins, etc.
+AREA_DETECTOR=$(SUPPORT)/areaDetector-R3-7
+-include $(AREA_DETECTOR)/configure/RELEASE_PATHS.local
+
+# Unfortunately RELEASE_PATHS.local above redefines SUPPORT and AREA_DETECTOR
+# and this messes things up on Windows building on a Linux host.
+# Need to redefine them as above.
+-include $(TOP)/../configure/SUPPORT.$(EPICS_HOST_ARCH)
+AREA_DETECTOR=$(SUPPORT)/areaDetector-R3-7
+-include $(AREA_DETECTOR)/configure/RELEASE_PATHS.local.$(EPICS_HOST_ARCH)
+-include $(AREA_DETECTOR)/configure/RELEASE_PRODS.local
+
+MCA=$(SUPPORT)/mca-R7-8
+DXP_SITORO=$(SUPPORT)/dxpSITORO
+
+# The following are needed only to support the ioc
+CALC=$(SUPPORT)/calc-R3-7-3
+SSCAN=$(SUPPORT)/sscan-R2-11-3
+BUSY=$(SUPPORT)/busy-R1-7-2
+AUTOSAVE=$(SUPPORT)/autosave-R5-10
+DEVIOCSTATS=$(SUPPORT)/iocStats-3-1-16
+
+# EPICS_BASE usually appears last so other apps can override stuff:
+EPICS_BASE=/usr/lib/epics2/base
+-include $(TOP)/../configure/EPICS_BASE.$(EPICS_HOST_ARCH)
+
+#Capfast users may need the following definitions
+#CAPFAST_TEMPLATES=
+#SCH2EDIF_PATH=

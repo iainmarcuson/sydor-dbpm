@@ -1,0 +1,7 @@
+epicsEnvSet("IOC","iocTestBusyAsyn")
+epicsEnvSet("TOP","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/busy-R1-7-2")
+epicsEnvSet("SUPPORT","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support")
+epicsEnvSet("ASYN","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36")
+epicsEnvSet("AUTOSAVE","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/autosave-R5-10")
+epicsEnvSet("BUSY","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/busy-R1-7-2")
+epicsEnvSet("EPICS_BASE","/usr/lib/epics2/base")

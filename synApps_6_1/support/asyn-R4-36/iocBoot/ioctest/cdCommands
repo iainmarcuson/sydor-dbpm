@@ -1,0 +1,15 @@
+startup = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36/iocBoot/ioctest"
+putenv("IOC=ioctest")
+top = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36"
+putenv("TOP=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36")
+topbin = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36/bin/linux-x86_64"
+support = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support"
+putenv("SUPPORT=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support")
+ipac = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/ipac-2-15"
+putenv("IPAC=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/ipac-2-15")
+sncseq = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/seq-2-2-6"
+putenv("SNCSEQ=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/seq-2-2-6")
+sncseqbin = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/seq-2-2-6/bin/linux-x86_64"
+epics_base = "/usr/lib/epics2/base"
+putenv("EPICS_BASE=/usr/lib/epics2/base")
+epics_basebin = "/usr/lib/epics2/base/bin/linux-x86_64"

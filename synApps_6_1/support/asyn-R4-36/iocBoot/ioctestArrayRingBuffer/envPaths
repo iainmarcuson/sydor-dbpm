@@ -1,0 +1,6 @@
+epicsEnvSet("IOC","ioctestArrayRingBuffer")
+epicsEnvSet("TOP","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36")
+epicsEnvSet("SUPPORT","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support")
+epicsEnvSet("IPAC","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/ipac-2-15")
+epicsEnvSet("SNCSEQ","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/seq-2-2-6")
+epicsEnvSet("EPICS_BASE","/usr/lib/epics2/base")

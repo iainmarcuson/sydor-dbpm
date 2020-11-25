@@ -1,0 +1,125 @@
+# BEGIN softGlueZynq.iocsh ----------------------------------------------------
+
+
+epicsEnvSet("PREFIX", "tmm:")
+epicsEnvSet("INSTANCE", "SG:")
+epicsEnvSet("CONFIG", "SG")
+
+epicsEnvSet("READEVENT", "10")
+epicsEnvSet("IPORT", "AXI0INT")
+epicsEnvSet("SPORT", "AXI0")
+epicsEnvSet("RPORT", "AXI1")
+
+
+#var devAsynSoftGlueDebug,1
+#var drvZynqDebug,1
+###############################################################################
+#    Initialize the FPGA
+#-----------------------
+#    Write content to the FPGA. 
+system("cat $(SOFTGLUEZYNQ)/softGlueApp/Db/softGlue_FPGAContent_7020_dma.bin >/dev/xdevcfg")
+
+#------------------------------------------------------------------------------
+#int initZynqInterrupts(const char *portName, const char *componentName) {
+#    portName: Name of asyn port for component at sopcOffset
+#    componentName: name of softGlue AXI component.
+initZynqInterrupts("$(IPORT)","softGlue_")
+
+###############################################################################
+#    Initialize softGlueZynq support for AXI registers
+#-----------------------------------------------------
+#    All instances of a single-register component are initialized with a single
+#    call, as follows:
+#
+# initZynqSingleRegisterPort(const char *portName, const char *componentName)
+initZynqSingleRegisterPort("$(SPORT)", "softGlue_")
+initZynqSingleRegisterPort("$(RPORT)", "softGlueReg32_")
+
+
+################################################################################
+#    Load databases
+#------------------
+#    Load a single database that all database fragments supporting
+#    single-register components can use to show which signals are connected
+#    together.  This database is not needed for the functioning of the
+#    components, it's purely for the user interface.
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/softGlue_SignalShow.db","P=$(PREFIX),H=$(INSTANCE),PORT=$(SPORT),READEVENT=$(READEVENT)")
+
+#    Load a set of database fragments for each single-register component.
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/softGlue_FPGAContent.db", "P=$(PREFIX),H=$(INSTANCE),PORT=$(SPORT),READEVENT=$(READEVENT)")
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/softGlue_FPGARegisters.db", "P=$(PREFIX),H=$(INSTANCE),PORT=$(RPORT),READEVENT=$(READEVENT)")
+
+
+#    Interrupt support.
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/softGlue_FPGAInt.db","P=$(PREFIX),H=$(INSTANCE),IPORT=$(IPORT)")
+
+#    Some stuff just for convenience: software clock and pulse generators, and
+#    a couple of busy records.
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/softGlue_convenience.db", "P=$(PREFIX),H=$(INSTANCE)")
+
+# Menu of softGlue circuits
+# configMenu example.
+dbLoadRecords("$(AUTOSAVE)/asApp/Db/configMenu.db","P=$(PREFIX),CONFIG=$(CONFIG)")
+# Note that the request file MUST be named $(CONFIG)Menu.req.  If the macro
+# CONFIGMENU is defined with any value, backup (".savB") and sequence files
+# (".savN") will not be written.  We don't want these for configMenu.
+doAfterIocInit("create_manual_set('$(CONFIG)Menu.req','P=$(PREFIX),CONFIG=$(CONFIG),H=$(INSTANCE),CONFIGMENU=1')")
+
+# Register included example of a custom softGlue interrupt-service routine.
+# This is for interrupts that occur too closely spaced in time for softGlue's
+# normal interrupt service (an output link to an EPICS record) to handle.
+#doAfterIocInit("sampleCustomInterruptPrepare(0x10000, 0x0)")
+
+# attach pixelTriggerDma histogrammer to FO_15 interrupt.
+# pixelTriggerDmaPrepare(char *componentName, epicsUInt32 risingMask, int notused)
+#var pixelTriggerDmaDebug,1
+doAfterIocInit("pixelTriggerDmaPrepare(softGlueReg32_, 0x40000000, 0)")
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/pixelTriggerDma.db","P=$(PREFIX),Q=1,N=40000")
+# for list-mode testing
+#dbLoadRecords("$(SOFTGLUEZYNQ)/db/pixelTriggerDma.db","P=$(PREFIX),Q=1,N=1000000")
+
+# histoScalerStream
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/histScalerDma.db","P=$(PREFIX),Q=1,N=64")
+
+# clockConfig
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/clockConfig.db","P=$(PREFIX),H=$(INSTANCE),Q=1")
+
+# 16-input scaler
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/SGscaler.db","P=$(PREFIX),Q=SGscaler")
+
+# readSoftGlueCounter_ISR
+# var readSoftGlueCounter_ISRDebug, 1
+#dbLoadRecords("$(SOFTGLUEZYNQ)/db/readSoftGlueCounter_ISR.db","P=$(PREFIX),Q=SG_RdCntr:,N=100000")
+#doAfterIocInit("readSoftGlueCounter_ISRPrepare(0x40000000)")
+
+# begin debug  ----------------------------------------------------------------
+dbLoadRecords("$(ASYN)/db/asynRecord.db","P=$(PREFIX),R=asynSoftGlue,PORT=$(SPORT),ADDR=0,OMAX=0,IMAX=0")
+dbLoadRecords("$(ASYN)/db/asynRecord.db","P=$(PREFIX),R=asynSoftGlueReg,PORT=$(RPORT),ADDR=0,OMAX=0,IMAX=0")
+
+# devA32ZedConfig(card,a32base,nreg,iVector,iLevel) 
+#    card    = card number                          
+#    a32base = base address of AXI component                 
+#    nreg    = number of A32 registers on this card 
+#    iVector = interrupt vector (MRD100 ONLY !!)    
+#    iLevel  = interrupt level  (MRD100 ONLY !!)    
+
+#var devA32ZedDebug,1
+
+# softGlue 300 IO component
+#devA32ZedConfig(0, "softGlue_", 0, 140)
+#dbLoadTemplate("zedLOreg0.substitutions")
+
+# softGlue reg32 component
+#devA32ZedConfig(1, "softGlueReg32_", 0, 64)
+#dbLoadTemplate("zedLOreg1.substitutions")
+
+# interrupt part of softGlue component
+#devA32ZedConfig(4, "softGlue_" 1, 5)
+#dbLoadTemplate("zedLOreg4.substitutions")
+# end debug  ------------------------------------------------------------------
+
+# Use bits of a reg32 register to control stream switch, and to specify which
+# fastGateDelay components have their outputs connected to field I/O.
+dbLoadRecords("$(SOFTGLUEZYNQ)/db/softGlue_config.db","P=$(PREFIX),H=$(INSTANCE)")
+
+# END softGlueZynq.iocsh-------------------------------------------------------

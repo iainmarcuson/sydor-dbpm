@@ -1,0 +1,4 @@
+epicsEnvSet("IOC","iocaliveEx")
+epicsEnvSet("TOP","/home/iainm/work/b4/bs_dev/synApps_6_1/support/alive-R1-1-1")
+epicsEnvSet("SUPPORT","/home/iainm/work/b4/bs_dev/synApps_6_1/support")
+epicsEnvSet("EPICS_BASE","/usr/lib/epics2/base")

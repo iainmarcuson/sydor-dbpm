@@ -1,0 +1,13 @@
+startup = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/modbus-R3-0/iocBoot/iocTest"
+putenv("IOC=iocTest")
+top = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/modbus-R3-0"
+putenv("TOP=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/modbus-R3-0")
+topbin = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/modbus-R3-0/bin/linux-x86_64"
+support = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support"
+putenv("SUPPORT=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support")
+asyn = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36"
+putenv("ASYN=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36")
+asynbin = "/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36/bin/linux-x86_64"
+epics_base = "/usr/lib/epics2/base"
+putenv("EPICS_BASE=/usr/lib/epics2/base")
+epics_basebin = "/usr/lib/epics2/base/bin/linux-x86_64"

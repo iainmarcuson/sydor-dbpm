@@ -1,0 +1,5 @@
+# Tell medm where to look for .adl files.  Edit the following line, or comment it
+# out if the environment variable is already set
+#setenv EPICS_DISPLAY_PATH /corvette/home/epics/epics_devel/all
+#medm -x -macro "P=microDXP:, D=dxp:, M=mca"  microDXP.adl &
+../../bin/linux-x86_64/dxpApp st.cmd

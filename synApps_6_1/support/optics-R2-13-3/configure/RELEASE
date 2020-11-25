@@ -1,0 +1,34 @@
+#RELEASE Location of external products
+# Run "gnumake clean uninstall install" in the application
+# top directory each time this file is changed.
+
+TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
+
+SUPPORT=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support
+-include $(TOP)/../configure/SUPPORT.$(EPICS_HOST_ARCH)
+
+#If using the sequencer, point SNCSEQ at its top directory:
+SNCSEQ=$(SUPPORT)/seq-2-2-6
+
+# For transform record (not needed to build)
+CALC=$(SUPPORT)/calc-R3-7-3
+
+# For busy record (not needed to build)
+BUSY=$(SUPPORT)/busy-R1-7-2
+
+# for serial support
+ASYN=$(SUPPORT)/asyn-R4-36
+
+# EPICS_BASE usually appears last so other apps can override stuff:
+EPICS_BASE=/usr/lib/epics2/base
+-include $(TOP)/../configure/EPICS_BASE.$(EPICS_HOST_ARCH)
+
+#Capfast users may need the following definitions
+#CAPFAST_TEMPLATES=
+#SCH2EDIF_PATH=
+
+# These lines allow developers to override these RELEASE settings
+# without having to modify this file directly.
+-include $(TOP)/../RELEASE.local
+-include $(TOP)/../RELEASE.$(EPICS_HOST_ARCH).local
+-include $(TOP)/configure/RELEASE.local

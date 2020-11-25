@@ -1,0 +1,15 @@
+#RELEASE Location of external products
+
+SUPPORT=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support
+-include $(TOP)/../configure/SUPPORT.$(EPICS_HOST_ARCH)
+
+#  IPAC is only necessary if support for Greensprings IP488 is required
+#  IPAC release V2-7 or later is required.
+IPAC=$(SUPPORT)/ipac-2-15
+
+# SEQ is required for testIPServer
+SNCSEQ=$(SUPPORT)/seq-2-2-6
+
+#  EPICS_BASE 3.14.6 or later is required
+EPICS_BASE=/usr/lib/epics2/base
+-include $(TOP)/../configure/EPICS_BASE.$(EPICS_HOST_ARCH)

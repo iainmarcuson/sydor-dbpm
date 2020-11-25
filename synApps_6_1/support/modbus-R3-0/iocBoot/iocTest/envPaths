@@ -1,0 +1,5 @@
+epicsEnvSet("IOC","iocTest")
+epicsEnvSet("TOP","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/modbus-R3-0")
+epicsEnvSet("SUPPORT","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support")
+epicsEnvSet("ASYN","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36")
+epicsEnvSet("EPICS_BASE","/usr/lib/epics2/base")

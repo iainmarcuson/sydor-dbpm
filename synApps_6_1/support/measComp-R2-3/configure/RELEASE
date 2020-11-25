@@ -1,0 +1,48 @@
+# RELEASE - Location of external support modules
+#
+# IF YOU MAKE ANY CHANGES to this file you must subsequently
+# do a "gnumake rebuild" in this application's top level
+# directory.
+#
+# The build process does not check dependencies against files
+# that are outside this application, thus you should do a
+# "gnumake rebuild" in the top level directory after EPICS_BASE
+# or any other external module pointed to below is rebuilt.
+#
+# Host- or target-specific settings can be given in files named
+#  RELEASE.$(EPICS_HOST_ARCH).Common
+#  RELEASE.Common.$(T_A)
+#  RELEASE.$(EPICS_HOST_ARCH).$(T_A)
+#
+# This file should ONLY define paths to other support modules,
+# or include statements that pull in similar RELEASE files.
+# Build settings that are NOT module paths should appear in a
+# CONFIG_SITE file.
+
+TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
+
+# If using the sequencer, point SNCSEQ at its top directory:
+#SNCSEQ=$(EPICS_BASE)/../modules/soft/seq
+
+SUPPORT=/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support
+-include $(TOP)/../configure/SUPPORT.$(EPICS_HOST_ARCH)
+
+ASYN=$(SUPPORT)/asyn-R4-36
+CALC=$(SUPPORT)/calc-R3-7-3
+STD=$(SUPPORT)/std-R3-6
+MCA=$(SUPPORT)/mca-R7-8
+BUSY=$(SUPPORT)/busy-R1-7-2
+# SSCAN is needed by calc for recDynLink
+SSCAN=$(SUPPORT)/sscan-R2-11-3
+AUTOSAVE=$(SUPPORT)/autosave-R5-10
+# SNCSEQ is needed by std
+SNCSEQ=$(SUPPORT)/seq-2-2-6
+MEASCOMP=$(SUPPORT)/measComp-R2-3
+
+# EPICS_BASE usually appears last so other apps can override stuff:
+EPICS_BASE=/usr/lib/epics2/base
+-include $(TOP)/../configure/EPICS_BASE.$(EPICS_HOST_ARCH)
+
+# Set RULES here if you want to take build rules from somewhere
+# other than EPICS_BASE:
+#RULES=/path/to/epics/support/module/rules/x-y

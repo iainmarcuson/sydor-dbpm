@@ -1,0 +1,6 @@
+epicsEnvSet("IOC","siocvac")
+epicsEnvSet("TOP","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/vac-R1-9")
+epicsEnvSet("SUPPORT","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support")
+epicsEnvSet("IPAC","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/ipac-2-15")
+epicsEnvSet("ASYN","/home/spectro/src/bsharp/bsharp-dev/synApps_6_1/support/asyn-R4-36")
+epicsEnvSet("EPICS_BASE","/usr/lib/epics2/base")
