@@ -78,6 +78,18 @@ typedef struct {
   BS_Out_T out_max;		/* Maximum of output, variable type */
 } Bs_Reg_T;
 
+typedef struct {
+  unsigned int cal_present;	/* Whether a calibration value is present */
+  double cal_slope[4];		/* Calibration slope in nA */
+  double cal_offset[4];		/* Calibration offset in nA */
+} Calibration_Data;
+
+typedef struct
+{
+  int lower_bound;		/* Set to -1 for not found */
+  int upper_bound;		/* Set to -1 for not found */
+} Cal_Find; 
+
 /** Class to control the NSLS Precision Integrator */
 class drvBS_EM : public drvQuadEM {
 public:
@@ -149,13 +161,26 @@ private:
     char ipAddress_[MAX_IPNAME_LEN];
     char outString_[MAX_COMMAND_LEN];
     char inString_[MAX_COMMAND_LEN];
+    double acqFactor_;		/* Scaling factor for raw-to-current 
+				   conversion from acquisition parameters */
+    double adcFactor_;		/* Scaling factor from ADC parameters */
+    double adcOffset_;		/* Offset from ADC parameters */
 
     Bs_Reg_T pidRegData_[21];	/* Holds parameters for the PID registers */
+    Calibration_Data cal_values_[MAX_RANGES]; /* One calibration per range */
+    int num_cals_;			     /* Number of calibration values */
+    double cal_slope_[4];			     /* The calculated slope */
+    double cal_offset_[4];			     /* The calculated offset */
+
     asynStatus findModule();
     asynStatus writeReadMeter();
     asynStatus getFirmwareVersion();
     asynStatus setMode();
     asynStatus computeScaleFactor();
     void process_reg(int reg_lookup, double value);
+    signed int current_to_raw(double current);
+    double raw_to_current(signed int raw_val);
+    void calc_calibration();
+    void parse_cal_file(FILE *cal_file);
 };
 
