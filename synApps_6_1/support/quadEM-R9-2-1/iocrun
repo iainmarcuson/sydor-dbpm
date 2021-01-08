@@ -32,6 +32,14 @@ if [ ! -z $1 ];then
 
 
         elif [ $1 = 'start' ];then
+	    printf "\n**Load calibration\n"
+	    if [ -z $2 ]; then
+		echo "***No calibration set.  Defaulting to 'direct'"
+		CAL_SET="direct"
+	    else
+		CAL_SET=$2
+	    fi
+	    python3 calibration_select.py $CAL_SET
             printf "\n**Initialize IOC\n"
 	    python3 ../../../socket_split_queue.py &
 	    SPLIT_ID=$!
@@ -42,7 +50,26 @@ if [ ! -z $1 ];then
                 ./st.cmd
 		kill $SPLIT_ID
 
+	elif [ $1 = 'startioc' ];then
+	    printf "\n**Load calibration\n"
+	    if [ -z $2 ]; then
+		echo "***No calibration set.  Defaulting to 'direct'"
+		CAL_SET="direct"
+	    else
+		CAL_SET=$2
+	    fi
+	    python3 calibration_select.py $CAL_SET
+            printf "\n**Initialize IOC\n"
+	    #python3 ../../../socket_split_queue.py &
+	    #SPLIT_ID=$!
+	    #echo "Starting networking; please wait."
+	    #sleep 4
+	    echo "Starting EPICS."
+                cd iocBoot/iocBS_EM
+                ./st.cmd
+		kill $SPLIT_ID
 
+		
         elif [ $1 = 'help' ];then
                 help
 

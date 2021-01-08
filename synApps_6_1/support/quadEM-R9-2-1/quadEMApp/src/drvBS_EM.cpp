@@ -95,6 +95,8 @@ drvBS_EM::drvBS_EM(const char *portName, const char *broadcastAddress, int modul
     asynStatus status;
     const char *functionName = "drvBS_EM";
     char tempString[256];
+    const char *cal_filename = "calibration.ini";
+    FILE *cal_file;
     
     numModules_ = 0;
     moduleID_ = moduleID;
@@ -109,6 +111,10 @@ drvBS_EM::drvBS_EM(const char *portName, const char *broadcastAddress, int modul
     ranges_[5]=250;
     ranges_[6]=300;
     ranges_[7]=350;
+
+    adcOffset_ = (double) 0x01000;
+    adcFactor_ = 1.0/(0xFFFFF-adcOffset_);
+    
     broadcastAddress_ = epicsStrDup(broadcastAddress);
     
     acquireStartEvent_ = epicsEventCreate(epicsEventEmpty);
@@ -173,6 +179,41 @@ drvBS_EM::drvBS_EM(const char *portName, const char *broadcastAddress, int modul
 	fflush(stdout);
       }
 
+    cal_file = fopen(cal_filename, "r");
+    if (cal_file == NULL)	// Assume there is no calibration file
+      {
+	int range_idx;
+
+	printf("No calibration file detected; using defaults.\n");
+	fflush(stdout);
+	for (range_idx = 0; range_idx < MAX_RANGES; range_idx++)
+	  {
+	    int channel_idx;
+	    cal_values_[range_idx].cal_present = 0; // No calibration
+	    for (channel_idx = 0; channel_idx<4; channel_idx++)
+	      {
+		cal_values_[range_idx].cal_slope[channel_idx] = 1.0; // Make it a NOP just in case
+		cal_values_[range_idx].cal_offset[channel_idx] = 0.0; // Ibid
+	      }
+	  }
+	cal_values_[0].cal_present = 1; // Set to true; NOP set above
+	num_cals_ = 1;			 // Flag one calibration value
+      }
+    else		      // A calibration file was found
+      {
+	int range_idx, channel_idx;
+	parse_cal_file(cal_file);
+	for (range_idx = 0; range_idx<MAX_RANGES; range_idx++)
+	  {
+	    printf("Calibration %02i, present %i\n", range_idx, cal_values_[range_idx].cal_present);
+	    for (channel_idx = 0; channel_idx < 4; channel_idx++)
+	      {
+		printf("Channel %i Slope %8f Offset %8f\n", channel_idx, cal_values_[range_idx].cal_slope[channel_idx], cal_values_[range_idx].cal_offset[channel_idx]);
+	      }
+	  }
+	fflush(stdout);
+      }
+    
     //Create the parameters for use with PID
     createParam(P_PIDEnableString, asynParamInt32, &P_FdbkEnable);
     createParam(P_PIDCutoffString, asynParamFloat64, &P_Fdbk_CutOutThresh);
@@ -648,10 +689,10 @@ void drvBS_EM::readThread(void)
 		(pingPong == PhaseBoth)) {
 	      for (i=0; i<4; i++) {
 		//12 bytes offset of payload, so 3 ints
-		data[i] = (((signed)(data_int[j*4+i+3]))-((signed)ADC_OFFSET))*scaleFactor_;
-  //data[i] = (((signed int) data_int[j*4+i])-((signed int) ADC_OFFSET)) * scaleFactor_;
-		///
-		//data[i] = (total_num++)*1.0;
+		data[i] = raw_to_current(data_int[j*4+i+3]);
+		///TODO Add in calibration
+		data[i] = data[i] - (cal_offset_[i]*1e-9);
+		data[i] = data[i]/cal_slope_[i];
 	      }      
 	      ///
 	      ///printf("Computing positions.\n");
@@ -816,7 +857,7 @@ asynStatus drvBS_EM::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
   if (reg_lookup >= 0)
     {
       process_reg(reg_lookup, value);	// Get the command string for the register lookup set
-      printf(outString_);
+      printf("%s\n", outString_);
       fflush(stdout);
       status = writeReadMeter();
     }
@@ -948,6 +989,34 @@ asynStatus drvBS_EM::computeScaleFactor()
     getDoubleParam(P_IntegrationTime, &integrationTime);
     scaleFactor_ = ranges_[range]*1e-12 * FREQUENCY / (integrationTime * 1e6)
                   / MAX_COUNTS / (double)valuesPerRead;
+    acqFactor_ = ranges_[range]*1e-12*FREQUENCY/(integrationTime*1e6)/(double) valuesPerRead;
+    this->calc_calibration();
+    ///
+    if (1)
+      {
+	int channel_idx;
+	printf("New calibration values:\n");
+	for (channel_idx =0; channel_idx < 4; channel_idx++)
+	  {
+	    printf("Channel %i Slope: %8f Offset: %8f\n", channel_idx, cal_slope_[channel_idx], cal_offset_[channel_idx]);
+	  }
+	fflush(stdout);
+      }
+
+    while (1)			// XXX Always do this, but break at end
+      {
+	int channel_idx;
+
+	for (channel_idx = 0; channel_idx<4; channel_idx++)
+	  {
+	    epicsSnprintf(outString_, sizeof(outString_), "wr %i %i\r\n", 230+channel_idx, (int) (cal_slope_[channel_idx]*10000));
+	    writeReadMeter();	// XXX Doesn't test return value
+	    epicsSnprintf(outString_, sizeof(outString_), "wr %i %i\r\n", 234+channel_idx, (int) (cal_offset_[channel_idx]*10000));
+	    writeReadMeter();
+	  }
+	break;			// Leave this loop -- one time only
+      }
+    
     ///XXX FIXME TODO Set here to allow setIntegrationTime to shift current
     //scaleFactor_ = ranges_[range]*1e-12 * FREQUENCY / (1.0 * 1e6)
     //              / MAX_COUNTS / (double)valuesPerRead;
@@ -1013,6 +1082,211 @@ void drvBS_EM::exitHandler()
     setAcquire(0);
     unlock();
 }
+
+signed int drvBS_EM::current_to_raw(double current)
+{
+  signed int raw_val;
+  raw_val = current/(adcFactor_*acqFactor_)+adcOffset_;
+  ///TODO FIXME Put in clipping
+  return raw_val;
+}
+
+double drvBS_EM::raw_to_current(signed int raw_val)
+{
+  double current;
+  current = (raw_val-adcOffset_)*adcFactor_*acqFactor_;
+  return current;
+}
+
+void drvBS_EM::parse_cal_file(FILE *cal_file)
+{
+  char curr_line[256];
+  int range_idx;
+  int channel_idx;
+
+  // Note that there are zero calibration values so far
+  num_cals_ = 0;
+  
+  // First, initialize the array to NOPs
+  for (range_idx = 0; range_idx < MAX_RANGES; range_idx++)
+    {
+      cal_values_[range_idx].cal_present = 0; // Set to absent
+      for (channel_idx = 0; channel_idx < 4; channel_idx++)
+	{
+	  cal_values_[range_idx].cal_slope[channel_idx] = 1.0;
+	  cal_values_[range_idx].cal_offset[channel_idx] = 0.0;
+	}
+    }
+  
+  while (!feof(cal_file))
+    {
+      char curr_channel;	// Channels are letters
+      int channel_num;		// Numeric channel index
+      int curr_range;		// Range being set
+      double curr_slope;	// Slope for this value
+      double curr_offset;	// Offset for this value
+      int args_read;
+      int upper_letter;		// Uppercase channel letter
+      
+      ///FIXME handle long lines appropriately
+      fscanf(cal_file, "%[^\n]%*[\n]", curr_line);
+    found_cal_line:		// A potential calibration line from later
+      args_read = sscanf(curr_line, " [direct_range%i] ", &curr_range);
+
+      if (args_read == 0)	// Range not found
+	{
+	  continue;		// Try with next line
+	}
+
+
+      if ((curr_range < 0) || (curr_range >= MAX_RANGES)) // Out of range
+	{
+	  continue;		// Try again with next line
+	}
+
+      cal_values_[curr_range].cal_present = 1; // Flag calibration present
+      num_cals_++;			       // Increase calibration count
+      
+      while (!feof(cal_file))			// Loop forever to read in new lines to get
+	// calibration values
+	{
+	  fscanf(cal_file, "%[^\n]%*[\n]", curr_line); // Read in a new line
+	  args_read = sscanf(curr_line, " %1[[]", &curr_channel); // Check for new range line
+	  if (args_read == 1)					 // Found a new range line
+	    {
+	      goto found_cal_line; // Start processing from there
+	    }
+	  args_read = sscanf(curr_line, " Channel%c = \" %lf , %lf \"", &curr_channel, &curr_slope, &curr_offset);
+	  if (args_read != 3)	// Not a valid calibration line
+	    {
+	      continue;		// Try again
+	    }
+
+	  upper_letter = toupper(curr_channel);
+	  channel_num = upper_letter - 'A'; // A-D
+	  if ((channel_num < 0) || (channel_num >= 4)) // Out of range
+	    {
+	      continue;		// Try again
+	    }
+
+	  // Populate values
+	  cal_values_[curr_range].cal_slope[channel_num] = curr_slope;
+	  cal_values_[curr_range].cal_offset[channel_num] = curr_offset;
+	}
+    }
+
+  return;
+}
+
+void drvBS_EM::calc_calibration()
+{
+  int lower_bound = -1;		// Not found yet
+  int upper_bound = -1;		// Not found yet
+  double curr_slope;
+  double curr_offset;		// Current slope and offset
+  double range_low;		// Lower range charge value for interpolation
+  double range_high;		// Higher range charge value for interpolation
+  double range_set;		// Curent range charge value
+  
+  int curr_range;		// Value of current range
+  int range_idx, channel_idx;	// Indices for iterating
+  if (num_cals_ == 0)
+    {
+      int channel_idx;
+      for (channel_idx = 0; channel_idx <  4; channel_idx++)
+	{
+	  cal_slope_[channel_idx] = 1.0;
+	  cal_offset_[channel_idx] = 0.0;	// Set for NOPs
+	}
+      return;
+    }
+  else if (num_cals_ == 1)	// One calibration value
+    {
+      int range_idx;
+            
+      for (range_idx = 0; range_idx<MAX_RANGES; range_idx++)
+	{
+	  if (cal_values_[range_idx].cal_present == 1) // Found THE present value
+	    {
+	      int channel_idx;
+
+	      for (channel_idx = 0; channel_idx < 4; channel_idx++)
+		{
+		  cal_slope_[channel_idx] = cal_values_[range_idx].cal_slope[channel_idx];
+		  cal_offset_[channel_idx] = cal_values_[range_idx].cal_offset[channel_idx];
+		}
+	      break;
+	    }
+	}
+      return;
+    }
+
+  // Now there are multiple calibration values set
+  // Iterate upwards
+
+  getIntegerParam(P_Range, &curr_range);
+  for (range_idx = 0; range_idx<MAX_RANGES; range_idx++)
+    {
+      if (cal_values_[range_idx].cal_present == 1) // We have found a calibration
+	{
+	  if (range_idx < curr_range) // Range lower
+	    {
+	      lower_bound = range_idx; // Note a new lower value
+	    }
+	  else if (range_idx == curr_range) // Exact match
+	    {
+	      for (channel_idx = 0; channel_idx<4; channel_idx++)
+		{
+		  cal_slope_[channel_idx] = cal_values_[range_idx].cal_slope[channel_idx];
+		  cal_offset_[channel_idx] = cal_values_[range_idx].cal_offset[channel_idx];
+		}
+	      return;
+	    }
+	  else 			// Range greater than index
+	    {
+	      upper_bound = range_idx;
+	      break;		// No need to check more
+	    }
+	}
+    } // for range_idx=...
+
+  if ((lower_bound >= 0) && (upper_bound < 0)) //only lower values found
+    {
+      for (channel_idx = 0; channel_idx < 4; channel_idx++)
+	{
+	  cal_slope_[channel_idx] = cal_values_[lower_bound].cal_slope[channel_idx];
+	  cal_offset_[channel_idx] = cal_values_[lower_bound].cal_offset[channel_idx];
+	}
+    }
+  else if ((lower_bound < 0) && (upper_bound >= 0)) //only upper values found
+    {
+      for (channel_idx = 0; channel_idx < 4; channel_idx++)
+	{
+	  cal_slope_[channel_idx] = cal_values_[upper_bound].cal_slope[channel_idx];
+	  cal_offset_[channel_idx] = cal_values_[upper_bound].cal_offset[channel_idx];
+	}
+    }
+  else				// Bounded on both sides
+    {
+      range_low = ranges_[lower_bound];
+      range_high = ranges_[upper_bound];
+      range_set = ranges_[curr_range];
+      
+      for (channel_idx = 0; channel_idx<4; channel_idx++)
+	{
+	  curr_slope = cal_values_[lower_bound].cal_slope[channel_idx]*(range_high-range_set) + cal_values_[upper_bound].cal_slope[channel_idx]*(range_set-range_low);
+	  curr_slope = curr_slope/(range_high-range_low);
+	  curr_offset = cal_values_[lower_bound].cal_offset[channel_idx]*(range_high-range_set) + cal_values_[upper_bound].cal_offset[channel_idx]*(range_set-range_low);
+	  curr_offset = curr_offset/(range_high-range_low);
+	  cal_slope_[channel_idx] = curr_slope;
+	  cal_offset_[channel_idx] = curr_offset;
+	} // for channel_idx
+      return;
+    }
+
+  return;
+}
+  
 
 /** Report  parameters 
   * \param[in] fp The file pointer to write to

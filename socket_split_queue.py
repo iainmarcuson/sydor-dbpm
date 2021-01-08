@@ -5,7 +5,7 @@ import os
 import traceback
 import time
 
-BSHARP_ADDR = '192.168.11.91';
+BSHARP_ADDR = '192.168.11.116';
 
 packet_count = 0;
 CMD_LEN = 32;                  # Maximum length of command to try to filter out.  Actual max for a command is 25, but add a litle padding.
@@ -17,7 +17,7 @@ RECV_FLUSH = 2;                 # If an erroneous packet is detected, signal to 
 
 
 ## YF [
-ALLOW_FLUSH = True
+ALLOW_FLUSH = False # #TODO: cleanup  ..True
 FLUSH = False
 #internal_log = []    # use this to debug
 internal_log = None   # use this for release
@@ -29,6 +29,12 @@ desync_packets = 0;
 DEFAULT_SELECT = 0.02;
 select_timeout = DEFAULT_SELECT;
 
+# Parameters for automatic querying
+QUERY_TIMEOUT = 0.15;           # Faster than the nominal 0.1
+query_old_time = 0;
+query_new_time = 0;             # Old and new times for determining timeout
+b_send_query = True;            # Always start with sending a query
+query_count = 0;                # Count queries requested
 
 
 
@@ -42,7 +48,7 @@ def bsharp_all_recv(in_bytes):
     log_len_inbytes = len(in_bytes)
     #YF]
 
-    if in_bytes.find(b'bb') == 0: # Data
+    if ((in_bytes.find(b'bb') == 0) or (in_bytes.find(b'rb')==0)): # Data
         #print("bb size:  {}".format(len(in_bytes)));
         delimit_idx = in_bytes.find(b'\x01');
         if (delimit_idx < 0):
@@ -66,13 +72,16 @@ def bsharp_all_recv(in_bytes):
             #               | | +-------------> Size bytes
             #               | +---------------> "B\x01"
             #               +-----------------> "rb>"
-            
+
+        #///Change for rb1>
+        if (in_bytes.find(b'rb')==0):
+            expected_size = expected_size+1;
 
         if len(in_bytes) >= expected_size:
             #print("bb returning {} of {} bytes.".format(len(in_bytes[0:expected_size]), len(in_bytes)));
             if internal_log != None:
                internal_log.append( str(log_len_inbytes) + ", " +  "RF, L70")
-            return (RECV_FULL, in_bytes[0:expected_size]);
+            return (RECV_FULL, in_bytes[0:(expected_size-1)]);
         else:
             if internal_log != None:
                internal_log.append( str(log_len_inbytes) + ", " +  "RP, L76")
@@ -178,6 +187,7 @@ cmd_get_time = 0.0;
 cmd_finish_time = 0.0;
 # Create the connection to the B#
 bsharp_sock = socket.socket();
+bsharp_sock.settimeout(5.0);
 bsharp_sock.connect((BSHARP_ADDR, BSHARP_PORT));
 
 # Create the command and data sockets
@@ -204,13 +214,22 @@ data_out_count = 0;
 curr_minutes = int(time.time()/60);
 old_minutes = int(time.time()/60);
 
-bsharp_sock.send(b'bs 0 4\r\n');
-go_return = bsharp_sock.recv(1024);
 #print("Go command reported: {}".format(go_return.decode()));
 bsharp_sock.send(b'wr 154 0\r\n');
 go_return = bsharp_sock.recv(1024);
-bsharp_sock.send(b'bc 152 2\r\n');
+print("Disabled broadcast return.");
+
+#/// Broadcast disabled for now
+bsharp_sock.send(b'bs 152 2\r\n');
 go_return = bsharp_sock.recv(1024);
+print("Disabled broadcast.");
+
+#Start Acquisition
+bsharp_sock.send(b'bs 0 4\r\n');
+go_return = bsharp_sock.recv(1024);
+print("Sent go command.");
+
+
 ### Not actually a function bsharp_sock.flush();
 #go_return = bsharp_sock.recv(1024);
 #print("Reg 1 is :{}".format(go_return.decode()));
@@ -242,14 +261,28 @@ try:
 
         select_timeout = DEFAULT_SELECT; # Always reset to default, as sometimes we might do a fast timeout;
         
-        ## YF[
+        #///Disable resume broadcast since simulating no broadcast
+	## YF[
         if len(read_list) == 0:
             if FLUSH:
                 FLUSH = False
-                bsharp_sock.send(b'bc 152 2\r\n');   # RE-START  Transmitting
+                #///bsharp_sock.send(b'bc 152 2\r\n');   # RE-START  Transmitting
 
         ## YF]
 
+        # Code to see if we need to do a query
+        query_new_time = time.time();                          # Fetch new time
+        if (query_new_time - query_old_time) >= QUERY_TIMEOUT: # Timeout reached
+            b_send_query = True;                               
+
+        if b_send_query:        # Time to send a query
+            query_old_time = query_new_time; # Update for next set
+            b_send_query = False;            # Wait for next timeout
+            bsharp_sock.send(b'rb1\r\n');        # Send a read command
+            query_count = (query_count + 1) % 100; # Roughly 10 seconds
+            if query_count == 0:
+                print("Sent query.");
+            
 
         curr_minutes = int(time.time()/10);  ## YF
 
@@ -321,14 +354,14 @@ try:
                 # XXX FIXME This is to flush the buffer if we get out of sync.
                 # The number should probably change.
                 if ALLOW_FLUSH:
-                    if (len(from_bsharp_socket)) > (440*2+32): # Two data transmissions plus a command
+                    if (len(from_bsharp_socket)) > (1700*2+32): # Two data transmissions plus a command
                         from_bsharp_socket = b'';
                         FLUSH = True;
                         FIFO_DIRTY = True;
                         ## YF[
                         select_timeout = 0.001;   # If packets are too rapid, clear quickly
-                        print("Set Broadcast off")
-                        bsharp_sock.send(b'bs 152 2\r\n');   # STOP Transmitting - Turn off Broadcast mode
+                        #print("Set Broadcast off")
+                        #bsharp_sock.send(b'bs 152 2\r\n');   # STOP Transmitting - Turn off Broadcast mode
                         continue
 
                 ## YF]
@@ -352,7 +385,7 @@ try:
                     data_in_count = data_in_count +1;
                     ###
                     #print("Got a B1");
-                elif (read_bytes.find(b'bb') == 0):
+                elif ((read_bytes.find(b'bb') == 0) or (read_bytes.find(b'rb') == 0)):
                     data_pending = DATA_CURR;
                     data_in_count = data_in_count + 1;
                 else:           # A command
@@ -383,8 +416,8 @@ try:
 
                 #print("Find index is: {}\tText is {},{}.".format(curr_bsharp.find(b'rb'),chr(curr_bsharp[0]),curr_bsharp[1]));
                 #print("Length is: {}".format(len(curr_bsharp)));
-                if (curr_bsharp.find(b'bb') == 0) or (curr_bsharp.find(b'B\x01') == 0): # Found first header
-                    if (curr_bsharp.find(b'bb') == 0):
+                if (curr_bsharp.find(b'bb') == 0) or (curr_bsharp.find(b'B\x01') == 0) or (curr_bsharp.find(b'rb1') == 0): # Found first header
+                    if (curr_bsharp.find(b'bb') == 0) or (curr_bsharp.find(b'rb1') == 0):
                         delimit_idx = curr_bsharp.find(b'>');
                     else:
                         delimit_idx = -1; # Incremented below
