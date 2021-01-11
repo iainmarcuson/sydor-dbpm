@@ -1,7 +1,7 @@
 import sys
 
 out_filename = 'iocBoot/iocBS_EM/calibration.ini';
-in_filename = 'dbpm_calibration.ini';
+in_filename = 'DBPM_settings.ini';
 calibration_name = sys.argv[1];
 
 STATE_COPY=1;
