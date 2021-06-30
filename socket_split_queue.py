@@ -4,8 +4,9 @@ import select
 import os
 import traceback
 import time
+import datetime
 
-BSHARP_ADDR = '192.168.11.116';
+BSHARP_ADDR = '192.168.11.227';
 
 packet_count = 0;
 CMD_LEN = 32;                  # Maximum length of command to try to filter out.  Actual max for a command is 25, but add a litle padding.
@@ -288,6 +289,7 @@ try:
 
         if (curr_minutes != old_minutes):
             old_minutes = curr_minutes;
+            print(datetime.datetime.now().strftime("%H:%M:%S"));
             print("In: {}\tOut: {}".format(data_in_count, data_out_count));
             if (desync_packets > 0):
                 print("Desync count: {}".format(desync_packets));
@@ -308,13 +310,13 @@ try:
                     cmd_connected = True;
 
             if curr_readable == data_sock:
-                ###print("Data socket readable.");
                 if data_connected: # Already have a conenction
                     temp_sock,temp_addr = data_sock.accept();
                     temp_sock.close(); # Just drop it
                 else:
-                    if cmd_connected == False:
-                        continue;
+                    # Don't totally know why we need command connected first.
+                    #///if cmd_connected == False:
+                    #///    continue;
                     print("Accepting new data connection.");
                     data_client_sock,temp_addr = data_sock.accept();
                     data_connected = True;
@@ -334,7 +336,14 @@ try:
                 cmd_read_data = cmd_client_sock.recv(1024); 
                 cmd_get_time = time.monotonic();
                 print("Received command: {}".format(cmd_read_data.decode()));
-                bsharp_sock.send(cmd_read_data);
+                if len(cmd_read_data) == 0: # Connection closed
+                    cmd_connected = False;
+                    cmd_client_sock = None;
+                else:           # Command received
+                    if cmd_read_data.find(b'NOP') == 0: # A keep-alive packet
+                        pass;
+                    else:       # A regular command
+                        bsharp_sock.send(cmd_read_data);
                 # Do nothing 
             
             if curr_readable == bsharp_sock:
