@@ -1,0 +1,63 @@
+record(fanout, "$(P)$(R)Fdbk_Send01")
+{
+field(LNK1, "$(P)$(R)PIDX_SP.PROC")
+field(LNK2, "$(P)$(R)PIDX_KP.PROC")
+field(LNK3, "$(P)$(R)PIDX_KI.PROC")
+field(LNK4, "$(P)$(R)PIDX_KD.PROC")
+field(LNK5, "$(P)$(R)Fdbk_Send02.PROC")
+}
+
+record(fanout, "$(P)$(R)Fdbk_Send02")
+{
+field(LNK1, "$(P)$(R)PIDX_MV.PROC")
+field(LNK2, "$(P)$(R)PIDX_VOff.PROC")
+field(LNK3, "$(P)$(R)PIDY_SP.PROC")
+field(LNK4, "$(P)$(R)PIDY_KP.PROC")
+field(LNK5, "$(P)$(R)Fdbk_Seq02.PROC")
+}
+
+record(seq,  "$(P)$(R)Fdbk_Seq02")
+{
+field(DOL1, "1")
+field(LNK1, "$(P)$(R)Fdbk_Send03.PROC")
+field(DLY1, "1.0")
+}
+
+record(fanout, "$(P)$(R)Fdbk_Send03")
+{
+field(LNK1, "$(P)$(R)PIDY_KI.PROC")
+field(LNK2, "$(P)$(R)PIDY_KD.PROC")
+field(LNK3, "$(P)$(R)PIDY_MV.PROC")
+field(LNK4, "$(P)$(R)PIDY_VOff.PROC")
+field(LNK5, "$(P)$(R)Fdbk_Send04.PROC")
+}
+
+record(fanout, "$(P)$(R)Fdbk_Send04")
+{
+field(LNK1, "$(P)$(R)PID_DACM.PROC")
+field(LNK2, "$(P)$(R)PID_On.PROC")
+field(LNK3, "$(P)$(R)PID_CutEn.PROC")
+field(LNK4, "$(P)$(R)PID_ReEn.PROC")
+field(LNK5, "$(P)$(R)Fdbk_Seq04.PROC")
+}
+
+record(seq,  "$(P)$(R)Fdbk_Seq04")
+{
+field(DOL1, "1")
+field(LNK1, "$(P)$(R)Fdbk_Send05.PROC")
+field(DLY1, "1.0")
+}
+
+record(fanout, "$(P)$(R)Fdbk_Send05")
+{
+field(LNK1, "$(P)$(R)PID_Cut.PROC")
+field(LNK2, "$(P)$(R)PID_Cut_Hyst.PROC")
+field(LNK3, "$(P)$(R)PID_IToV.PROC")
+field(LNK4, "$(P)$(R)PID_PosTrack.PROC")
+field(LNK5, "$(P)$(R)Fdbk_Send06.PROC")
+}
+
+record(fanout, "$(P)$(R)Fdbk_Send06")
+{
+field(LNK1, "$(P)$(R)PID_Pos_Rad.PROC")
+}

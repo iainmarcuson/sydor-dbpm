@@ -3,6 +3,9 @@
 ### TODO Not that PIDX may be replaced with PID(Dollarsign CHAN) in the future for modularity
 ### Some of the work may be accopmplished by #include-ing a module file with the String parameter as a #define
 
+### ///Fanouts -- Testing File Here
+include "fdbk_send.db"
+
 ### PID X Terms
 
 record(ao, "$(P)$(R)PIDX_SP")
@@ -15,6 +18,7 @@ record(ao, "$(P)$(R)PIDX_SP")
 	field(VAL, "0.0")
 	field(PINI, "YES")
 	field(PREC, "3")
+	info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDX_SP_RBV")
@@ -36,6 +40,7 @@ record(ao, "$(P)$(R)PIDX_KP")
 	     field(VAL, "0.5")
 	     field(PINI, "YES")
 	     field(PREC, "3")
+	     info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDX_KP_RBV")
@@ -57,6 +62,7 @@ record(ao, "$(P)$(R)PIDX_KI")
 	     field(VAL, "0")
 	     field(PINI, "YES")
 	     field(PREC, "3")
+	     info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDX_KI_RBV")
@@ -78,6 +84,7 @@ record(ao, "$(P)$(R)PIDX_KD")
 	     field(VAL, "0")
 	     field(PINI, "YES")
 	     field(PREC, "3")
+	     info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDX_KD_RBV")
@@ -99,6 +106,7 @@ record(ao, "$(P)$(R)PIDX_MV")
 	field(VAL, "5.0")
 	field(PINI, "YES")
 	field(PREC, "3")
+	info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDX_MV_RBV")
@@ -120,6 +128,7 @@ record(ao, "$(P)$(R)PIDX_VOff")
 	field(VAL, "0")
 	field(PINI, "YES")
 	field(PREC, "3")
+	info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDX_VOff_RBV")
@@ -144,6 +153,7 @@ record(ao, "$(P)$(R)PIDY_SP")
 	field(VAL, "0")
 	field(PINI, "YES")
 	field(PREC, "3")
+	info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDY_SP_RBV")
@@ -165,6 +175,7 @@ record(ao, "$(P)$(R)PIDY_KP")
 	     field(VAL, "0.5")
 	     field(PINI, "YES")
 	     field(PREC, "3")
+	     info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDY_KP_RBV")
@@ -186,6 +197,7 @@ record(ao, "$(P)$(R)PIDY_KI")
 	     field(VAL, "0")
 	     field(PINI, "YES")
 	     field(PREC, "3")
+	     info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDY_KI_RBV")
@@ -202,9 +214,10 @@ record(ao, "$(P)$(R)PIDY_KD")
 	     field(DESC, "PID Y D term")
 	     field(DTYP, "asynFloat64")
 	     field(OUT, "@asyn($(PORT) 0)PIDY_KD")
-	     field(VAL, "10000")
+	     field(VAL, "0")
 	     field(PINI, "YES")
 	     field(PREC, "3")
+	     info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDY_KD_RBV")
@@ -224,6 +237,7 @@ record(ao, "$(P)$(R)PIDY_MV")
 	field(VAL, "5")
 	field(PINI, "YES")
 	field(PREC, "3")
+	info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDY_MV_RBV")
@@ -245,6 +259,7 @@ record(ao, "$(P)$(R)PIDY_VOff")
 	field(VAL, "0")
 	field(PINI, "YES")
 	field(PREC, "3")
+	info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PIDY_VOff_RBV")
@@ -267,9 +282,10 @@ record(mbbo, "$(P)$(R)PID_On")
 	field(ZRST, "Off")
 	field(ZRVL, "0")
 	field(ONST, "On")
-	field(ONVL, "4")
+	field(ONVL, "1")
 	field(VAL, "0")
 	field(PINI, "YES")
+	info(asyn:READBACK,"1")
 }
 
 record(mbbi, "$(P)$(R)PID_On_RBV")
@@ -280,7 +296,7 @@ record(mbbi, "$(P)$(R)PID_On_RBV")
 	field(ZRST, "Off")
 	field(ZRVL, "0")
 	field(ONST, "On")
-	field(ONVL, "4")
+	field(ONVL, "1")
 	field(SCAN, "I/O Intr")
 }
 
@@ -294,6 +310,7 @@ record(ao, "$(P)$(R)PID_Cut")
 	field(VAL, "300")
 	field(PINI, "YES")
 	field(PREC, "3")
+	info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PID_Cut_RBV")
@@ -316,6 +333,7 @@ record(mbbo, "$(P)$(R)PID_ReEn")
 	field(ONVL, "1")
 	field(VAL, "0")
 	field(PINI, "YES")
+	info(asyn:READBACK,"1")
 }
 
 record(mbbi, "$(P)$(R)PID_ReEn_RBV")
@@ -345,6 +363,7 @@ record(mbbo, "$(P)$(R)PID_DACM")
 	field(THVL, "3")
 	field(VAL, "0")
 	field(PINI, "YES")
+	info(asyn:READBACK,"1")
 }
 
 record(mbbi, "$(P)$(R)PID_DACM_RBV")
@@ -377,6 +396,7 @@ record(mbbo, "$(P)$(R)PID_CutEn")
 	field(ONVL, "1")
 	field(VAL, "0")
 	field(PINI, "YES")
+	info(asyn:READBACK,"1")
 }
 
 record(mbbi, "$(P)$(R)PID_CutEn_RBV")
@@ -406,6 +426,7 @@ record(mbbo, "$(P)$(R)PID_ExtTrig")
 	field(ONVL, "1")
 	field(VAL, "0")
 	field(PINI, "YES")
+	info(asyn:READBACK,"1")
 }
 
 record(mbbi, "$(P)$(R)PID_ExtTrig_RBV")
@@ -435,6 +456,7 @@ record(mbbo, "$(P)$(R)PID_Inhibit")
 	field(ONVL, "1")
 	field(VAL, "0")
 	field(PINI, "YES")
+	info(asyn:READBACK,"1")
 }
 
 record(mbbi, "$(P)$(R)PID_Inhibit_RBV")
@@ -461,9 +483,10 @@ record(ao, "$(P)$(R)PID_Cut_Hyst")
 	field(OUT, "@asyn($(PORT) 0)PID_CUTHY")
 	field(DRVL, "0.0")
 	field(DRVH, "1000000000.0")
-	field(VAL, "0")
+	field(VAL, "10")
 	field(PINI, "YES")
 	field(PREC, "3")
+	info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PID_Cut_Hyst_RBV")
@@ -489,6 +512,7 @@ record(ao, "$(P)$(R)PID_IToV")
 	field(VAL, "0")
 	field(PINI, "YES")
 	field(PREC, "3")
+	info(asyn:READBACK,"1")
 }
 
 record(ai, "$(P)$(R)PID_IToV_RBV")
@@ -500,3 +524,197 @@ record(ai, "$(P)$(R)PID_IToV_RBV")
 	field(PREC, "3")
 }
 
+# Position Tracking
+
+record(mbbo, "$(P)$(R)PID_PosTrack")
+{
+	field(DESC, "Position Tracking")
+	field(DTYP, "asynInt32")
+	field(OUT, "@asyn($(PORT) 0)PID_POSTRACK")
+	field(ZRST, "Off")
+	field(ZRVL, "0")
+	field(ONST, "Active High")
+	field(ONVL, "8")
+	field(TWST, "Active Low")
+	field(TWVL, "16")
+	field(VAL, "0")
+	field(PINI, "YES")
+	info(asyn:READBACK,"1")
+}
+
+record(mbbi, "$(P)$(R)PID_PosTrack_RBV")
+{
+	field(DESC, "Position Tracking")
+	field(DTYP, "asynInt32")
+	field(INP, "@asyn($(PORT) 0)PID_POSTRACK")
+	field(ZRST, "Off")
+	field(ZRVL, "0")
+	field(ONST, "Active High")
+	field(ONVL, "8")
+	field(TWST, "Active Low")
+	field(TWVL, "16")
+	field(VAL, "0")
+	field(SCAN, "I/O Intr")
+}
+
+
+#Position Tracking Radius
+
+record(ao, "$(P)$(R)PID_Pos_Rad")
+{
+	field(DESC, "Target Radius")
+	field(DTYP, "asynFloat64")
+	field(OUT, "@asyn($(PORT) 0)PID_TRACK_RAD")
+	field(DRVL, "0.0")
+	field(DRVH, "1.0")
+	field(VAL, "0")
+	field(PINI, "YES")
+	field(PREC, "3")
+	info(asyn:READBACK,"1")
+}
+
+record(ai, "$(P)$(R)PID_Pos_Rad_RBV")
+{
+	field(DESC, "Target Radius")
+	field(DTYP, "asynFloat64")
+	field(INP, "@asyn($(PORT) 0)PID_TRACK_RAD")
+	field(SCAN, "I/O Intr")
+	field(PREC, "3")
+}
+
+# Overrides for QuadEM parameters
+
+record(ao, "$(P)$(R)PositionScaleX")
+{
+	field(VAL, "1.")
+}
+
+record(ao, "$(P)$(R)PositionScaleY")
+{
+	field(VAL, "1.")
+}
+
+# Calibration name
+
+record(stringin, "$(P)$(R)CalName_RBV")
+{
+	field(DESC, "Calibration name")
+	field(DTYP, "asynOctetRead")
+	field(VAL, "Unknown")
+	field(INP, "@asyn($(PORT) 0)CAL_NAME")
+	field(SCAN, "I/O Intr")
+	field(PINI, "NO")
+}
+
+# Integration Time Overrides
+
+record(ao, "$(P)$(R)IntegrationTime")
+{
+	field(VAL, "0.04")
+	field(PINI, "YES")
+	info(asyn:READBACK,"1")
+}
+
+record(ai, "$(P)$(R)IntegrationTime_RBV")
+{
+	field(FLNK, "$(P)$(R)S2MIntegTime")
+}
+
+# Range override
+
+record(mbbo, "$(P)$(R)Range")
+{
+	info(asyn:READBACK,"1")
+}
+
+# Maximum Current Computation
+
+record(ai, "$(P)$(R)MaxCurrent_RBV")
+{
+	field(DESC, "Maximum current")
+	field(DTYP, "asynFloat64")
+	field(INP, "@asyn($(PORT) 0)I_MAX")
+	field(SCAN, "I/O Intr")
+	field(PREC, "3")
+	field(FLNK, "$(P)$(R)DF_MaxI.PROC")
+}
+
+record(dfanout, "$(P)$(R)DF_MaxI")
+{
+	field(DESC, "Max current dfanout")
+	field(DOL, "$(P)$(R)MaxCurrent_RBV")
+	field(OMSL, "closed_loop")
+	field(OUTA, "$(P)$(R)Current1:MeanValue_RBV.HOPR")
+	field(OUTB, "$(P)$(R)Current2:MeanValue_RBV.HOPR")
+	field(OUTC, "$(P)$(R)Current3:MeanValue_RBV.HOPR")
+	field(OUTD, "$(P)$(R)Current4:MeanValue_RBV.HOPR")
+}
+
+record(ai, "$(P)$(R)Current1:MeanValue_RBV")
+{
+	field(LOPR, "0.0")
+}
+
+# Record to continually refresh
+
+record(longout, "$(P)$(R)PID_Refresh")
+{
+	field(DESC, "PID X Refresh")
+	field(DTYP, "asynInt32")
+	field(OUT, "@asyn($(PORT) 0)PID_REFRESH")
+	field(VAL, "0")
+	field(PINI, "YES")
+	info(asyn:READBACK,"1")
+	field(SCAN, "2 second")
+}
+
+record(longin, "$(P)$(R)PID_Refresh_RBV")
+{
+	field(DESC, "PID X Refresh")
+	field(DTYP, "asynInt32")
+	field(INP, "@asyn($(PORT) 0)PID_REFRESH")
+}
+
+#Integration Time Scaling
+
+record(ao, "$(P)$(R)IntegTime_ms")
+{
+	field(DESC, "Integration time in ms")
+	field(EGU, "ms")
+	field(VAL, "0.810")
+	field(PREC, "3")
+	field(PINI, "YES")
+	field(OUT, "$(P)$(R)M2SIntegTime")
+	field(FLNK, "$(P)$(R)M2SIntegTime")
+}
+
+record(calc, "$(P)$(R)M2SIntegTime")
+{
+	field(INPA, "$(P)$(R)IntegTime_ms")
+	field(CALC, "A/1000.0")
+	field(FLNK, "$(P)$(R)M2SOut.PROC")
+}
+
+record(ao, "$(P)$(R)M2SOut")
+{
+	field(DOL, "$(P)$(R)M2SIntegTime")
+	field(OMSL, "closed_loop")
+	field(OUT, "$(P)$(R)IntegrationTime")
+	field(FLNK, "$(P)$(R)IntegrationTime")
+}
+
+record(calc, "$(P)$(R)S2MIntegTime")
+{
+	field(INPA, "$(P)$(R)IntegrationTime_RBV")
+	field(CALC, "A*1000.0")
+	field(FLNK, "$(P)$(R)S2MOut")
+#	field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)S2MOut")
+{
+	field(DOL, "$(P)$(R)S2MIntegTime")
+	field(OMSL, "closed_loop")
+	field(OUT, "$(P)$(R)IntegTime_ms")
+	field(PREC, "3")
+}

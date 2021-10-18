@@ -1,10 +1,10 @@
 epicsEnvSet("SERIAL_NUMBER", "00")
 epicsEnvSet("MODULE_ID", "0")
 epicsEnvSet("BROADCAST", "127.0.0.1")
-epicsEnvSet("PREFIX", "Sydor_")
+epicsEnvSet("PREFIX", "Sydor2_")
 epicsEnvSet("RECORD", "BPM-EM")
 
 
 *******************************************************************************
-epicsEnvSet("CSSPATH", "/usr/local/css-nsls2")
-epicsEnvSet("CSSEXEC", "css-nsls2")
+epicsEnvSet("CSSPATH", "/usr/local/cs-studio")
+epicsEnvSet("CSSEXEC", "cs-studio")

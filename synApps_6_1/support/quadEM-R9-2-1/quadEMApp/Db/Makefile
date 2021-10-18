@@ -20,6 +20,7 @@ DB += TetrAMM.template
 DB += BS_EM_PID.template
 DB += quadEM.template
 DB += quadEM_TimeSeries.template
+DB += fdbk_send.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
