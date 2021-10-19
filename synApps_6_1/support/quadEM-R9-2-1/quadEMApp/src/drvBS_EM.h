@@ -198,6 +198,6 @@ private:
     void calc_calibration();
     void parse_cal_file(FILE *cal_file);
   asynStatus readResponse();
-  void pvCallback(unsigned int *reg_pair);
+  void pvCallback(int *reg_pair);
 };
 

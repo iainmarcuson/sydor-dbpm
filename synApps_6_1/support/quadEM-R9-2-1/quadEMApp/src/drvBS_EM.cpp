@@ -620,7 +620,7 @@ asynStatus drvBS_EM::readResponse()
       if (read_state == kRead_BB_Payload)
 	{
 	  int bb_idx;
-	  unsigned int bb_payload[2]; // Pairs of <reg num>,<reg val>
+	  int bb_payload[2]; // Pairs of <reg num>,<reg val>
 
 	  for (bb_idx = 0; bb_idx<(bb_len/8); bb_idx++)
 	    {
@@ -1150,10 +1150,10 @@ asynStatus drvBS_EM::setPingPong(epicsInt32 value)
 /** Do the register callback
  */
 
-void drvBS_EM::pvCallback(unsigned int *reg_pair)
+void drvBS_EM::pvCallback(int *reg_pair)
 {
-  unsigned int reg_num = reg_pair[0];
-  unsigned int reg_val = reg_pair[1];
+  int reg_num = reg_pair[0];
+  int reg_val = reg_pair[1];
   int val_int;
   double val_double;
   double scale_factor = 10000.0; // Some modularity
