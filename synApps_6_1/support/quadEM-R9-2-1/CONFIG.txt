@@ -1,8 +1,8 @@
 epicsEnvSet("SERIAL_NUMBER", "00")
-epicsEnvSet("MODULE_ID", "0")
+epicsEnvSet("MODULE_ID", "6")
 epicsEnvSet("BROADCAST", "127.0.0.1")
-epicsEnvSet("PREFIX", "Sydor2_")
-epicsEnvSet("RECORD", "BPM-EM")
+epicsEnvSet("PREFIX", "Sydor_")
+epicsEnvSet("RECORD", "BPM-EM2")
 
 
 *******************************************************************************

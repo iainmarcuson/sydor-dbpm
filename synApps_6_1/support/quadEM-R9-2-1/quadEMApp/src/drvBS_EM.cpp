@@ -460,13 +460,11 @@ asynStatus drvBS_EM::writeReadMeter()
   // Zero out the return string
   bzero(inString_, sizeof(inString_));
 
-  
-  if (strlen(outString_) == 0)	// Blank string, so touch registers
-    {
-      sprintf(outString_, "tr 200 241\r\n");
-    }
 
-  status = pasynOctetSyncIO->write(pasynUserTCPCommand_, outString_, strlen(outString_), NSLS_EM_TIMEOUT, &nwrite); //Now write the command
+  if (strlen(outString_) != 0) //Actual command
+    {
+      status = pasynOctetSyncIO->write(pasynUserTCPCommand_, outString_, strlen(outString_), NSLS_EM_TIMEOUT, &nwrite); //Now write the command
+    }
 
   readResponse();		// Always read the response, since it is sent unsolicited
   
@@ -500,7 +498,7 @@ asynStatus drvBS_EM::readResponse()
       if (read_state == kRead_Header)
 	{
 	  // Read in the two byte header to start
-	  status = pasynOctetSyncIO->read(pasynUserTCPCommand_, inString_, 2, TOTAL_TIMEOUT,
+	  status = pasynOctetSyncIO->read(pasynUserTCPCommand_, inString_, 2, BYTE_TIMEOUT,
 					  &nread, &eomReason);
 	  if (status != asynSuccess) // Some variety of error
 	    {
