@@ -1338,21 +1338,10 @@ void drvBS_EM::pvCallback(int *reg_pair)
 
     max_current_ = ranges_[range]*1e-12/integrationTime*1e9; //Current in nA
     setDoubleParam(P_MaxCurrent, max_current_);
-    this->calc_calibration();
-    
-    while (1)			// XXX Always do this, but break at end
-      {
-	int channel_idx;
 
-	for (channel_idx = 0; channel_idx<4; channel_idx++)
-	  {
-	    epicsSnprintf(outString_, sizeof(outString_), "wr %i %i\r\n", 230+channel_idx, (int) (cal_slope_[channel_idx]*10000));
-	    writeReadMeter();	// XXX Doesn't test return value
-	    epicsSnprintf(outString_, sizeof(outString_), "wr %i %i\r\n", 234+channel_idx, (int) (cal_offset_[channel_idx]*10000));
-	    writeReadMeter();
-	  }
-	break;			// Leave this loop -- one time only
-      }
+    //Force an update of calibration values
+    epicsSnprintf(outString_, sizeof(outString_), "tr 200 241\r\n");
+    writeReadMeter();
     
     asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER,
         "%s::%s scaleFactor=%e\n", driverName, functionName, scaleFactor_);
