@@ -136,6 +136,7 @@ drvBS_EM::drvBS_EM(const char *portName, const char *broadcastAddress, int modul
     broadcastAddress_ = epicsStrDup(broadcastAddress);
     
     acquireStartEvent_ = epicsEventCreate(epicsEventEmpty);
+    writeCmdEvent_ = epicsEventCreate(epicsEventFull);
     
     strcpy(udpPortName_, "UDP_");
     strcat(udpPortName_, portName);
@@ -467,7 +468,8 @@ asynStatus drvBS_EM::writeReadMeter()
     }
 
   readResponse();		// Always read the response, since it is sent unsolicited
-  
+
+  epicsEventSignal(writeCmdEvent_);
   return status;
 }
 
@@ -910,12 +912,14 @@ asynStatus drvBS_EM::writeInt32(asynUser *pasynUser, epicsInt32 value)
     
   if (reg_lookup >= 0)
     {
+      (void)epicsEventWait(writeCmdEvent_);
       process_reg(reg_lookup, value);	// Get the command string for the register lookup set
       status = writeReadMeter();
     }
 
   if (function == P_PIDRefresh)	    // Doing a refresh
     {
+      (void)epicsEventWait(writeCmdEvent_);
       bzero(outString_, sizeof(outString_));
       status = writeReadMeter();
     }
@@ -1023,6 +1027,7 @@ asynStatus drvBS_EM::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
     
   if (reg_lookup >= 0)
     {
+      (void)epicsEventWait(writeCmdEvent_);
       process_reg(reg_lookup, value);	// Get the command string for the register lookup set
       printf("%s\n", outString_);
       fflush(stdout);

@@ -165,6 +165,7 @@ private:
     asynUser *pasynUserTCPCommandConnect_;
     asynUser *pasynUserTCPData_;
     epicsEventId acquireStartEvent_;
+    epicsEventId writeCmdEvent_;
     int moduleID_;
     int numModules_;
     double ranges_[MAX_RANGES];
