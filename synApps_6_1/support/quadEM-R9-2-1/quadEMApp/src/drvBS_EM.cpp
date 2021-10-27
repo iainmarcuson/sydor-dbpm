@@ -919,6 +919,7 @@ asynStatus drvBS_EM::writeInt32(asynUser *pasynUser, epicsInt32 value)
 
   if (function == P_PIDRefresh)	    // Doing a refresh
     {
+      setIntegerParam(P_PIDRefresh, 1);
       (void)epicsEventWait(writeCmdEvent_);
       bzero(outString_, sizeof(outString_));
       status = writeReadMeter();
