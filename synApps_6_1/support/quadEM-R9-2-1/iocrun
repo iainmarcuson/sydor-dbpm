@@ -11,7 +11,7 @@ SPLIT_ID=""
 
 export EPICS_CA_MAX_ARRAY_BYTES=1000000
 PATH=/usr/lib/epics2/base/bin/linux-x86_64:$PATH
-DIR="$HOME/work/bsharp-dev/synApps_6_1/support/quadEM-R9-2-1"
+DIR="$HOME/work/sydor-dbpm/synApps_6_1/support/quadEM-R9-2-1"
 CSSGUI="$DIR/quadEMApp/op/opi/autoconvert/CSS/xbpm_SIEPB4.opi"
 help(){
         printf "Syntax:\n       ./iocrun {Option}\nOptions:\n       {gui}: Start CSS GUI\n  {startioc}: Boot IOC.\n      {help}: This menu\n"
