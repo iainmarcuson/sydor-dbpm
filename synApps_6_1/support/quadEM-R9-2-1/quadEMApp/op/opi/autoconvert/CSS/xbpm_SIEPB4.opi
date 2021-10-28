@@ -594,7 +594,7 @@ $(pv_value)</tooltip>
           <keep_wh_ratio>false</keep_wh_ratio>
         </scale_options>
         <scripts />
-        <text>2.1.0</text>
+        <text>2.1.1</text>
         <tooltip></tooltip>
         <transparent>true</transparent>
         <vertical_alignment>1</vertical_alignment>
@@ -986,8 +986,8 @@ $(pv_value)</tooltip>
             <color red="200" green="200" blue="200" />
           </axis_0_grid_color>
           <axis_0_log_scale>false</axis_0_log_scale>
-          <axis_0_maximum>1000.0</axis_0_maximum>
-          <axis_0_minimum>-1000.0</axis_0_minimum>
+          <axis_0_maximum>1.0</axis_0_maximum>
+          <axis_0_minimum>-1.0</axis_0_minimum>
           <axis_0_scale_font>
             <opifont.name fontName="Sans" height="10" style="0" pixels="false">Default</opifont.name>
           </axis_0_scale_font>
@@ -1009,8 +1009,8 @@ $(pv_value)</tooltip>
             <color red="200" green="200" blue="200" />
           </axis_1_grid_color>
           <axis_1_log_scale>false</axis_1_log_scale>
-          <axis_1_maximum>1000.0</axis_1_maximum>
-          <axis_1_minimum>-1000.0</axis_1_minimum>
+          <axis_1_maximum>1.0</axis_1_maximum>
+          <axis_1_minimum>-1.0</axis_1_minimum>
           <axis_1_scale_font>
             <opifont.name fontName="Sans" height="10" style="0" pixels="false">Default</opifont.name>
           </axis_1_scale_font>
@@ -1214,7 +1214,7 @@ $(trace_0_y_pv_value)</tooltip>
           </items>
           <items_from_pv>false</items_from_pv>
           <name>Combo_4</name>
-          <pv_name>loc://${PosScale:Manual}(3000)</pv_name>
+          <pv_name>loc://${PosScale:Manual}(1)</pv_name>
           <pv_value />
           <rules>
             <rule name="Autoscale" prop_id="enabled" out_exp="false">
