@@ -466,6 +466,10 @@ asynStatus drvBS_EM::writeReadMeter()
     {
       status = pasynOctetSyncIO->write(pasynUserTCPCommand_, outString_, strlen(outString_), NSLS_EM_TIMEOUT, &nwrite); //Now write the command
     }
+  else
+    {
+      status = pasynOctetSyncIO->write(pasynUserTCPCommand_, outString_, 0, 0.01, &nwrite);
+    }
 
   readResponse();		// Always read the response, since it is sent unsolicited
 
@@ -919,9 +923,11 @@ asynStatus drvBS_EM::writeInt32(asynUser *pasynUser, epicsInt32 value)
 
   if (function == P_PIDRefresh)	    // Doing a refresh
     {
+      int curr_refresh;
       setIntegerParam(P_PIDRefresh, 1);
       (void)epicsEventWait(writeCmdEvent_);
       bzero(outString_, sizeof(outString_));
+      sprintf(outString_, "wr 999 1234\r\n");
       status = writeReadMeter();
     }
   else if (function < P_FdbkEnable)	// Assume function not a BSharp one
