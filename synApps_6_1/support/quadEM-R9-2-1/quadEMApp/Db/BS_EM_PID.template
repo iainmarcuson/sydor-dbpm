@@ -16,7 +16,7 @@ record(ao, "$(P)$(R)PIDX_SP")
 	field(DRVL, "-1.0")
 	field(DRVH, "1.0")
 	field(VAL, "0.0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -38,7 +38,7 @@ record(ao, "$(P)$(R)PIDX_KP")
 	     field(DRVL, "0.0")
 	     field(DRVH, "1.0")
 	     field(VAL, "0.5")
-	     field(PINI, "YES")
+	     field(PINI, "NO")
 	     field(PREC, "3")
 	     info(asyn:READBACK,"1")
 }
@@ -60,7 +60,7 @@ record(ao, "$(P)$(R)PIDX_KI")
 	     field(DRVL, "0.0")
 	field(DRVH, "1.0")
 	     field(VAL, "0")
-	     field(PINI, "YES")
+	     field(PINI, "NO")
 	     field(PREC, "3")
 	     info(asyn:READBACK,"1")
 }
@@ -82,7 +82,7 @@ record(ao, "$(P)$(R)PIDX_KD")
 	     field(DRVL, "0.0")
 	     field(DRVH, "1.0")
 	     field(VAL, "0")
-	     field(PINI, "YES")
+	     field(PINI, "NO")
 	     field(PREC, "3")
 	     info(asyn:READBACK,"1")
 }
@@ -104,7 +104,7 @@ record(ao, "$(P)$(R)PIDX_MV")
 	field(DRVL, "-5.0")
 	field(DRVH, "5.0")
 	field(VAL, "5.0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -126,7 +126,7 @@ record(ao, "$(P)$(R)PIDX_VOff")
 	field(DRVL, "0.0")
 	field(DRVH, "10.0")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -151,7 +151,7 @@ record(ao, "$(P)$(R)PIDY_SP")
 	field(DRVL, "-1.0")
 	field(DRVH, "1.0")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -173,7 +173,7 @@ record(ao, "$(P)$(R)PIDY_KP")
 	     field(DRVL, "0.0")
 	field(DRVH, "1.0")
 	     field(VAL, "0.5")
-	     field(PINI, "YES")
+	     field(PINI, "NO")
 	     field(PREC, "3")
 	     info(asyn:READBACK,"1")
 }
@@ -195,7 +195,7 @@ record(ao, "$(P)$(R)PIDY_KI")
 	     field(DRVL, "0.0")
 	field(DRVH, "1.0")
 	     field(VAL, "0")
-	     field(PINI, "YES")
+	     field(PINI, "NO")
 	     field(PREC, "3")
 	     info(asyn:READBACK,"1")
 }
@@ -215,7 +215,7 @@ record(ao, "$(P)$(R)PIDY_KD")
 	     field(DTYP, "asynFloat64")
 	     field(OUT, "@asyn($(PORT) 0)PIDY_KD")
 	     field(VAL, "0")
-	     field(PINI, "YES")
+	     field(PINI, "NO")
 	     field(PREC, "3")
 	     info(asyn:READBACK,"1")
 }
@@ -235,7 +235,7 @@ record(ao, "$(P)$(R)PIDY_MV")
 	field(DTYP, "asynFloat64")
 	field(OUT, "@asyn($(PORT) 0)PIDY_MAXV")
 	field(VAL, "5")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -257,7 +257,7 @@ record(ao, "$(P)$(R)PIDY_VOff")
 	field(DRVL, "0.0")
 	field(DRVH, "10.0")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -284,7 +284,7 @@ record(mbbo, "$(P)$(R)PID_On")
 	field(ONST, "On")
 	field(ONVL, "1")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	info(asyn:READBACK,"1")
 }
 
@@ -308,7 +308,7 @@ record(ao, "$(P)$(R)PID_Cut")
 	field(DRVL, "0.0")
 	field(DRVH, "350.0")
 	field(VAL, "300")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -332,7 +332,7 @@ record(mbbo, "$(P)$(R)PID_ReEn")
 	field(ONST, "On")
 	field(ONVL, "1")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	info(asyn:READBACK,"1")
 }
 
@@ -362,7 +362,7 @@ record(mbbo, "$(P)$(R)PID_DACM")
 	field(THST, "PID")
 	field(THVL, "3")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	info(asyn:READBACK,"1")
 }
 
@@ -395,7 +395,7 @@ record(mbbo, "$(P)$(R)PID_CutEn")
 	field(ONST, "On")
 	field(ONVL, "1")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	info(asyn:READBACK,"1")
 }
 
@@ -425,7 +425,7 @@ record(mbbo, "$(P)$(R)PID_ExtTrig")
 	field(ONST, "On")
 	field(ONVL, "1")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	info(asyn:READBACK,"1")
 }
 
@@ -455,7 +455,7 @@ record(mbbo, "$(P)$(R)PID_Inhibit")
 	field(ONST, "On")
 	field(ONVL, "1")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	info(asyn:READBACK,"1")
 }
 
@@ -484,7 +484,7 @@ record(ao, "$(P)$(R)PID_Cut_Hyst")
 	field(DRVL, "0.0")
 	field(DRVH, "1000000000.0")
 	field(VAL, "10")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -510,7 +510,7 @@ record(ao, "$(P)$(R)PID_IToV")
 	field(DRVL, "0.0")
 	field(DRVH, "1000000000.0")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -538,7 +538,7 @@ record(mbbo, "$(P)$(R)PID_PosTrack")
 	field(TWST, "Active Low")
 	field(TWVL, "16")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	info(asyn:READBACK,"1")
 }
 
@@ -568,7 +568,7 @@ record(ao, "$(P)$(R)PID_Pos_Rad")
 	field(DRVL, "0.0")
 	field(DRVH, "1.0")
 	field(VAL, "0")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(PREC, "3")
 	info(asyn:READBACK,"1")
 }
@@ -611,7 +611,7 @@ record(stringin, "$(P)$(R)CalName_RBV")
 record(ao, "$(P)$(R)IntegrationTime")
 {
 	field(VAL, "0.04")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	info(asyn:READBACK,"1")
 }
 
@@ -624,7 +624,18 @@ record(ai, "$(P)$(R)IntegrationTime_RBV")
 
 record(mbbo, "$(P)$(R)Range")
 {
+	field(PINI, "NO")
 	info(asyn:READBACK,"1")
+}
+
+record(mbbi, "$(P)$(R)Range_RBV")
+{
+	field(VAL, "8")
+}
+
+record(mbbo, "$(P)$(R)RangeSimple")
+{
+	field(PINI, "NO")
 }
 
 # Maximum Current Computation
@@ -675,6 +686,25 @@ record(longin, "$(P)$(R)PID_Refresh_RBV")
 	field(INP, "@asyn($(PORT) 0)PID_REFRESH")
 }
 
+# Record to do a full refresh
+
+record(longout, "$(P)$(R)RefreshAll")
+{
+	field(DESC, "Refresh parameters")
+	field(DTYP, "asynInt32")
+	field(OUT, "@asyn($(PORT) 0)REFRESH_ALL")
+	info(asyn:READBACK,"1")
+	field(VAL, "0")
+}
+
+record(longin, "$(P)$(R)RefreshAll_RBV")
+{
+	field(DESC, "Refresh parameters")
+	field(DTYP, "asynInt32")
+	field(INP, "@asyn($(PORT) 0)REFRESH_ALL")
+}
+
+
 #Integration Time Scaling
 
 record(ao, "$(P)$(R)IntegTime_ms")
@@ -683,7 +713,7 @@ record(ao, "$(P)$(R)IntegTime_ms")
 	field(EGU, "ms")
 	field(VAL, "0.810")
 	field(PREC, "3")
-	field(PINI, "YES")
+	field(PINI, "NO")
 	field(OUT, "$(P)$(R)M2SIntegTime")
 	field(FLNK, "$(P)$(R)M2SIntegTime")
 }
