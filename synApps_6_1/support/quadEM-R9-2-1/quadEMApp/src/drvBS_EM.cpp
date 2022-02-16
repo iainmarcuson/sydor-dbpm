@@ -602,9 +602,6 @@ asynStatus drvBS_EM::readResponse()
 		  
 		  /// TODO Do something with the payload maybe
 		  //At this point, our response should now have a good pattern
-		  ///DEBUGGING
-		  printf("Full command string: \"%s\"\n", inString_);
-		  fflush(stdout);
 		  num_parsed = sscanf(inString_, "rr %i %i ", &reg_num, &reg_val);
 		  ///FIXME The next bit will be a bit overly verbose for debugging
 
@@ -805,9 +802,6 @@ void drvBS_EM::readThread(void)
 	    pasynOctet->flush(octetPvt, pasynUser);
 	    pasynManager->unlockPort(pasynUser);
 	    lock();
-	    /// DEBUGGING XXX
-	    printf("Invalid header in data payload.  Flushing.\n");
-	    fflush(stdout);
 	    continue;		// Try again next packet
 	  }
 	///XXX TODO Note that the checksum is not currently transmitted, so the +1 that should be there has been turne into a +0 for now
