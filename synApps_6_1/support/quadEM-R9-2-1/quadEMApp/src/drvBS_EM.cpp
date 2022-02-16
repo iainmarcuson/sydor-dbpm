@@ -244,6 +244,7 @@ drvBS_EM::drvBS_EM(const char *portName, const char *broadcastAddress, int modul
     createParam(P_MaxCurrentString, asynParamFloat64, &P_MaxCurrent);
 
     createParam(P_PIDRefreshString, asynParamInt32, &P_PIDRefresh);
+    createParam(P_RefreshAllString, asynParamInt32, &P_RefreshAll);
     
     //Set the PID register parameters
     /*pidRegData_ = {
@@ -265,6 +266,7 @@ drvBS_EM::drvBS_EM(const char *portName, const char *broadcastAddress, int modul
 //    drvQuadEM::reset();
 //    unlock();
 
+        
     /* Create the thread that reads the meter */
     status = (asynStatus)(epicsThreadCreate("drvBS_EMTask",
                           epicsThreadPriorityMedium,
@@ -277,12 +279,28 @@ drvBS_EM::drvBS_EM(const char *portName, const char *broadcastAddress, int modul
     }
 
     //Parameters to set
-    setIntegerParam(P_Range, 0);
+          
     setIntegerParam(P_ValuesPerRead, 5);
-    setDoubleParam(P_IntegrationTime, 810e-6);
     setDoubleParam(P_SampleTime, 20e-6);
     setIntegerParam(P_NumAverage, 25);
 
+    /// Query all parameters on startup
+    {
+      int reg_idx;
+
+      // First, query the other registers
+      for (reg_idx = 1; reg_idx<=3; reg_idx++)
+	{
+	  epicsSnprintf(outString_, sizeof(outString_), "rr %i\n", reg_idx);
+	  writeReadMeter();
+	}
+
+      /// XXX May be able to delete all here.
+      // Then do a tr of the PID registers
+      //epicsSnprintf(outString_, sizeof(outString_), "tr 200 241\r\n");
+      ///writeReadMeter();
+
+    }
 
     callParamCallbacks();
 }
@@ -394,7 +412,9 @@ asynStatus drvBS_EM::findModule()
     }
     pasynOctetSyncIO->setInputEos(pasynUserTCPData_, "\n", 1);
 
+    
     return asynSuccess;
+    
 }
 
 void drvBS_EM::process_reg(int reg_lookup, double value)
@@ -464,6 +484,10 @@ asynStatus drvBS_EM::writeReadMeter()
 
   if (strlen(outString_) != 0) //Actual command
     {
+      ///XXX DEBUGGING
+      //printf("OutCommand: %s", outString_);
+      //fflush(stdout);
+      
       status = pasynOctetSyncIO->write(pasynUserTCPCommand_, outString_, strlen(outString_), NSLS_EM_TIMEOUT, &nwrite); //Now write the command
     }
   else
@@ -578,12 +602,10 @@ asynStatus drvBS_EM::readResponse()
 		  
 		  /// TODO Do something with the payload maybe
 		  //At this point, our response should now have a good pattern
-		  ///DEBUGGING
-		  printf("Full command string: \"%s\"\n", inString_);
-		  fflush(stdout);
 		  num_parsed = sscanf(inString_, "rr %i %i ", &reg_num, &reg_val);
 		  ///FIXME The next bit will be a bit overly verbose for debugging
-		  if ((num_parsed == 2))
+
+		  if ((num_parsed == 2) & (reg_num != 999)) // 999 is name and handled specially
 		    // Matched pattern
 		    /// TODO Get OK from Qt?
 		    
@@ -602,12 +624,19 @@ asynStatus drvBS_EM::readResponse()
 			  printf("New Integration Time: %f\n", time_val);
 			  setDoubleParam(P_IntegrationTime, time_val);
 			  computeScaleFactor();
+			  readStatus();
 			}
 		      else if (reg_num == 2)
 			{
 			  ///TODO Do I want to handle this?
 			}
 		    }
+		  else if ((num_parsed >= 1) && (reg_num == 999)) //Reading the calibration name
+		    {
+		      sscanf(inString_, " rr 999 %s", calName_); //Know rr and reg 999
+		      setStringParam(P_CalName, calName_);
+		    }
+		      
 		  break;
 		}
 
@@ -928,6 +957,21 @@ asynStatus drvBS_EM::writeInt32(asynUser *pasynUser, epicsInt32 value)
       (void)epicsEventWait(writeCmdEvent_);
       bzero(outString_, sizeof(outString_));
       sprintf(outString_, "wr 999 1234\r\n");
+      status = writeReadMeter(); // The write gets the calibration name and reads all pending traffic in the command receive queue.
+      // Refresh scale factor
+      computeScaleFactor();
+    }
+  else if (function == P_RefreshAll)
+    {
+      // Do queries of integration time, range, and all PID parameters.
+      // This is a HEAVY operation, so a periodic scan in not appropriate.
+    
+      sprintf(outString_, "tr 200 241\n"); // Read the PID parameters
+      status = writeReadMeter();
+      sprintf(outString_, "rr 1\n"); // Read the integration time
+      status = writeReadMeter();
+      /// XXX Register 2 is not handled elsewhere, being the same as Reg 1
+      sprintf(outString_, "rr 3\n");
       status = writeReadMeter();
     }
   else if (function < P_FdbkEnable)	// Assume function not a BSharp one
@@ -1131,6 +1175,7 @@ asynStatus drvBS_EM::setRange(epicsInt32 value)
     
     epicsSnprintf(outString_, sizeof(outString_), "wr 3 %d\r\n", value);
     status = writeReadMeter();
+    
     computeScaleFactor();
     return status;
 }

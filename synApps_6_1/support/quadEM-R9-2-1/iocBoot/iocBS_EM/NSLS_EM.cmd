@@ -27,6 +27,8 @@ asynSetTraceIOMask("$(PORT)",0,2)
 
 < $(QUADEM)/iocBoot/saveRestore.cmd
 
+callbackSetQueueSize(5000)
+
 iocInit()
 
 #Set an ID Number
@@ -60,6 +62,10 @@ dbpf $(PREFIX)$(RECORD)Geometry 1
 #Set Serial NUmber
 dbpf $(PREFIX)$(RECORD)B4SerNum $(SERIAL_NUMBER)
 
+# Set the calibration name
+< calname.cmd
+
+
 #Start historical monitoring
 epicsThreadSleep 5
 dbpf $(PREFIX)$(RECORD)Acquire 1
@@ -67,7 +73,6 @@ epicsThreadSleep 5
 dbpf $(PREFIX)$(RECORD)TS:TSAcquire 1
 
 #Set Gain to high (Needs to be set last in the sequence)
-dbpf $(PREFIX)$(RECORD)RangeSimple 0
 
 # save settings every thirty seconds
 create_monitor_set("auto_settings.req",30,"P=$(PREFIX), R=$(RECORD)")
