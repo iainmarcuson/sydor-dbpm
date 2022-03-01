@@ -141,7 +141,7 @@ record(stringin, "$(P)$(R)B4SerNum")
 
 record(stringin, "$(P)$(R)IOCVer")
 {
-        field(VAL, "1.2.0")
+        field(VAL, "1.2.1")
 	field(PINI, "YES")
 }
 
